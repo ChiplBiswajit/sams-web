@@ -1,0 +1,580 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@1,500&display=swap');
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: Poppins -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  scroll-behavior: smooth;
+  /* background-attachment: fixed; */
+}
+*{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box
+}
+.boxPlan {
+  box-shadow: 10px 10px rgb(0, 4, 6);
+}
+@layer components {
+  .main-container {
+    @apply container mx-auto px-6;
+  }
+  .center {
+    @apply flex items-center justify-center;
+  }
+  .center_column {
+    @apply flex flex-col items-center justify-center;
+  }
+  .center_between {
+    @apply flex items-center justify-between;
+  }
+  .start_column {
+    @apply flex flex-col items-start justify-center;
+  }
+  .navSpan {
+    @apply h-16  flex items-center justify-evenly cursor-pointer  relative;
+  }
+  .resNavDiv {
+    @apply w-full p-2 text-white text-start text-lg font-bold border border-gray-800 bg-gray-700 capitalize;
+  }
+  .navH1 {
+    @apply text-base font-bold capitalize;
+  }
+  .bookingbutton{
+    @apply bg-white rounded-md text-[#FF0000] text-lg font-bold  border-bgColour border uppercase px-5 py-2 lg:px-8 lg:py-3;
+  }
+}
+
+
+
+.hovered {
+  transition: transform 0.9s ease-in-out;
+  transform: rotateY(180deg);
+}
+
+
+@keyframes fadeInAnimation {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-logo {
+  animation: fadeIn 1s ease-out;
+}
+
+
+
+.starStyle1{
+  color:  #FFD700 !important;
+}
+
+.starStyle2{
+  color:#808080 !important;
+}
+
+.notchedOutline {
+  border: none !important;
+}
+.input-field {
+  background-color: white !important;
+  border-radius: 0.25rem !important;
+  width: 100% !important;
+}
+.input-field_one {
+  height: 0.6rem !important;
+  min-height: 0.5rem !important;
+  display: flex;
+  /* justify-content: center; */
+  align-items: center;
+  width: 100% !important;
+}
+.mui-multi-row .input-field {
+  padding: 16.5px 14px;
+}
+.mui-multi-row .MuiInputBase-multiline {
+  padding: 0 !important;
+}
+
+.center_column_between {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.my_animation_slide {
+  animation: slide 0.3s ease-in-out;
+}
+
+.discount-card:hover::before {
+  animation: shine 1.3s;
+  display: block;
+}
+.discount-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  display: none;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.3) 100%
+  );
+  transform: skewX(-25deg);
+}
+
+.outline-style input:focus {
+  outline-width: 0px !important;
+}
+
+.filter-select fieldset:hover {
+  border: none;
+}
+.filter-select fieldset {
+  border: none;
+}
+
+.select .MuiInputBase-input {
+  color: rgb(92, 92, 92) !important;
+}
+
+.logoWarper {
+  filter: drop-shadow(1px 1px 1px rgb(98, 98, 98));
+}
+.logoWarper_two {
+  filter: drop-shadow(10px 15px 15px rgb(0, 0, 9));
+}
+.logoWarper_one {
+  filter: drop-shadow(0px 0px 01px rgb(255, 255, 255));
+}
+.gradient-text_3 {
+  background: linear-gradient(
+    91.58deg,
+    #9a1bfe 25.86%,
+    #8469ee 45.86%,
+    #3ba5fd 71.46%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.gradient-text_4 {
+  background: linear-gradient(91.58deg, #2600ff, #ff0011);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.cardShadow {
+  box-shadow: 7px 7px 15px 0px #0e1015;
+}
+.slick-dot li {
+  background: white;
+  font-size: 4rem;
+  list-style: disc;
+}
+.slick-dots li button:before {
+  color: rgb(255, 0, 153) !important;
+}
+
+.slick-dots li.slick-active button:before {
+  color: white !important;
+}
+.focusItem fieldset {
+  border-color: #e7e7e7 !important;
+}
+/* -------------------------------------------------------------------------------------------------- */
+/* Animations */
+
+@keyframes slide {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes shine {
+  0% {
+    left: -100%;
+    opacity: 0;
+  }
+  100% {
+    left: 100%;
+    opacity: 1;
+  }
+}
+
+
+
+/* Hide scrollbar for Chrome, Safari, and Edge */
+body::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for Firefox */
+body {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+
+body:hover {
+  scrollbar-color: transparent #fff; /* Change #fff to your background color if needed */
+}
+
+
+
+
+
+
+.perspective {
+  perspective: 1000px;
+}
+
+.card {
+  transform-style: preserve-3d;
+  transition: transform 0.5s, box-shadow 0.5s;
+  cursor: pointer;
+}
+
+.card:hover {
+  transform: scale(1.05) rotateY(0deg);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.card-content {
+  transform: translateZ(1px);
+}
+
+
+
+
+
+/* Add these styles to your CSS file or component */
+
+.details-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Semi-transparent background overlay */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000; /* Ensure it appears above other elements */
+
+  /* Additional styles for background shadow */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.details-card {
+  background-color: white;
+  /* padding: 20px; */
+  border-radius: 8px;
+  transform: translateZ(50px); /* Apply the 3D effect */
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); /* Shadow for the card */
+
+  /* Add other styles for the card */
+}
+
+/* Add any other styles you need for your components */
+
+
+.active {
+  background-color: #B2C1E0; 
+  color: #000;
+  border-radius: 10px;
+  padding: 5px; 
+}
+
+
+
+
+/* Add this style to your existing styles */
+@keyframes gradientLineShadow {
+  0% {
+    box-shadow: 0 0 5px 1px rgba(0, 0, 255, 0.8);
+  }
+  50% {
+    box-shadow: 0 0 10px 2px rgba(0, 0, 255, 0.5);
+  }
+  100% {
+    box-shadow: 0 0 5px 1px rgba(0, 0, 255, 0.8);
+  }
+}
+
+.animate-gradient-line-shadow {
+  animation: gradientLineShadow 2s infinite;
+}
+
+
+
+
+
+/* Add this to your CSS file or Tailwind CSS configuration */
+@keyframes zoom-in {
+  from {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes zoom-out {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+.animate-zoom-in {
+  animation: zoom-in 1s ease-in-out;
+}
+
+.animate-zoom-out {
+  animation: zoom-out 0.5s ease-in-out;
+}
+
+
+
+
+
+/* ////DASHBOARD BUTTON///// */
+/* CSS */
+.button-32 {
+  background-color: #fff000;
+  border-radius: 12px;
+  color: #000;
+  cursor: pointer;
+  font-weight: bold;
+  padding: 5px 10px;
+  text-align: center;
+  transition: 200ms;
+  box-sizing: border-box;
+  border: 0;
+  font-size: 16px;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.button-32:not(:disabled):hover,
+.button-32:not(:disabled):focus {
+  outline: 0;
+  background: #f4e603;
+  box-shadow: 0 0 0 2px rgba(0,0,0,.2), 0 3px 8px 0 rgba(0,0,0,.15);
+}
+
+.button-32:disabled {
+  filter: saturate(0.2) opacity(0.5);
+  -webkit-filter: saturate(0.2) opacity(0.5);
+  cursor: not-allowed;
+}
+
+
+/* ///back to dashboard button/// */
+/* CSS */
+.button-62 {
+  background: linear-gradient(to bottom right, #EF4765, #FF9A5A);
+  border: 0;
+  border-radius: 12px;
+  cursor: pointer;
+  display: inline-block;
+  font-family: -apple-system,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 2.5;
+  outline: transparent;
+  padding: 0 1rem;
+  text-align: center;
+  text-decoration: none;
+  transition: box-shadow .2s ease-in-out;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  white-space: nowrap;
+}
+
+.button-62:not([disabled]):focus {
+  box-shadow: 0 0 .25rem rgba(0, 0, 0, 0.5), -.125rem -.125rem 1rem rgba(239, 71, 101, 0.5), .125rem .125rem 1rem rgba(255, 154, 90, 0.5);
+}
+
+.button-62:not([disabled]):hover {
+  box-shadow: 0 0 .25rem rgba(0, 0, 0, 0.5), -.125rem -.125rem 1rem rgba(239, 71, 101, 0.5), .125rem .125rem 1rem rgba(255, 154, 90, 0.5);
+}
+
+
+
+
+/* CSS */
+.button-24 {
+  width: 100%;
+  background: #01339f;
+  border: 1px solid #01339f;
+  border-radius: 6px;
+  box-shadow: rgba(0, 0, 0, 0.1) 1px 2px 4px;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  cursor: pointer;
+  display: inline-block;
+  font-family: nunito,roboto,proxima-nova,"proxima nova",sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 16px;
+  min-height: 40px;
+  outline: 0;
+  padding: 4px 6px;
+  text-align: center;
+  text-rendering: geometricprecision;
+  text-transform: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: middle;
+}
+
+.button-24:hover,
+.button-24:active {
+  background-color: initial;
+  background-position: 0 0;
+  color: #FF4742;
+}
+
+.button-24:active {
+  opacity: .5;
+}
+
+
+
+/* --------------------------------LOADER----------------------------------- */
+.loader {
+  width: 48px;
+  height: 48px;
+  border: 3px dotted #2e17b3;
+  border-style: solid solid dotted dotted;
+  border-radius: 50%;
+  display: inline-block;
+  position: relative;
+  box-sizing: border-box;
+  animation: rotation 2s linear infinite;
+}
+.loader::after {
+  content: '';  
+  box-sizing: border-box;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  border: 3px dotted #dc2626;
+  border-style: solid solid dotted;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  animation: rotationBack 1s linear infinite;
+  transform-origin: center center;
+}
+    
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+} 
+@keyframes rotationBack {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(-360deg);
+  }
+} 
+
+.button-Profile-page {
+  background: #5E5DF0;
+  border-radius: 999px;
+  box-shadow: #5E5DF0 0 10px 20px -10px;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  cursor: pointer;
+  font-family: Inter, Helvetica, "Apple Color Emoji", "Segoe UI Emoji", NotoColorEmoji, "Noto Color Emoji", "Segoe UI Symbol", "Android Emoji", EmojiSymbols, -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 24px;
+  opacity: 1;
+  outline: 0 solid transparent;
+  padding: 8px 18px;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  width: fit-content;
+  word-break: break-word;
+  border: 0;
+  transition: background 0.3s ease; /* Add a transition for smooth color change */
+}
+
+.button-Profile-page:hover {
+  background: #101083; /* Change the background color on hover */
+}
+
+.button-Profile-page-cancel {
+  background: #df2e2e;
+  border-radius: 999px;
+  box-shadow: #5E5DF0 0 10px 20px -10px;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  cursor: pointer;
+  font-family: Inter, Helvetica, "Apple Color Emoji", "Segoe UI Emoji", NotoColorEmoji, "Noto Color Emoji", "Segoe UI Symbol", "Android Emoji", EmojiSymbols, -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 24px;
+  opacity: 1;
+  outline: 0 solid transparent;
+  padding: 8px 18px;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  width: fit-content;
+  word-break: break-word;
+  border: 0;
+  transition: background 0.3s ease; /* Add a transition for smooth color change */
+}
+
+.button-Profile-page-cancel:hover {
+  background: #831010; /* Change the background color on hover */
+}
+
+
+

@@ -1,0 +1,9 @@
+export {default as dashboard} from "./dashboard.png";
+export {default as ChiplAdmin} from "./ChiplAdmin.png";
+export {default as fleets} from "./fleets.png";
+export {default as stocks} from "./stocks.png";
+export {default as live} from "./live.png";
+export {default as reportamtek} from "./report.png";
+export {default as profilePage} from "./profilePage.png";
+export {default as help} from "./help.png";
+export {default as Aboutus} from "./About-us.png";
