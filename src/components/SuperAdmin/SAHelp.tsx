@@ -15,7 +15,7 @@ const SAHelp = (props: any) => {
   return (
     <div className="h-screen w-full">
       <p>SAHelp</p>
-      <Map google={props.google} zoom={14}>
+      {/* <Map google={props.google} zoom={14}>
         <Marker onClick={onMarkerClick} name={"Current location"} />
 
         <InfoWindow onClose={onInfoWindowClose} marker={selectedPlace}>
@@ -23,7 +23,7 @@ const SAHelp = (props: any) => {
             <h1>{selectedPlace && selectedPlace.name}</h1>
           </div>
         </InfoWindow>
-      </Map>
+      </Map> */}
     </div>
   );
 };
