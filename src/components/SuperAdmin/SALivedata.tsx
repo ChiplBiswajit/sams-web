@@ -31,10 +31,59 @@ import { ImCross } from "react-icons/im";
 import socketServcies from "@/src/utils/Socket/socketService";
 import { getObjByKey, storeObjByKey } from "@/src/utils/Socket/storage";
 import Loader from "../Loader";
-import { live } from "@/src/assets/SuperAdmin/Sidebar/Index";
+import { live, location } from "@/src/assets/SuperAdmin/Sidebar/Index";
 import { MdOutlineKeyboardDoubleArrowRight } from "react-icons/md";
+import { useRouter } from "next/router";
+import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
+
+const mapContainerStyle = {
+  height: "100%",
+  width: "100%",
+};
+
+const center = {
+  lat: 20.314081,
+  lng: 85.818766,
+};
+
+const markerPosition = {
+  lat: 20.331705995946024,
+  lng: 85.8199423052189,
+};
+
+
+
+const googleMapsApiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+
+const LocationData = () => {
+  if (!googleMapsApiKey) {
+    return <div>Error: Google Maps API key not defined</div>;
+  }
+  return (
+    <div className="h-full w-full">
+      <LoadScript googleMapsApiKey={googleMapsApiKey}>
+        <GoogleMap
+          mapContainerStyle={mapContainerStyle}
+          center={center}
+          zoom={10}
+        >
+          {/* <Marker
+            icon={{
+              url: "../../assets/SuperAdmin/Sidebar/google-maps.png",
+              scaledSize: { width: 50, height: 40 } as google.maps.Size,
+              // scaledSize: new window.google.maps.Size(35, 40),
+            }}
+            position={markerPosition}
+          /> */}
+          <Marker position={markerPosition} />
+        </GoogleMap>
+      </LoadScript>
+    </div>
+  );
+};
 
 export default function SALivedata() {
+  const router = useRouter();
   const [isOffCanvasOpen, setIsOffCanvasOpen] = useState(false);
   const [ambulanceData, setAmbulanceData] = useState([]);
   const [modalVisible, setModalVisible] = useState(true);
@@ -111,13 +160,6 @@ export default function SALivedata() {
         setLoading(false);
         setModalVisible(false);
       }, 5000);
-      // let a = res.find((entry: any) => entry[msg?.ambulanceId]?.alcohol) as| AlcoholData| undefined;
-      // setAmbData(a);
-      // console.log("hhhhhhhhhhhhhh", a);
-      // console.log(
-      //   "Ambulance List skt data : ++++++++++++++++++++++++++++++++",
-      //   msg
-      // );
     });
   }, []);
   useEffect(() => {
@@ -128,7 +170,7 @@ export default function SALivedata() {
   }, [filter]);
   return (
     <section className="md:w-[92%] h-screen md:h-auto pt-0 md:pt-2 p-5 md:gap-6 center grid grid-cols-2 md:grid-cols-3">
-      {loading && <Loader />} {/* Render loader while loading is true */}
+      {loading && <Loader />}
       {ambulanceData &&
         ambulanceData?.map((item: any) => {
           const alcoholData = res.find(
@@ -273,16 +315,13 @@ export default function SALivedata() {
             <div className="w-full  gap-3 flex md:flex-row flex-col">
               <div className="w-full  flex-col flex gap-2 ">
                 <div className="w-full h-full bg-[#EBEDFF] rounded-md  mt-2">
-                  <p className="text-center bg-purple-500 text-white rounded-sm text-sm font-bold capitalize">
+                  <p className="text-center bg-[#8B95E3] text-black rounded-sm text-sm font-bold capitalize">
                     GPS
                   </p>
-                  <span className="w-full">hiii</span>
+                  <span className="w-full">
+                    <LocationData />
+                  </span>
                 </div>
-                {/* <div className="w-full h-52 bg-[#EBEDFF] rounded-md border ">
-                  <p className="text-center bg-purple-500 text-white rounded-sm text-sm font-bold capitalize">
-                    livefeed
-                  </p>
-                </div> */}
               </div>
               <div className="w-full grid grid-cols-3  gap-6 md:gap-8">
                 <span className=" w-full ">
@@ -433,26 +472,48 @@ export default function SALivedata() {
                     </div>
                   </a>
                 </span>
-                <span className="w-full">
-                  <a
-                    href={`http://46.28.44.138:3008/stream?ambulanceId=${ambulanceID}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <img src={triangle.src} alt="" className="w-32 absolute" />
-                    <div className="w-20 h-24 p-1 rounded-md center bg-[#ffffff] relative top-4 left-[10px]">
-                      <div className="w-[72px] h-[88px] center flex flex-col rounded-md bg-[#EBEDFF]">
-                        <span className="border-[#8B95E3] rounded-full center pt-0">
-                          <img src={jerkvalue.src} alt="" className="w-8" />
-                        </span>
-                        <p className="text-center font-semibold text-xs">
-                          Tab to see
-                          <p className="text-center text-xs">Jerk Value</p>
-                        </p>
-                        <MdOutlineKeyboardDoubleArrowRight className="" />
-                      </div>
+                {/* 
+
+                <span
+                  className="w-full"
+                  onClick={() => {
+                    router.push("./location");
+                  }}
+                >
+                  <img src={triangle.src} alt="" className="w-32 absolute" />
+                  <div className="w-20 h-24 p-1 rounded-md center bg-[#ffffff] relative top-4 left-[10px]">
+                    <div className="w-[72px] h-[88px] center flex flex-col rounded-md bg-[#EBEDFF]">
+                      <span className="border-[#8B95E3] rounded-full center pt-0">
+                        <img src={location.src} alt="" className="w-8" />
+                      </span>
+                      <p className="text-center font-semibold text-xs">
+                        Tab to see
+                        <p className="text-center text-xs">Location</p>
+                      </p>
+                      <MdOutlineKeyboardDoubleArrowRight className="" />
                     </div>
-                  </a>
+                  </div>
+                </span> */}
+
+                <span
+                  className="w-full"
+                  onClick={() => {
+                    router.push("./jerk");
+                  }}
+                >
+                  <img src={triangle.src} alt="" className="w-32 absolute" />
+                  <div className="w-20 h-24 p-1 rounded-md center bg-[#ffffff] relative top-4 left-[10px]">
+                    <div className="w-[72px] h-[88px] center flex flex-col rounded-md bg-[#EBEDFF]">
+                      <span className="border-[#8B95E3] rounded-full center pt-0">
+                        <img src={jerkvalue.src} alt="" className="w-8" />
+                      </span>
+                      <p className="text-center font-semibold text-xs">
+                        Tab to see
+                        <p className="text-center text-xs">Jerk Value</p>
+                      </p>
+                      <MdOutlineKeyboardDoubleArrowRight className="" />
+                    </div>
+                  </div>
                 </span>
               </div>
             </div>
