@@ -1,27 +1,33 @@
-import React from "react";
-import { GoogleMap, LoadScript } from "@react-google-maps/api";
+import React, { useState } from "react";
+import { Map, InfoWindow, Marker, GoogleApiWrapper } from "google-maps-react";
 
-const containerStyle = {
-  width: "100%",
-  height: "100vh",
-};
+const SAHelp = (props: any) => {
+  const [selectedPlace, setSelectedPlace] = useState(null);
 
-const center = {
-  lat: -34.397,
-  lng: 150.644,
-};
+  const onMarkerClick = (props: any, marker: any) => {
+    setSelectedPlace(props);
+  };
 
-export default function SAHelp() {
+  const onInfoWindowClose = () => {
+    setSelectedPlace(null);
+  };
+
   return (
-    // <div className='h-screen'>SAHelp</div>
-    <div className="h-screen">
-      <LoadScript googleMapsApiKey="process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY">
-        <GoogleMap
-          mapContainerStyle={containerStyle}
-          center={center}
-          zoom={10}
-        />
-      </LoadScript>
+    <div className="h-screen w-full">
+      <p>SAHelp</p>
+      <Map google={props.google} zoom={14}>
+        <Marker onClick={onMarkerClick} name={"Current location"} />
+
+        <InfoWindow onClose={onInfoWindowClose} marker={selectedPlace}>
+          <div>
+            <h1>{selectedPlace && selectedPlace.name}</h1>
+          </div>
+        </InfoWindow>
+      </Map>
     </div>
   );
-}
+};
+
+export default GoogleApiWrapper({
+  apiKey: "YOUR_GOOGLE_API_KEY_GOES_HERE",
+})(SAHelp);

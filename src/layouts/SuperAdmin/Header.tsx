@@ -56,7 +56,7 @@ export default function Header({ open, setOpen }: any) {
         // Simulate a delay (replace with your actual logout logic)
         // await new Promise((resolve) => setTimeout(resolve, 1000));
 
-        router.push("../../components/Login");
+        router.push("./login.tsx");
       }
     } catch (error) {
       console.error("Logout failed:", error);

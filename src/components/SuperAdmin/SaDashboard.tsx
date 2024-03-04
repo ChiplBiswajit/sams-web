@@ -46,7 +46,7 @@ export default function SADashboard() {
     labels: ["All Devices", "Active", "Inactive"],
     datasets: [
       {
-        label: ["Total devices"],
+        label: "Total devices",
         data: [15, 5, 10],
         backgroundColor: [
           "rgb(54, 162, 235)",
@@ -367,7 +367,7 @@ export default function SADashboard() {
           </div>
         </span>
 
-        <div className="w-full  h-full flex md:flex-row flex-col gap-2 p-5 rounded-md ">
+        <div className="w-full  h-full mb-4 flex md:flex-row flex-col gap-2 p-5 rounded-md ">
           <div className=" md:w-[50%]  md:h-[50%] w-full h-full">
             <Bar
               className="  justify-center items-center shadow-md "
@@ -377,18 +377,26 @@ export default function SADashboard() {
           <div className="md:w-[50%] md:h-[50%] w-full h-full">
             <Line
               data={data}
-              options={options}
+              // options={options}
               className="justify-center items-center shadow-md "
             />
           </div>
         </div>
         <div className="w-full center  h-full">
           <div className="w-full center">
-            <PolarArea data={polarData2} options={polarOptions} />
+            <div className="w-[70%] h-[70%]">
+              <PolarArea data={polarData2} options={polarOptions} />
+            </div>
           </div>
           <div className="w-full h-full center">
-            <Doughnut data={donutData} options={donutOptions} />
+            <div className="w-[70%] h-[70%]">
+              <Doughnut
+                data={donutData}
+                // options={donutOptions}
+              />{" "}
+            </div>
           </div>
+       
         </div>
       </div>
     </section>

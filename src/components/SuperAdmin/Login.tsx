@@ -3,9 +3,9 @@ import { useRouter } from "next/router";
 import Swal from "sweetalert2";
 import * as Yup from "yup";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import { loginpageimg } from "../assets/Login";
+import { loginpageimg } from "../../assets/Login";
 import { BsFillEyeFill, BsFillEyeSlashFill } from "react-icons/bs";
-import Loader from "./Loader";
+import Loader from "../Loader";
 
 const validationSchema = Yup.object().shape({
   username: Yup.string()
@@ -35,7 +35,6 @@ export default function Login() {
 
       console.log("Username:", values.username);
       console.log("Password:", values.password);
-
       try {
         const response = await fetch(apiUrl, {
           method: "POST",

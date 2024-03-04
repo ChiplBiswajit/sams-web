@@ -2,6 +2,7 @@ import Head from "next/head";
 import React, { ReactElement, useEffect, useState } from "react";
 import Sidebar from "./Sidebar";
 import Loader from "@/src/components/Loader";
+import { Amteklogo } from "@/src/assets/SuperAdmin/header";
 type prop = {
   title?: string;
   children: ReactElement | ReactElement[];
@@ -24,13 +25,13 @@ export default function SAmainLayout({ children, title = "AMTeK" }: prop) {
   return (
     <>
       <Head>
-        {/* <meta property="og:image" content={mainLogo.src} /> */}
+        <meta property="og:image" content={Amteklogo.src} />
         <title>{title}</title>
-        {/* <link rel='icon' href='main-logo.webp'></link> */}
+        <link rel="icon" href="amtekk.webp"></link>
       </Head>
 
       {loading ? (
-        <Loader/>
+        <Loader />
       ) : (
         <>
           <Sidebar>

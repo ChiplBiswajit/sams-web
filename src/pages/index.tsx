@@ -1,5 +1,5 @@
 import FlashScreen from "../components/FlashScreen";
-import Login from "../components/Login";
+import Login from "../components/SuperAdmin/Login";
 
 export default function Home() {
   return (
