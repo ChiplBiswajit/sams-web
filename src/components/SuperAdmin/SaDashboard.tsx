@@ -26,6 +26,7 @@ import {
   RadialLinearScale, // Add RadialLinearScale for polar charts
   DoughnutController, // Add DoughnutController for the donut chart
 } from "chart.js";
+import Link from "next/link";
 
 Chart.register(
   Tooltip,
@@ -224,7 +225,7 @@ export default function SADashboard() {
   return (
     <section className="w-full h-full bg-[#EEF1FC] ">
       <div className="w-full  flex flex-col">
-        <span className="w-full flex md:flex-row  p-2 gap-4">
+        <span className="w-full flex md:flex-row   p-2 gap-4">
           <div className="w-full  p-1 flex flex-col gap-2 center  rounded-md bg-gradient-to-r from-[#272770]  to-[#BA3664]">
             <span className=" w-full flex flex-col pl-2">
               <p className="text-white md:text-lg  font-semibold ">{`Total Number of Devices`}</p>
@@ -277,6 +278,7 @@ export default function SADashboard() {
               <p className="text-white md:text-lg  font-semibold ">
                 Total Number of Fleets
               </p>
+              {/* <p className="text-white md:text-lg  font-semibold "></p> */}
               <p className="text-white md:text-lg  font-semibold ">Admins</p>
             </span>
             <span className="w-full flex pl-2 center  justify-between">
@@ -367,17 +369,16 @@ export default function SADashboard() {
           </div>
         </span>
 
-        <div className="w-full  h-full mb-4 flex md:flex-row flex-col gap-2 p-5 rounded-md ">
-          <div className=" md:w-[50%]  md:h-[50%] w-full h-full">
+        <div className="w-full  h-full mb-4 flex center md:flex-row flex-col gap-2 p-5 rounded-md ">
+          <div className=" md:w-[50%]  md:h-[50%] center w-[90%] h-[90%]">
             <Bar
-              className="  justify-center items-center shadow-md "
+              className="justify-center items-center shadow-md "
               data={bardata}
             />
           </div>
-          <div className="md:w-[50%] md:h-[50%] w-full h-full">
+          <div className="md:w-[50%] md:h-[50%] center w-[90%] h-[90%]">
             <Line
               data={data}
-              // options={options}
               className="justify-center items-center shadow-md "
             />
           </div>

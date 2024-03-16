@@ -112,36 +112,35 @@ const Jerkvalue = () => {
     // ... (rest of your JSX)
     <div className="w-full mt-8 h-auto rounded-lg shadow-2xl  p-2">
       <div className="">
-      <Line
-        data={{
-          labels: jerkValueData.map((entry) => entry.timestamp),
-          datasets: [
-            {
-              label: "Jerk Value",
-              data: jerkValueData.map((entry) => entry.jerkValue),
-              borderColor: "rgba(255, 0, 0, 1)", // Red color for jerk value line
-              borderWidth: 1,
-              pointRadius: 3, // Adjust the point radius as needed
-              fill: true,
-              backgroundColor: "rgba(255, 0, 0, 1)", // Transparent fill color
+        <Line
+          data={{
+            labels: jerkValueData.map((entry) => entry.timestamp),
+            datasets: [
+              {
+                label: "Jerk Value",
+                data: jerkValueData.map((entry) => entry.jerkValue),
+                borderColor: "rgba(255, 0, 0, 1)", // Red color for jerk value line
+                borderWidth: 1,
+                pointRadius: 3, // Adjust the point radius as needed
+                fill: true,
+                backgroundColor: "rgba(255, 0, 0, 1)", // Transparent fill color
+              },
+            ],
+          }}
+          options={{
+            scales: {
+              x: {
+                type: "linear",
+                position: "bottom",
+                min: 0,
+              },
+              y: {
+                beginAtZero: true,
+              },
             },
-          ],
-        }}
-        options={{
-          scales: {
-            x: {
-              type: "linear",
-              position: "bottom",
-              min: 0,
-            },
-            y: {
-              beginAtZero: true,
-            },
-          },
-        }}
-      />
+          }}
+        />
       </div>
-    
     </div>
   );
 };
@@ -159,14 +158,14 @@ const center = {
 const googleMapsApiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
 const LocationData = () => {
-  const [res, setRes] = useState<Message[]>([]); // Specify the type here
+  const [locres, setLocRes] = useState<Message[]>([]); // Specify the type here
   const [msg, setMsg] = useState<Message | null>(null); // Specify the type here
 
   useEffect(() => {
     try {
       socketServcies.initializeSocket();
       socketServcies.on("received_message", (receivedMsg: any) => {
-        setRes(receivedMsg);
+        setLocRes(receivedMsg);
         console.log("received_message", receivedMsg?.atoms[0]?.latitude);
         console.log("received_message", receivedMsg?.atoms[0]?.longitude);
 
@@ -196,7 +195,7 @@ const LocationData = () => {
         <GoogleMap
           mapContainerStyle={mapContainerStyle}
           center={center}
-          zoom={11}
+          zoom={8}
         >
           {msg?.atoms?.[0]?.latitude !== undefined &&
             msg?.atoms?.[0]?.longitude !== undefined && (
@@ -322,7 +321,6 @@ export default function SALivedata() {
             ambulanceID
           );
           console.log("-----@@@@@@@@@@@@@@@@@@@@------alcohol", alcoholData);
-
           return (
             <div
               className="w-auto h-auto mb-0 md:mb-7 md:pl-7"
@@ -471,10 +469,16 @@ export default function SALivedata() {
                         oxygen
                       </p>
                       <p className=" text-center text-xs">
-                        {
-                          (alcoholDataState as AlcoholDataState)?.oxygen
-                            ?.filterValue
-                        }
+                        {(() => {
+                          const oxygenFilterValue = (
+                            alcoholDataState as AlcoholDataState
+                          )?.oxygen?.filterValue;
+                          const displayedOxygenValue =
+                            typeof oxygenFilterValue === "number"
+                              ? Math.min(Math.max(oxygenFilterValue, 0), 100)
+                              : 0; // Set a default value (e.g., 0) if oxygenFilterValue is not a number
+                          return displayedOxygenValue + "%";
+                        })()}
                       </p>
                     </div>
                   </div>
@@ -607,7 +611,6 @@ export default function SALivedata() {
                     </div>
                   </a>
                 </span>
-            
               </div>
             </div>
 

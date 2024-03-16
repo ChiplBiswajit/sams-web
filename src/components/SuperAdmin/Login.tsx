@@ -30,8 +30,8 @@ export default function Login() {
       await validationSchema.validate(values, { abortEarly: false });
 
       // API endpoint
-      // const apiUrl = "https://0r4mtgsn-3006.inc1.devtunnels.ms/user/login";
-      const apiUrl = "https://24x7healthcare.live/adminLogin";
+      const apiUrl = "https://0r4mtgsn-3006.inc1.devtunnels.ms/users/login";
+      // const apiUrl = "https://24x7healthcare.live/adminLogin";
 
       console.log("Username:", values.username);
       console.log("Password:", values.password);
@@ -42,7 +42,7 @@ export default function Login() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            adminId: values.username,
+            userId: values.username,
             password: values.password,
           }),
         });
@@ -53,19 +53,24 @@ export default function Login() {
           throw new Error(`Login failed. Status: ${response.status}`);
         }
 
-        // Assuming the API returns a JSON with a success message
         const data = await response.json();
 
+        // Store the token in session storage
+        sessionStorage.setItem("authToken", data.token);
+        sessionStorage.setItem("ProfileData", JSON.stringify(data.profile)); // Assuming profile data is available in 'data.profile'
+
         console.log("API Response Data:", data);
+        console.log("Profile Data:", data.profile);
 
         Swal.fire({
           icon: "success",
           title: "Login Successful!",
           text: "You are now logged in.",
           confirmButtonColor: "#01246F",
+          timer: 1500,
         });
 
-        router.push("./SuperAdmin/dashboard");
+        router.push("./dashboard");
 
         setSubmitting(false);
         setIsSubmitting(false); // Set loading state to false after form submission
@@ -99,7 +104,7 @@ export default function Login() {
             <img
               src={loginpageimg.src}
               alt=""
-              className=  " h-[35vh]  md:w-[100vh] md:h-[85vh]"
+              className=" h-[35vh]  md:w-[100vh] md:h-[85vh]"
             />
           </div>
         </div>

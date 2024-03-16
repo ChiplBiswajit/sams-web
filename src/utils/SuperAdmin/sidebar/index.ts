@@ -12,41 +12,42 @@ import {
   reportamtek,
   stocks,
 } from "@/src/assets/SuperAdmin/Sidebar/Index";
+import { camera } from "@/src/assets/SuperAdmin/fleets/offcanvas";
 
 export const navbar: SuperAdminnavbar[] = [
   {
     id: 1,
     icon: dashboard,
     title: "Dashboard",
-    path: "/SuperAdmin/dashboard",
+    path: "/dashboard",
     pagePath: "dashboard",
   },
   {
     id: 2,
     icon: ChiplAdmin,
-    title: "Chipl Admin",
-    path: "/SuperAdmin/chiplAdmin",
-    pagePath: "ChiplAdmin",
+    title: "Admin",
+    path: "/admin",
+    pagePath: "admin",
   },
-  {
-    id: 3,
-    icon: fleets,
-    title: "Fleets",
-    path: "/SuperAdmin/fleets",
-    pagePath: "Fleets",
-  },
+  // {
+  //   id: 3,
+  //   icon: fleets,
+  //   title: "Fleets",
+  //   path: "/fleets",
+  //   pagePath: "Fleets",
+  // },
   {
     id: 4,
     icon: stocks,
     title: "Stocks",
-    path: "/SuperAdmin/stocks",
+    path: "/stocks",
     pagePath: "Stocks",
   },
   {
     id: 5,
     icon: live,
     title: "Live Data",
-    path: "/SuperAdmin/liveData",
+    path: "/liveData",
     pagePath: "LiveData",
   },
   // {
@@ -56,13 +57,20 @@ export const navbar: SuperAdminnavbar[] = [
   //   path: "/SuperAdmin/jerk",
   //   pagePath: "jerk",
   // },
-  // {
-  //   id: 11,
-  //   icon: location,
-  //   title: "Location",
-  //   path: "/SuperAdmin/location",
-  //   pagePath: "location",
-  // },
+  {
+    id: 11,
+    icon: location,
+    title: "Location",
+    path: "/location",
+    pagePath: "location",
+  },
+  {
+    id: 13,
+    icon: camera,
+    title: "Camera",
+    path: "/camera",
+    pagePath: "camera",
+  },
   {
     id: 9,
     icon: reportamtek,
@@ -74,21 +82,29 @@ export const navbar: SuperAdminnavbar[] = [
     id: 6,
     icon: profilePage,
     title: "Profile",
-    path: "/SuperAdmin/profile",
+    path: "/profile",
     pagePath: "Profile",
   },
   {
     id: 7,
     icon: help,
     title: "Help",
-    path: "/SuperAdmin/help",
+    path: "/help",
     pagePath: "Help",
   },
   {
     id: 8,
     icon: Aboutus,
     title: "About Us",
-    path: "/SuperAdmin/About_Us",
+    path: "/About_Us",
     pagePath: "About_Us",
   },
+  // {
+  //   id: 9,
+  //   icon: Aboutus,
+  //   title: "Hams Login",
+  //   path: "/hamslogin",
+  //   pagePath: "hamslogin",
+  // },
 ];
+

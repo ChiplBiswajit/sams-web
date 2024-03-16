@@ -56,7 +56,7 @@ export default function Header({ open, setOpen }: any) {
         // Simulate a delay (replace with your actual logout logic)
         // await new Promise((resolve) => setTimeout(resolve, 1000));
 
-        router.push("./login.tsx");
+        router.push("./login");
       }
     } catch (error) {
       console.error("Logout failed:", error);
@@ -85,14 +85,14 @@ export default function Header({ open, setOpen }: any) {
               <span className="h-10 w-1 rounded-full bg-[#01339F] mr-3"></span>
               <p className="w-full text-xl font-bold text-[#01339F]">AMTeK</p>
             </span>
-          </span>
-          <div className="pl-0">
-            <MdMenuOpen
-              className={`text-black text-4xl cursor-pointer 
+            <div className="pl-4 md:pl-11">
+              <MdMenuOpen
+                className={`text-black text-4xl cursor-pointer 
               ${!open && "rotate-180"}`}
-              onClick={() => setOpen((open: any) => !open)}
-            />
-          </div>
+                onClick={() => setOpen((open: any) => !open)}
+              />
+            </div>
+          </span>
         </span>
 
         <div className="flex gap-5 justify-end m-4 center">

@@ -15,6 +15,7 @@
     "@mui/material": "^5.15.10",
     "@react-google-maps/api": "^2.19.3",
     "@reduxjs/toolkit": "^2.2.1",
+    "axios": "^1.6.7",
     "chart.js": "^4.4.1",
     "font-awesome": "^4.7.0",
     "formik": "^2.4.5",

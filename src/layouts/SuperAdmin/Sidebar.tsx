@@ -12,6 +12,7 @@ import { useRouter } from "next/router";
 import { superadminprofile } from "@/src/assets/SuperAdmin/dashboard";
 import SADashboard from "@/src/components/SuperAdmin/SaDashboard";
 import Header from "./Header";
+import Link from "next/link";
 type prop = {
   title?: string;
   children: ReactElement | ReactElement[];
@@ -58,7 +59,6 @@ export default function Sidebar({ children, title = "Amtek" }: prop) {
       }
     } catch (error) {
       console.error("Logout failed:", error);
-
       // Display error message
       Swal.fire({
         icon: "error",
@@ -72,9 +72,9 @@ export default function Sidebar({ children, title = "Amtek" }: prop) {
   return (
     <>
       <Header setOpen={setOpen} />
-      <div className="flex h-screen md:h-auto ">
+      <div className="flex max-h-auto md:h-auto ">
         <div
-          className={`bg-[#DCDFFF]   p-2 pt-3 w-60 ${
+          className={`bg-[#DCDFFF]  p-2 pt-3 w-60 ${
             open ? "w-60" : "w-[80px]"
           } ease-in-out transition-all duration-300  top-0 left-0 `}
         >
@@ -91,13 +91,11 @@ export default function Sidebar({ children, title = "Amtek" }: prop) {
               }`}
             >
               <p className="w-full text-sm font-bold text-black">Welcome!</p>
-              <p className="w-full text-sm font-bold text-gray-500">
-                super Admin
-              </p>
+              <p className="w-full text-base font-bold text-gray-500">Admin</p>
             </span>
           </span>
           <span
-            className={` fixed inline-flex mt-32 flex-col items-start gap-4 p-2`}
+            className={`fixed inline-flex mt-28 flex-col items-start gap-3 p-2`}
           >
             <text
               className={`text-start  duration-300 text-gray-500 font-bold 
@@ -108,7 +106,7 @@ export default function Sidebar({ children, title = "Amtek" }: prop) {
             </text>
 
             {navbar.map((item: any) => (
-              <a
+              <Link
                 key={item.id}
                 href={item.path}
                 className={`flex items-center gap-2 pl-2 text-gray-600 transition-all duration-300 rounded-md 
@@ -129,11 +127,11 @@ export default function Sidebar({ children, title = "Amtek" }: prop) {
                 >
                   {item.title}
                 </span>
-              </a>
+              </Link>
             ))}
           </span>
         </div>
-        <div className="w-full pt-14 ">
+        <div className="w-full h-auto pt-14 ">
           <>{children}</>
         </div>
       </div>

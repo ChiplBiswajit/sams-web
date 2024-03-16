@@ -1,3 +1,4 @@
+import Error from "../components/Error";
 import FlashScreen from "../components/FlashScreen";
 import Login from "../components/SuperAdmin/Login";
 
@@ -6,6 +7,7 @@ export default function Home() {
     <>
       <FlashScreen />
       <Login />
+      {/* <Error/> */}
     </>
   );
 }

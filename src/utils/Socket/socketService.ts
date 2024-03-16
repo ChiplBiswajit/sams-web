@@ -1,7 +1,7 @@
 import { io } from "socket.io-client";
 import { getObjByKey } from "./storage";
 // const SOCKET_URL = 'https:apiman.in'
-const SOCKET_URL = 'http://46.28.44.138:3004/'
+const SOCKET_URL = "http://46.28.44.138:3004/";
 // const SOCKET_URL = 'https://0r4mtgsn-3004.inc1.devtunnels.ms/'
 // const SOCKET_URL = "https://0r4mtgsn-3004.inc1.devtunnels.ms/"; //last local
 // const SOCKET_URL = 'http://24x7healthcare.live/'//last lo cal/'
@@ -44,6 +44,25 @@ class WSService {
   //   }
   // };
 
+  emitAllLocation = async () => {
+    // Made this function async
+    await this.retrieveData(); // Wait for data retrieval
+    this.socket.emit("joinLocation", location);
+  };
+
+  retrieveAllLocation = async () => {
+    try {
+      const storedData = await getObjByKey("obj");
+      console.log("Retriev+++++++++++++:+", storedData);
+      // Assign the retrieved data to stringToSend
+      location =
+        storedData?.ambulanceId == null ? storedData : storedData?.ambulanceId;
+      console.log("--------------------", location);
+    } catch (error) {
+      console.error("Error retrieving data:", error);
+    }
+  };
+
   retrieveData = async () => {
     try {
       // Use setTimeout to add a delay of 2 minutes (120,000 milliseconds)
@@ -53,8 +72,9 @@ class WSService {
       console.log("Retriev+++++++++++++:+", storedData);
 
       // Assign the retrieved data to stringToSend
-      stringToSend = storedData?.ambulanceId == null ? storedData : storedData?.ambulanceId;
-      console.log("--------------------", stringToSend)
+      stringToSend =
+        storedData?.ambulanceId == null ? storedData : storedData?.ambulanceId;
+      console.log("--------------------", stringToSend);
     } catch (error) {
       console.error("Error retrieving data:", error);
     }
@@ -64,7 +84,6 @@ class WSService {
     // Made this function async
     await this.retrieveData(); // Wait for data retrieval
     this.socket.emit("emit data", stringToSend);
-
   };
   socket: any;
   //--end--
