@@ -34,7 +34,7 @@ import Loader from "../Loader";
 import { live, location } from "@/src/assets/SuperAdmin/Sidebar/Index";
 import { MdOutlineKeyboardDoubleArrowRight } from "react-icons/md";
 import { useRouter } from "next/router";
-import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
+import { GoogleMap, LoadScript, Marker, useJsApiLoader } from "@react-google-maps/api";
 import livelocation from "../../assets/SuperAdmin/Sidebar/google-maps.png";
 import {
   Chart,
@@ -68,82 +68,7 @@ Chart.register(
   DoughnutController // Register DoughnutController
 );
 import { Line } from "react-chartjs-2";
-// Sample heart rate data
-const sampleJerkValueData = [
-  { timestamp: 0, jerkValue: 0 },
-  { timestamp: 1, jerkValue: 2 },
-  { timestamp: 2, jerkValue: 4 },
-  { timestamp: 3, jerkValue: 15 },
-  { timestamp: 4, jerkValue: 20 },
-  { timestamp: 5, jerkValue: 60 },
-  { timestamp: 6, jerkValue: 10 },
-  { timestamp: 7, jerkValue: 60 },
-  { timestamp: 8, jerkValue: 75 },
-  { timestamp: 9, jerkValue: 21 },
-  { timestamp: 10, jerkValue: 8 },
-  { timestamp: 11, jerkValue: 16 },
-  { timestamp: 12, jerkValue: 54 },
-  { timestamp: 13, jerkValue: 89 },
-  { timestamp: 14, jerkValue: 76 },
-  { timestamp: 15, jerkValue: 40 },
-  { timestamp: 16, jerkValue: 87 },
-  { timestamp: 17, jerkValue: 56 },
-  { timestamp: 18, jerkValue: 32 },
-  { timestamp: 19, jerkValue: 12 },
-  { timestamp: 20, jerkValue: 82 },
-  { timestamp: 21, jerkValue: 99 },
-  { timestamp: 22, jerkValue: 66 },
-  { timestamp: 23, jerkValue: 78 },
-  { timestamp: 24, jerkValue: 21 },
-  { timestamp: 25, jerkValue: 1 },
-  { timestamp: 26, jerkValue: 23 },
-  { timestamp: 27, jerkValue: 45 },
-  { timestamp: 28, jerkValue: 56 },
-  { timestamp: 29, jerkValue: 78 },
-  { timestamp: 30, jerkValue: 51 },
-  { timestamp: 31, jerkValue: 89 },
-  // Add more data points as needed
-];
-
-const Jerkvalue = () => {
-  const [jerkValueData, setJerkValueData] = useState(sampleJerkValueData);
-
-  return (
-    // ... (rest of your JSX)
-    <div className="w-full mt-8 h-auto rounded-lg shadow-2xl  p-2">
-      <div className="">
-        <Line
-          data={{
-            labels: jerkValueData.map((entry) => entry.timestamp),
-            datasets: [
-              {
-                label: "Jerk Value",
-                data: jerkValueData.map((entry) => entry.jerkValue),
-                borderColor: "rgba(255, 0, 0, 1)", // Red color for jerk value line
-                borderWidth: 1,
-                pointRadius: 3, // Adjust the point radius as needed
-                fill: true,
-                backgroundColor: "rgba(255, 0, 0, 1)", // Transparent fill color
-              },
-            ],
-          }}
-          options={{
-            scales: {
-              x: {
-                type: "linear",
-                position: "bottom",
-                min: 0,
-              },
-              y: {
-                beginAtZero: true,
-              },
-            },
-          }}
-        />
-      </div>
-    </div>
-  );
-};
+import SAJerkdata from "./SAJerkdata";
 
 const mapContainerStyle = {
   height: "100%",
@@ -154,8 +79,6 @@ const center = {
   lat: 20.314081,
   lng: 85.818766,
 };
-
-const googleMapsApiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
 const LocationData = () => {
   const [locres, setLocRes] = useState<Message[]>([]); // Specify the type here
@@ -168,7 +91,6 @@ const LocationData = () => {
         setLocRes(receivedMsg);
         console.log("received_message", receivedMsg?.atoms[0]?.latitude);
         console.log("received_message", receivedMsg?.atoms[0]?.longitude);
-
         // Set the message in the state variable
         setMsg(receivedMsg);
       });
@@ -177,42 +99,37 @@ const LocationData = () => {
     }
   }, []);
 
-  if (!googleMapsApiKey) {
-    return <div>Error: Google Maps API key not defined</div>;
-  }
-
   interface Message {
     atoms?: Array<{
       latitude: number;
       longitude: number;
-      // Add other properties as needed
     }>;
-    // Add other properties as needed
   }
-  return (
+
+  const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "",
+  });
+
+  return isLoaded ? (
     <div className="h-full w-full">
-      <LoadScript googleMapsApiKey={googleMapsApiKey}>
-        <GoogleMap
-          mapContainerStyle={mapContainerStyle}
-          center={center}
-          zoom={8}
-        >
-          {msg?.atoms?.[0]?.latitude !== undefined &&
-            msg?.atoms?.[0]?.longitude !== undefined && (
-              <Marker
-                icon={{
-                  url: "/gps.png",
-                  scaledSize: { width: 60, height: 60 } as google.maps.Size,
-                }}
-                position={{
-                  lat: msg?.atoms?.[0]?.latitude || 20.29565501725301,
-                  lng: msg?.atoms?.[0]?.longitude || 85.81768540604737,
-                }}
-              />
-            )}
-        </GoogleMap>
-      </LoadScript>
+      <GoogleMap mapContainerStyle={mapContainerStyle} center={center} zoom={5}>
+        {msg?.atoms?.[0]?.latitude !== undefined &&
+          msg?.atoms?.[0]?.longitude !== undefined && (
+            <Marker
+              icon={{
+                url: "/gps.png",
+                scaledSize: { width: 60, height: 60 } as google.maps.Size,
+              }}
+              position={{
+                lat: msg?.atoms?.[0]?.latitude,
+                lng: msg?.atoms?.[0]?.longitude,
+              }}
+            />
+          )}
+      </GoogleMap>
     </div>
+  ) : (
+    <></>
   );
 };
 
@@ -269,7 +186,7 @@ export default function SALivedata() {
     try {
       //  const response = await fetch(`https://0r4mtgsn-3004.inc1.devtunnels.ms/fetchAmbulanceList/${filter}`);
       const response = await fetch(
-        `https://24x7healthcare.live/fetchAmbulanceList/${filter}`
+        `https://24x7healthcare.live/v1fetchAmbulanceList/${filter}`
       );
       const data = await response.json();
       console.log("amblist", data);
@@ -615,7 +532,7 @@ export default function SALivedata() {
             </div>
 
             <div className="w-full mt-12 ">
-              <Jerkvalue />
+              <SAJerkdata />
             </div>
           </div>
         </div>

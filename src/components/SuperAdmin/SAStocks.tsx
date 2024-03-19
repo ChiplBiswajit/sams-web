@@ -12,7 +12,7 @@ export default function SAStocks() {
     undefined
   );
   const [loading, setLoading] = useState(true);
-  const API_URL = "https://0r4mtgsn-3004.inc1.devtunnels.ms/admins/getStocks";
+  const API_URL = "https://24x7healthcare.live/admins/getStocks";
 
   useEffect(() => {
     fetchData();

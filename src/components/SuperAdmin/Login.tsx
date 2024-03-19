@@ -30,7 +30,7 @@ export default function Login() {
       await validationSchema.validate(values, { abortEarly: false });
 
       // API endpoint
-      const apiUrl = "https://0r4mtgsn-3006.inc1.devtunnels.ms/users/login";
+      const apiUrl = "https://sams.24x7healthcare.live/users/login";
       // const apiUrl = "https://24x7healthcare.live/adminLogin";
 
       console.log("Username:", values.username);

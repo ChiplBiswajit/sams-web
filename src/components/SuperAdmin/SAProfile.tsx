@@ -22,11 +22,10 @@ export default function SAProfile() {
   const handleSubmit = () => {
     console.log("Form data submitted:", formData);
     updateProfileData(); // Call the function to update profile data
-  
+
     // Close the dialog after submission
     setIsDialogOpen(false);
   };
-  
 
   const handleCancel = () => {
     // Reset the form data
@@ -67,9 +66,10 @@ export default function SAProfile() {
     try {
       const authToken = sessionStorage.getItem("authToken");
       const userId = formData.userId; // Assuming userId is available in formData
-  
-      const API_URL = `https://0r4mtgsn-3006.inc1.devtunnels.ms/users/updateProfile/${userId}`;
-  
+
+      // const API_URL = `https://0r4mtgsn-3006.inc1.devtunnels.ms/users/updateProfile/${userId}`;
+      const API_URL = `https://sams.24x7healthcare.lives/users/updateProfile/${userId}`;
+
       const response = await fetch(API_URL, {
         method: "PUT",
         headers: {
@@ -78,7 +78,7 @@ export default function SAProfile() {
         },
         body: JSON.stringify(formData),
       });
-  
+
       if (response.ok) {
         console.log("Profile updated successfully");
         // Optionally, you can perform any actions after successful update
@@ -91,7 +91,6 @@ export default function SAProfile() {
       // Handle error case here
     }
   }, [formData.userId, formData, sessionStorage]);
-  
 
   return (
     <section className="h-screen p-2">
@@ -114,9 +113,7 @@ export default function SAProfile() {
             </div>
             <div className="w-[50%] flex-col flex md:items-center">
               <span className="font-bold text-lg ">Contact Number:</span>
-              <span className="text-base font-mono">
-                {formData.contactNo}
-              </span>
+              <span className="text-base font-mono">{formData.contactNo}</span>
             </div>
           </div>
           <div className="w-full flex  md:flex-row flex-col md:gap-0 gap-4 px-8">
@@ -167,9 +164,7 @@ export default function SAProfile() {
                   <input
                     type="text"
                     value={formData.name}
-                    onChange={(e) =>
-                      handleInputChange("name", e.target.value)
-                    }
+                    onChange={(e) => handleInputChange("name", e.target.value)}
                     className="mt-1 p-2 w-full border rounded-md"
                   />
                 </div>
@@ -195,12 +190,13 @@ export default function SAProfile() {
                   <input
                     type="text"
                     value={formData.emailId}
-                    onChange={(e) => handleInputChange("emailId", e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange("emailId", e.target.value)
+                    }
                     className="mt-1 p-2 w-full border rounded-md"
                   />
                 </div>
               </div>
-            
 
               {/* Submit button */}
               <div className="flex w-full md:pt-10 pt-20 justify-end center gap-3">

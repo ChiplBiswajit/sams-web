@@ -72,7 +72,7 @@ export default function Sidebar({ children, title = "Amtek" }: prop) {
   return (
     <>
       <Header setOpen={setOpen} />
-      <div className="flex max-h-auto md:h-auto ">
+      <div className="flex h-auto md:h-auto ">
         <div
           className={`bg-[#DCDFFF]  p-2 pt-3 w-60 ${
             open ? "w-60" : "w-[80px]"

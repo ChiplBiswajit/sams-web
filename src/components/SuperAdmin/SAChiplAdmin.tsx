@@ -20,7 +20,7 @@ export default function SAChiplAdmin() {
 
   const [apiData, setApiData] = useState<ApiData | undefined>(undefined);
   const [loading, setLoading] = useState(true);
-  const API_URL = "https://0r4mtgsn-3006.inc1.devtunnels.ms/admins/getAdmin";
+  const API_URL = "https://sams.24x7healthcare.live/admins/getAdmin";
 
   useEffect(() => {
     fetchData();

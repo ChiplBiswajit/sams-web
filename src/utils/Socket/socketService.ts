@@ -9,6 +9,9 @@ const SOCKET_URL = "http://46.28.44.138:3004/";
 let stringToSend = "";
 
 class WSService {
+  disconnect() {
+    throw new Error("Method not implemented.");
+  }
   initializeSocket = async () => {
     try {
       this.socket = io(SOCKET_URL, {
@@ -30,48 +33,10 @@ class WSService {
     }
   };
 
-  //  added
-  // retrieveData = async () => {
-  //   // console.log("hiiooooooooooooooiiiiiiiiiiiii")
-  //   try {
-  //     const storedData = await getObjByKey("obj");
-  //     console.log("etrieved Data:",storedData)
-  //     // console.log("Retrieved Data: in skt.js page = ", storedData);
-  //     stringToSend =
-  //       storedData?.ambulanceId == null ? storedData : storedData?.ambulanceId; // Assign the retrieved data to stringToSend
-  //   } catch (error) {
-  //     console.error("Error retrieving data:", error);
-  //   }
-  // };
-
-  emitAllLocation = async () => {
-    // Made this function async
-    await this.retrieveData(); // Wait for data retrieval
-    this.socket.emit("joinLocation", location);
-  };
-
-  retrieveAllLocation = async () => {
-    try {
-      const storedData = await getObjByKey("obj");
-      console.log("Retriev+++++++++++++:+", storedData);
-      // Assign the retrieved data to stringToSend
-      location =
-        storedData?.ambulanceId == null ? storedData : storedData?.ambulanceId;
-      console.log("--------------------", location);
-    } catch (error) {
-      console.error("Error retrieving data:", error);
-    }
-  };
-
   retrieveData = async () => {
     try {
-      // Use setTimeout to add a delay of 2 minutes (120,000 milliseconds)
-      // await new Promise(resolve => setTimeout(resolve, 2000));
-
       const storedData = await getObjByKey("obj");
       console.log("Retriev+++++++++++++:+", storedData);
-
-      // Assign the retrieved data to stringToSend
       stringToSend =
         storedData?.ambulanceId == null ? storedData : storedData?.ambulanceId;
       console.log("--------------------", stringToSend);
