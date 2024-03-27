@@ -6,6 +6,10 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import { loginpageimg } from "../../assets/Login";
 import { BsFillEyeFill, BsFillEyeSlashFill } from "react-icons/bs";
 import Loader from "../Loader";
+import { RecoilRoot, useSetRecoilState } from "recoil"; // Import Recoil components
+import { authState } from '../../utils/Recoil/authState'; // Import your Recoil atom for auth state
+
+
 
 const validationSchema = Yup.object().shape({
   username: Yup.string()
@@ -21,6 +25,7 @@ export default function Login() {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const setAuth = useSetRecoilState(authState); // Get setter function for auth state
 
   const handleLogin = async (
     values: { username: string; password: string },
@@ -71,7 +76,8 @@ export default function Login() {
         });
 
         router.push("./dashboard");
-
+        
+        setAuth(true); // Set auth state to true upon successful login
         setSubmitting(false);
         setIsSubmitting(false); // Set loading state to false after form submission
       } catch (error) {

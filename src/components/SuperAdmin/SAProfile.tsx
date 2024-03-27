@@ -101,9 +101,9 @@ export default function SAProfile() {
             <img src={superadminprofile.src} alt="loading..." className="p-1" />
           </span>
           <span className="font-bold text-lg ">User ID:</span>
-          <text className="text-base font-serif  font-medium">
+          <span className="text-base font-serif  font-medium">
             {formData.userId}
-          </text>
+          </span>
         </span>
         <div className="w-full flex flex-col md:gap-8 gap-5 mt-10 ">
           <div className="w-full flex md:flex-row flex-col md:gap-0 gap-4 px-8">

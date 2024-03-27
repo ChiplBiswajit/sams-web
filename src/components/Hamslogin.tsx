@@ -5,7 +5,6 @@ import Swal from "sweetalert2";
 const errorCode = " Unauthorized ";
 const errorMessage =
   "The page you are looking for might have been removed had its name changed or its temporary unavailable.";
-
 const Hamslogin = ({ username, password }: any) => {
   const router = useRouter();
   const [loginFailed, setLoginFailed] = useState(false);

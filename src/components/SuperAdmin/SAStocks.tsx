@@ -171,8 +171,8 @@ export default function SAStocks() {
             {stocksData?.stocks?.map((user: any, index: any) => {
               console.log("hiiiiiiiiiiiiiiiiiiiiiiiii", stocksData); // Log apiData here
               return (
-                <tbody className="bg-white divide-y divide-gray-200">
-                  <tr key={index}>
+                <tbody  key={index} className="bg-white divide-y divide-gray-200">
+                  <tr>
                     <td className="px-6 py-2 text-center whitespace-nowrap">
                       {index + 1}
                     </td>

@@ -81,8 +81,8 @@ const center = {
 };
 
 const LocationData = () => {
-  const [locres, setLocRes] = useState<Message[]>([]); // Specify the type here
-  const [msg, setMsg] = useState<Message | null>(null); // Specify the type here
+  const [locres, setLocRes] = useState<Message[]>([]); 
+  const [msg, setMsg] = useState<Message | null>(null); 
 
   useEffect(() => {
     try {
@@ -184,9 +184,16 @@ export default function SALivedata() {
 
   const fetchAmbulanceData = async () => {
     try {
-      //  const response = await fetch(`https://0r4mtgsn-3004.inc1.devtunnels.ms/fetchAmbulanceList/${filter}`);
+      const authToken = sessionStorage.getItem("authToken");
+      // const filter = ""; // Define your filter here
       const response = await fetch(
-        `https://24x7healthcare.live/v1fetchAmbulanceList/${filter}`
+        `https://24x7healthcare.live/v1fetchAmbulanceList/${filter}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        }
       );
       const data = await response.json();
       console.log("amblist", data);
@@ -199,6 +206,7 @@ export default function SALivedata() {
       setLoading(false);
     }
   };
+  
 
   useEffect(() => {
     storeObjByKey("obj", "Admin");
@@ -501,7 +509,7 @@ export default function SALivedata() {
                         }
                       </p>
                       <p className=" text-center  text-xs">
-                        <text className="font-bold"> Alert: </text>
+                        <span className="font-bold"> Alert: </span>
                         {(alcoholDataState as AlcoholDataState)?.alcohol?.alert}
                       </p>
                     </div>

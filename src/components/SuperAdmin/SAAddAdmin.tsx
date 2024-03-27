@@ -11,9 +11,13 @@ import Swal from "sweetalert2";
 
 interface SAAddAdminProps {
   toggleForm: () => void; // Define the toggleForm prop
+  setFormikFunction: (formikFunc: any) => void; // Add this prop
 }
 
-export default function SAAddAdmin({ toggleForm }: SAAddAdminProps) {
+export default function SAAddAdmin({
+  toggleForm,
+ 
+}: SAAddAdminProps) {
   //add form details
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({
@@ -95,6 +99,10 @@ export default function SAAddAdmin({ toggleForm }: SAAddAdminProps) {
       }
     },
   });
+
+  // useEffect(() => {
+  //   setFormikFunction(formik); // Pass the formik function to the parent component
+  // }, [formik, setFormikFunction]);
 
   useEffect(() => {
     if (showForm) {

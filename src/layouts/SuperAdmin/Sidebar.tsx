@@ -13,6 +13,7 @@ import { superadminprofile } from "@/src/assets/SuperAdmin/dashboard";
 import SADashboard from "@/src/components/SuperAdmin/SaDashboard";
 import Header from "./Header";
 import Link from "next/link";
+import ProtectedRoute from "@/src/pages/ProtectedRoute";
 type prop = {
   title?: string;
   children: ReactElement | ReactElement[];
@@ -97,13 +98,13 @@ export default function Sidebar({ children, title = "Amtek" }: prop) {
           <span
             className={`fixed inline-flex mt-28 flex-col items-start gap-3 p-2`}
           >
-            <text
+            <span
               className={`text-start  duration-300 text-gray-500 font-bold 
      ${!open && "hidden"}
      `}
             >
               MENU
-            </text>
+            </span>
 
             {navbar.map((item: any) => (
               <Link
@@ -131,8 +132,10 @@ export default function Sidebar({ children, title = "Amtek" }: prop) {
             ))}
           </span>
         </div>
-        <div className="w-full h-auto pt-14 ">
-          <>{children}</>
+        <div className="w-full h-auto pt-14">
+          <>
+            <ProtectedRoute>{children}</ProtectedRoute>
+          </>
         </div>
       </div>
     </>

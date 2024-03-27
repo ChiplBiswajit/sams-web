@@ -64,13 +64,13 @@ export const navbar: SuperAdminnavbar[] = [
     path: "/location",
     pagePath: "location",
   },
-  {
-    id: 13,
-    icon: camera,
-    title: "Camera",
-    path: "/camera",
-    pagePath: "camera",
-  },
+  // {
+  //   id: 13,
+  //   icon: camera,
+  //   title: "Camera",
+  //   path: "/camera",
+  //   pagePath: "camera",
+  // },
   {
     id: 9,
     icon: reportamtek,

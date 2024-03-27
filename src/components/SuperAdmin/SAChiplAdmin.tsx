@@ -17,6 +17,16 @@ interface ApiData {
 
 export default function SAChiplAdmin() {
   const [showAddAdminForm, setShowAddAdminForm] = useState(false);
+  const [formikFunction, setFormikFunction] = useState<any>(null); // State to hold formik function
+
+// useEffect to call the formik function
+useEffect(() => {
+  if (formikFunction) {
+    // call formik function here
+    formikFunction.handleSubmit();
+  }
+}, [formikFunction]);
+
 
   const [apiData, setApiData] = useState<ApiData | undefined>(undefined);
   const [loading, setLoading] = useState(true);
@@ -179,8 +189,8 @@ export default function SAChiplAdmin() {
             {apiData?.admin?.map((user: any, index: any) => {
               console.log("hiiiiiiiiiiiiiiiiiiiiiiiii", apiData); // Log apiData here
               return (
-                <tbody className="bg-white divide-y divide-gray-200">
-                  <tr key={index}>
+                <tbody  key={index} className="bg-white divide-y divide-gray-200">
+                  <tr >
                     <td className="px-6 py-2 text-center whitespace-nowrap">
                       {index + 1}
                     </td>
@@ -223,7 +233,7 @@ export default function SAChiplAdmin() {
           </div>
         )}
       </table>
-      {showAddAdminForm && <SAAddAdmin toggleForm={toggleAddAdminForm} />}
+      {showAddAdminForm && <SAAddAdmin toggleForm={toggleAddAdminForm} setFormikFunction={setFormikFunction} />}
     </section>
   );
 }
