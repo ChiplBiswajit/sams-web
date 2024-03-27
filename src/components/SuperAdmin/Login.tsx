@@ -9,8 +9,6 @@ import Loader from "../Loader";
 import { RecoilRoot, useSetRecoilState } from "recoil"; // Import Recoil components
 import { authState } from '../../utils/Recoil/authState'; // Import your Recoil atom for auth state
 
-
-
 const validationSchema = Yup.object().shape({
   username: Yup.string()
     .required("Username is required")

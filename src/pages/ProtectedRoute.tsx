@@ -24,7 +24,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   };
   useEffect(() => {
     checkAuth();
-  }, [router, isAuthenticated, checkAuth]);
+  }, [router, isAuthenticated]);
 
   return isAuthenticated ? (
     // <ProtectedRoute>
