@@ -3,7 +3,7 @@ import { Chart } from "react-google-charts";
 import socketServcies from "@/src/utils/Socket/socketService";
 
 export default function SAJerkdata() {
-  const [res, setRes] = useState([0.9, 0.1, 0.9, 0.9]);
+  const [res, setRes] = useState([]);
 
   useEffect(() => {
     socketServcies.initializeSocket();
@@ -23,11 +23,11 @@ export default function SAJerkdata() {
     });
   };
 
-  // Convert data into the format required by react-google-charts
   const chartData = [
     ["Time", "Jerk"],
-    ...res.map((value, index) => [getCurrentTime(), value]),
+    ...(Array.isArray(res) ? res.map((value, index) => [getCurrentTime(), value]) : []),
   ];
+  
 
   return (
     <div className="h-[100vh] w-full">

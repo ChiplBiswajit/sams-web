@@ -57,13 +57,13 @@ export const navbar: SuperAdminnavbar[] = [
   //   path: "/SuperAdmin/jerk",
   //   pagePath: "jerk",
   // },
-  {
-    id: 11,
-    icon: location,
-    title: "Location",
-    path: "/location",
-    pagePath: "location",
-  },
+  // {
+  //   id: 11,
+  //   icon: location,
+  //   title: "Location",
+  //   path: "/location",
+  //   pagePath: "location",
+  // },
   // {
   //   id: 13,
   //   icon: camera,

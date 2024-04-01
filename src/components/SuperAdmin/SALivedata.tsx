@@ -31,16 +31,8 @@ import { ImCross } from "react-icons/im";
 import socketServcies from "@/src/utils/Socket/socketService";
 import { getObjByKey, storeObjByKey } from "@/src/utils/Socket/storage";
 import Loader from "../Loader";
-import { live, location } from "@/src/assets/SuperAdmin/Sidebar/Index";
 import { MdOutlineKeyboardDoubleArrowRight } from "react-icons/md";
 import { useRouter } from "next/router";
-import {
-  GoogleMap,
-  LoadScript,
-  Marker,
-  useJsApiLoader,
-} from "@react-google-maps/api";
-import livelocation from "../../assets/SuperAdmin/Sidebar/google-maps.png";
 import {
   Chart,
   Tooltip,
@@ -85,58 +77,6 @@ const center = {
   lng: 85.818766,
 };
 
-const LocationData = () => {
-  const [locres, setLocRes] = useState<Message[]>([]);
-  const [msg, setMsg] = useState<Message | null>(null);
-
-  useEffect(() => {
-    try {
-      socketServcies.initializeSocket();
-      socketServcies.on("received_message", (receivedMsg: any) => {
-        setLocRes(receivedMsg);
-        console.log("received_message", receivedMsg?.atoms[0]?.latitude);
-        console.log("received_message", receivedMsg?.atoms[0]?.longitude);
-        // Set the message in the state variable
-        setMsg(receivedMsg);
-      });
-    } catch (error) {
-      console.error(error);
-    }
-  }, []);
-
-  interface Message {
-    atoms?: Array<{
-      latitude: number;
-      longitude: number;
-    }>;
-  }
-
-  const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "",
-  });
-
-  return isLoaded ? (
-    <div className="h-full w-full">
-      <GoogleMap mapContainerStyle={mapContainerStyle} center={center} zoom={5}>
-        {msg?.atoms?.[0]?.latitude !== undefined &&
-          msg?.atoms?.[0]?.longitude !== undefined && (
-            <Marker
-              icon={{
-                url: "/gps.png",
-                scaledSize: { width: 60, height: 60 } as google.maps.Size,
-              }}
-              position={{
-                lat: msg?.atoms?.[0]?.latitude,
-                lng: msg?.atoms?.[0]?.longitude,
-              }}
-            />
-          )}
-      </GoogleMap>
-    </div>
-  ) : (
-    <></>
-  );
-};
 
 export default function SALivedata() {
   const router = useRouter();
@@ -381,7 +321,7 @@ export default function SALivedata() {
                     GPS
                   </p>
                   <span className="w-full">
-                    <LocationData />
+                    {/* <LocationData /> */}
                   </span>
                 </div>
               </div>
