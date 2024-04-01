@@ -34,7 +34,12 @@ import Loader from "../Loader";
 import { live, location } from "@/src/assets/SuperAdmin/Sidebar/Index";
 import { MdOutlineKeyboardDoubleArrowRight } from "react-icons/md";
 import { useRouter } from "next/router";
-import { GoogleMap, LoadScript, Marker, useJsApiLoader } from "@react-google-maps/api";
+import {
+  GoogleMap,
+  LoadScript,
+  Marker,
+  useJsApiLoader,
+} from "@react-google-maps/api";
 import livelocation from "../../assets/SuperAdmin/Sidebar/google-maps.png";
 import {
   Chart,
@@ -81,8 +86,8 @@ const center = {
 };
 
 const LocationData = () => {
-  const [locres, setLocRes] = useState<Message[]>([]); 
-  const [msg, setMsg] = useState<Message | null>(null); 
+  const [locres, setLocRes] = useState<Message[]>([]);
+  const [msg, setMsg] = useState<Message | null>(null);
 
   useEffect(() => {
     try {
@@ -206,7 +211,6 @@ export default function SALivedata() {
       setLoading(false);
     }
   };
-  
 
   useEffect(() => {
     storeObjByKey("obj", "Admin");
