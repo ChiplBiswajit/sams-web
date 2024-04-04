@@ -79,7 +79,7 @@ export default function SAAddAdmin({
           }
         );
         resetForm();
-        console.log("Response:", response.data); // You can handle the response as per your requirement
+        // console.log("Response:", response.data); // You can handle the response as per your requirement
         Swal.fire({
           icon: "success",
           title: "Admin added successfully",
@@ -88,7 +88,7 @@ export default function SAAddAdmin({
         });
         setShowForm(false);
       } catch (error) {
-        console.error("Error:", error);
+        // console.error("Error:", error);
         Swal.fire({
           icon: "error",
           title: "Failed to add admin",

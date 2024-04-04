@@ -43,10 +43,10 @@ const Hamslogin = ({ username, password }: any) => {
         });
       } else {
         // Handle non-successful response (e.g., show error message)
-        console.error("Login failed:", response.status, response.statusText);
+        // console.error("Login failed:", response.status, response.statusText);
       }
     } catch (error) {
-      console.error("Error during login:", error);
+      // console.error("Error during login:", error);
     }
   };
 

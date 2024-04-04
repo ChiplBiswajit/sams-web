@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Swal from "sweetalert2";
 import * as Yup from "yup";
@@ -7,7 +7,7 @@ import { loginpageimg } from "../../assets/Login";
 import { BsFillEyeFill, BsFillEyeSlashFill } from "react-icons/bs";
 import Loader from "../Loader";
 import { RecoilRoot, useSetRecoilState } from "recoil"; // Import Recoil components
-import { authState } from '../../utils/Recoil/authState'; // Import your Recoil atom for auth state
+import { authState } from "../../utils/Recoil/authState"; // Import your Recoil atom for auth state
 
 const validationSchema = Yup.object().shape({
   username: Yup.string()
@@ -36,8 +36,8 @@ export default function Login() {
       const apiUrl = "https://sams.24x7healthcare.live/users/login";
       // const apiUrl = "https://24x7healthcare.live/adminLogin";
 
-      console.log("Username:", values.username);
-      console.log("Password:", values.password);
+      // console.log("Username:", values.username);
+      // console.log("Password:", values.password);
       try {
         const response = await fetch(apiUrl, {
           method: "POST",
@@ -50,7 +50,7 @@ export default function Login() {
           }),
         });
 
-        console.log("Response Status:", response.status);
+        // console.log("Response Status:", response.status);
 
         if (!response.ok) {
           throw new Error(`Login failed. Status: ${response.status}`);
@@ -62,8 +62,12 @@ export default function Login() {
         sessionStorage.setItem("authToken", data.token);
         sessionStorage.setItem("ProfileData", JSON.stringify(data.profile)); // Assuming profile data is available in 'data.profile'
 
-        console.log("API Response Data:", data);
-        console.log("Profile Data:", data.profile);
+        // Store the token in local storage
+        localStorage.setItem("authToken", data.token);
+        localStorage.setItem("ProfileData", JSON.stringify(data.profile));
+
+        // console.log("API Response Data:", data);
+        // console.log("Profile Data:", data.profile);
 
         Swal.fire({
           icon: "success",
@@ -74,15 +78,15 @@ export default function Login() {
         });
 
         router.push("./dashboard");
-        
-        setAuth(true); // Set auth state to true upon successful login
+
+        // setAuth(true); // Set auth state to true upon successful login
         setSubmitting(false);
         setIsSubmitting(false); // Set loading state to false after form submission
       } catch (error) {
-        console.error("Login failed:", error);
+        // console.error("Login failed:", error);
 
         if (error instanceof Error) {
-          console.log("Error Message:", error.message);
+          // console.log("Error Message:", error.message);
         }
 
         Swal.fire({
@@ -99,6 +103,12 @@ export default function Login() {
       setSubmitting(false);
     }
   };
+
+// useEffect(async () => {
+//   const authToken = await localStorage.getItem("authToken");
+//   console.log("rrrrrrrrrrrrrrrrrrrrrrr",authToken);
+// }, [])
+
 
   return (
     <section className="w-full h-screen md:h-[100vh] center bg-[#DCDFFF]">

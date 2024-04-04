@@ -49,12 +49,12 @@ useEffect(() => {
       if (response.ok) {
         const data = await response.json();
         setApiData(data);
-        console.log("Admin List +++++++++", data);
+        // console.log("Admin List +++++++++", data);
       } else {
-        console.error("Error fetching data:", response.statusText);
+        // console.error("Error fetching data:", response.statusText);
       }
     } catch (error) {
-      console.error("Error fetching data:", error);
+      // console.error("Error fetching data:", error);
     } finally {
       setLoading(false);
     }
@@ -83,7 +83,7 @@ useEffect(() => {
         {apiData && apiData?.status === 200 ? (
           <>
             {apiData?.admin?.map((user: any, index: any) => {
-              console.log("hiiiiiiiiiiiiiiiiiiiiiiiii", apiData); // Log apiData here
+              // console.log("hiiiiiiiiiiiiiiiiiiiiiiiii", apiData); // Log apiData here
               return (
                 <div
                   key={index}
@@ -187,7 +187,7 @@ useEffect(() => {
         {apiData && apiData?.status === 200 ? (
           <>
             {apiData?.admin?.map((user: any, index: any) => {
-              console.log("hiiiiiiiiiiiiiiiiiiiiiiiii", apiData); // Log apiData here
+              // console.log("hiiiiiiiiiiiiiiiiiiiiiiiii", apiData); // Log apiData here
               return (
                 <tbody  key={index} className="bg-white divide-y divide-gray-200">
                   <tr >

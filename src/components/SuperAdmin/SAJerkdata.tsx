@@ -8,12 +8,11 @@ export default function SAJerkdata() {
   useEffect(() => {
     socketServcies.initializeSocket();
     socketServcies.on("received_message", (msg: any) => {
-      console.log("Jerk Value response::::", msg?.alcohol[0]?.jerkValue);
+      // console.log("Jerk Value response::::", msg?.alcohol[0]?.jerkValue);
       setRes(JSON.parse(msg?.alcohol[0]?.jerkValue));
     });
   }, []);
 
-  // Function to get current time in HH:MM:SS format
   const getCurrentTime = () => {
     const now = new Date();
     return now.toLocaleTimeString([], {

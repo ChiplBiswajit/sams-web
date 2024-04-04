@@ -26,7 +26,7 @@ class WSService {
         console.log("=== socket disconnected ====");
       });
       this.socket.on("error", (data: any) => {
-        console.log("socekt error", data);
+        // console.log("socekt error", data);
       });
     } catch (error) {
       console.log("scoket is not inialized", error);
@@ -36,12 +36,12 @@ class WSService {
   retrieveData = async () => {
     try {
       const storedData = await getObjByKey("obj");
-      console.log("Retriev+++++++++++++:+", storedData);
+      // console.log("Retriev+++++++++++++:+", storedData);
       stringToSend =
         storedData?.ambulanceId == null ? storedData : storedData?.ambulanceId;
-      console.log("--------------------", stringToSend);
+      // console.log("--------------------", stringToSend);
     } catch (error) {
-      console.error("Error retrieving data:", error);
+      // console.error("Error retrieving data:", error);
     }
   };
 

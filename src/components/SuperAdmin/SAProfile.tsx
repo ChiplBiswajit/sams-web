@@ -20,7 +20,7 @@ export default function SAProfile() {
   };
 
   const handleSubmit = () => {
-    console.log("Form data submitted:", formData);
+    // console.log("Form data submitted:", formData);
     updateProfileData(); // Call the function to update profile data
 
     // Close the dialog after submission
@@ -80,14 +80,14 @@ export default function SAProfile() {
       });
 
       if (response.ok) {
-        console.log("Profile updated successfully");
+        // console.log("Profile updated successfully");
         // Optionally, you can perform any actions after successful update
       } else {
-        console.error("Failed to update profile");
+        // console.error("Failed to update profile");
         // Handle error case here
       }
     } catch (error) {
-      console.error("Error while updating profile:", error);
+      // console.error("Error while updating profile:", error);
       // Handle error case here
     }
   }, [formData.userId, formData, sessionStorage]);

@@ -54,7 +54,7 @@ export default function SACamera() {
 
     socket.on("connect", () => {
       const ambulanceId = getQueryParam("ambulanceId");
-      console.log("Connected to the socket", ambulanceId);
+      // console.log("Connected to the socket", ambulanceId);
       socket.emit("joinRoom", ambulanceId);
     });
 
@@ -66,18 +66,18 @@ export default function SACamera() {
       if (vdo) {
         vdo.src = `data:image/jpeg;base64,${msg}`;
       } else {
-        console.error(
-          "Element with id 'messageInput' not found or is not an image element"
-        );
+        // console.error(
+        //   "Element with id 'messageInput' not found or is not an image element"
+        // );
       }
     });
 
     socket.on("peopleInRoom", (numberOfClients) => {
-      console.log(`There are ${numberOfClients} people in the room.`);
+      // console.log(`There are ${numberOfClients} people in the room.`);
     });
 
     socket.on("disconnect", () => {
-      console.log("Disconnected from the server room");
+      // console.log("Disconnected from the server room");
     });
 
     return () => {

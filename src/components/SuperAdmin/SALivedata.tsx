@@ -33,6 +33,8 @@ import { getObjByKey, storeObjByKey } from "@/src/utils/Socket/storage";
 import Loader from "../Loader";
 import { MdOutlineKeyboardDoubleArrowRight } from "react-icons/md";
 import { useRouter } from "next/router";
+import { useMediaQuery } from "react-responsive";
+
 import {
   Chart,
   Tooltip,
@@ -64,19 +66,75 @@ Chart.register(
   RadialLinearScale, // Register RadialLinearScale
   DoughnutController // Register DoughnutController
 );
-import { Line } from "react-chartjs-2";
+import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api"; // Add this import
 import SAJerkdata from "./SAJerkdata";
 
-const mapContainerStyle = {
-  height: "100%",
-  width: "100%",
-};
+interface Message {
+  location?: {
+    latitude: number;
+    longitude: number;
+  };
+}
 
-const center = {
-  lat: 20.314081,
-  lng: 85.818766,
-};
+const LocationData = ({ lat, lng }: any) => {
+  const containerStyle = {
+    height: "100%",
+    width: "100%",
+  };
 
+  const center = {
+    lat: lat || 0,
+    lng: lng || 0,
+  };
+
+  const mapOptions = {
+    disableDefaultUI: true,
+    styles: [
+      {
+        featureType: "poi",
+        elementType: "labels",
+        stylers: [{ visibility: "off" }],
+      },
+
+      {
+        featureType: "road",
+        elementType: "labels",
+        stylers: [{ visibility: "off" }],
+      },
+    ],
+  };
+
+  const { isLoaded } = useJsApiLoader({
+    id: "google-map-script",
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "",
+  });
+
+  
+
+  return isLoaded ? (
+    <div className="md:h-full md:w-full h-96 ">
+      <GoogleMap
+        mapContainerStyle={containerStyle}
+        center={center}
+        zoom={10}
+        options={mapOptions}
+      >
+        <Marker
+          icon={{
+            url: "/gps.png",
+            scaledSize: { width: 60, height: 60 } as google.maps.Size,
+          }}
+          position={{
+            lat: lat || 0,
+            lng: lng || 0,
+          }}
+        />
+      </GoogleMap>
+    </div>
+  ) : (
+    <></>
+  );
+};
 
 export default function SALivedata() {
   const router = useRouter();
@@ -88,6 +146,10 @@ export default function SALivedata() {
   const [loading, setLoading] = useState(true); // Updated to include loading state
   const [alcoholDataState, setAlcoholDataState] = useState(null);
   const [ambulanceID, setAmbulanceID] = useState();
+
+  useEffect(() => {
+    <LocationData />;
+  }, [alcoholDataState]);
 
   interface AlcoholDataState {
     oxygen?: {
@@ -141,13 +203,13 @@ export default function SALivedata() {
         }
       );
       const data = await response.json();
-      console.log("amblist", data);
+      // console.log("amblist", data);
       if (data && data.ambulanceList) {
         setAmbulanceData(data.ambulanceList);
         setLoading(false);
       }
     } catch (error) {
-      console.log("Error fetching data:", error);
+      // console.log("Error fetching data:", error);
       setLoading(false);
     }
   };
@@ -171,6 +233,7 @@ export default function SALivedata() {
   useEffect(() => {
     fetchAmbulanceData();
   }, [filter]);
+
   return (
     <section className="md:w-[92%] h-screen md:h-auto pt-0 md:pt-2 p-5 md:gap-6 center grid grid-cols-2 md:grid-cols-3">
       {loading && <Loader />}
@@ -185,21 +248,27 @@ export default function SALivedata() {
               ? (alcoholData[item.ambulanceId] as { amtekStatus?: number })
                   .amtekStatus || 0
               : 0;
-          console.log(
-            "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++",
-            ambulanceID
-          );
-          console.log("-----@@@@@@@@@@@@@@@@@@@@------alcohol", alcoholData);
+          // console.log(
+          //   "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++",
+          //   ambulanceID
+          // );
+          // console.log("-----@@@@@@@@@@@@@@@@@@@@------alcohol", alcoholData);
+          // console.log(
+          //   "------ggggggggggggggggggghvg",
+          //   alcoholDataState?.location
+          // );
+
           return (
             <div
               className="w-auto h-auto mb-0 md:mb-7 md:pl-7"
               key={item?.id}
               onClick={async () => {
-                console.log("first");
+                // console.log("first");
                 storeObjByKey("obj", item);
                 const dt = await getObjByKey("obj");
                 openOffCanvas();
                 setAlcoholDataState(alcoholData?.[item?.ambulanceId] || null);
+                // loc  = alcoholData?.[item?.ambulanceId]
                 setAmbulanceID(item?.ambulanceId);
               }}
             >
@@ -289,14 +358,19 @@ export default function SALivedata() {
             </div>
           );
         })}
+
+
+        
       {isOffCanvasOpen && alcoholDataState && (
         <div className=" absolute top-0 right-0 h-full w-full bg-black bg-opacity-15 flex items-center overflow-x-auto overflow-y-auto justify-end ">
-          <div className="w-[85%] md:w-[85%] flex top-14 flex-col absolute bg-white p-4 overflow-y-auto">
+          <div className="w-[85%] md:w-[85%] h-full  flex top-14 flex-col absolute bg-white p-4 overflow-y-auto">
             <span className="w-full  mb-2 flex  justify-between center">
-              <span className="w-8 h-7 rounded-full center bg-[#7F88CE]">
+              <span className="w-8 h-7 rounded-full center bg-[#7F88CE]"
+                 onClick={closeOffCanvas}
+                 >
                 <ImCross
                   className="text-white text-sm"
-                  onClick={closeOffCanvas}
+               
                 />
               </span>
 
@@ -320,8 +394,11 @@ export default function SALivedata() {
                   <p className="text-center bg-[#8B95E3] text-black rounded-sm text-sm font-bold capitalize">
                     GPS
                   </p>
-                  <span className="w-full">
-                    {/* <LocationData /> */}
+                  <span className="h-full w-full">
+                    <LocationData className="md:h-full md:w-full h-96"
+                      lat={(alcoholDataState  as Message)?.location ?.latitude}
+                      lng={(alcoholDataState as Message)?.location?.longitude}
+                    />
                   </span>
                 </div>
               </div>

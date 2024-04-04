@@ -36,7 +36,7 @@ export default function Sidebar({ children, title = "Amtek" }: prop) {
         setIsFullscreen(true);
       }
     } else {
-      console.error("Fullscreen not supported by your browser");
+      // console.error("Fullscreen not supported by your browser");
     }
   };
 
@@ -54,12 +54,12 @@ export default function Sidebar({ children, title = "Amtek" }: prop) {
 
       // Check if the user confirmed the logout
       if (confirmLogout.isConfirmed) {
-        console.log("Logout clicked");
+        // console.log("Logout clicked");
 
         router.push("../../components/Login");
       }
     } catch (error) {
-      console.error("Logout failed:", error);
+      // console.error("Logout failed:", error);
       // Display error message
       Swal.fire({
         icon: "error",

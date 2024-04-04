@@ -8,29 +8,19 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const isAuthenticated = useRecoilValue(authState);
 
   const checkAuth = async () => {
-    const authToken = await sessionStorage.getItem("authToken");
-    // Retrieve authentication token from local storage
-    console.log("page reload", !isAuthenticated, !authToken);
-
+    const authToken = await localStorage.getItem("authToken");
+    console.log("Auth Token:", authToken);
+    // console.log("Is Authenticated:", isAuthenticated);
     if (!isAuthenticated) {
       router.push("/login");
-      // Redirect to login page if not authenticated and no token found
     }
-
-    // if (!isAuthenticated && !authToken) {
-    //   router.push("/login");
-    //   // Redirect to login page if not authenticated and no token found
-    // }
   };
+  
   useEffect(() => {
     checkAuth();
   }, [router, isAuthenticated]);
 
-  return isAuthenticated ? (
-    // <ProtectedRoute>
-    <>{children}</>
-  ) : // </ProtectedRoute>
-  null;
+  return isAuthenticated() ? <>{children}</> : null;
 };
 
 export default ProtectedRoute;

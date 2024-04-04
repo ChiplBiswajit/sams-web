@@ -3,8 +3,6 @@ import React, { ReactElement, useEffect, useState } from "react";
 import Sidebar from "./Sidebar";
 import Loader from "@/src/components/Loader";
 import { Amteklogo } from "@/src/assets/SuperAdmin/header";
-import { RecoilRoot, useRecoilValue } from "recoil"; // Import Recoil components
-import { authState } from '../../utils/Recoil/authState'; // Import your Recoil atom for auth state
 
 type prop = {
   title?: string;
@@ -13,7 +11,6 @@ type prop = {
 
 export default function SAmainLayout({ children, title = "AMTeK" }: prop) {
   const [loading, setLoading] = useState(true);
-  const isAuthenticated = useRecoilValue(authState); // Access auth state from Recoil
 
   useEffect(() => {
     // Simulate an asynchronous operation (e.g., fetching data)

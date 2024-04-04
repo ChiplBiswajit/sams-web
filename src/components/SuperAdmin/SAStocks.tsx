@@ -31,12 +31,12 @@ export default function SAStocks() {
       if (response.ok) {
         const data = await response.json();
         setStocksData(data);
-        console.log("Admin List +++++++++", data);
+        // console.log("Admin List +++++++++", data);
       } else {
-        console.error("Error fetching data:", response.statusText);
+        // console.error("Error fetching data:", response.statusText);
       }
     } catch (error) {
-      console.error("Error fetching data:", error);
+      // console.error("Error fetching data:", error);
     } finally {
       setLoading(false);
     }
@@ -49,7 +49,7 @@ export default function SAStocks() {
         {stocksData && stocksData?.status === 200 ? (
           <>
             {stocksData?.stocks?.map((user: any, index: any) => {
-              console.log("hiiiiiiiiiiiiiiiiiiiiiiiii", stocksData); // Log apiData here
+              // console.log("hiiiiiiiiiiiiiiiiiiiiiiiii", stocksData); // Log apiData here
               return (
                 <div
                   key={index}
@@ -169,7 +169,7 @@ export default function SAStocks() {
         {stocksData && stocksData?.status === 200 ? (
           <>
             {stocksData?.stocks?.map((user: any, index: any) => {
-              console.log("hiiiiiiiiiiiiiiiiiiiiiiiii", stocksData); // Log apiData here
+              // console.log("hiiiiiiiiiiiiiiiiiiiiiiiii", stocksData); // Log apiData here
               return (
                 <tbody  key={index} className="bg-white divide-y divide-gray-200">
                   <tr>

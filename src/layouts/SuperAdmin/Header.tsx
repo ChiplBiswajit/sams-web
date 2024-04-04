@@ -33,7 +33,7 @@ export default function Header({ open, setOpen }: any) {
         setIsFullscreen(true);
       }
     } else {
-      console.error("Fullscreen not supported by your browser");
+      // console.error("Fullscreen not supported by your browser");
     }
   };
 
@@ -51,7 +51,7 @@ export default function Header({ open, setOpen }: any) {
 
       // Check if the user confirmed the logout
       if (confirmLogout.isConfirmed) {
-        console.log("Logout clicked");
+        // console.log("Logout clicked");
 
         // Simulate a delay (replace with your actual logout logic)
         // await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -59,7 +59,7 @@ export default function Header({ open, setOpen }: any) {
         router.push("./login");
       }
     } catch (error) {
-      console.error("Logout failed:", error);
+      // console.error("Logout failed:", error);
 
       // Display error message
       Swal.fire({

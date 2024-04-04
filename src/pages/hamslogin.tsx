@@ -8,7 +8,7 @@ const HamsloginPage = () => {
   const { query } = router;
 
   useEffect(() => {
-    console.log("query", query);
+    // console.log("query", query);
   }, [query]);
 
   return (

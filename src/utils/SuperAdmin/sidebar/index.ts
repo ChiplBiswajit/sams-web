@@ -57,13 +57,13 @@ export const navbar: SuperAdminnavbar[] = [
   //   path: "/SuperAdmin/jerk",
   //   pagePath: "jerk",
   // },
-  // {
-  //   id: 11,
-  //   icon: location,
-  //   title: "Location",
-  //   path: "/location",
-  //   pagePath: "location",
-  // },
+  {
+    id: 11,
+    icon: location,
+    title: "Location",
+    path: "/location",
+    pagePath: "location",
+  },
   // {
   //   id: 13,
   //   icon: camera,
@@ -75,7 +75,7 @@ export const navbar: SuperAdminnavbar[] = [
     id: 9,
     icon: reportamtek,
     title: "Report",
-    path: "https://24x7healthcare.live/allReport",
+    path: "https://24x7healthcare.live/allReport/Admin",
     pagePath: "report",
   },
   {
@@ -85,13 +85,13 @@ export const navbar: SuperAdminnavbar[] = [
     path: "/profile",
     pagePath: "Profile",
   },
-  {
-    id: 7,
-    icon: help,
-    title: "Help",
-    path: "/help",
-    pagePath: "Help",
-  },
+  // {
+  //   id: 7,
+  //   icon: help,
+  //   title: "Help",
+  //   path: "/help",
+  //   pagePath: "Help",
+  // },
   {
     id: 8,
     icon: Aboutus,
