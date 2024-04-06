@@ -9,7 +9,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 
   const checkAuth = async () => {
     const authToken = await localStorage.getItem("authToken");
-    console.log("Auth Token:", authToken);
+    // console.log("Auth Token:", authToken);
     // console.log("Is Authenticated:", isAuthenticated);
     if (!isAuthenticated) {
       router.push("/login");
