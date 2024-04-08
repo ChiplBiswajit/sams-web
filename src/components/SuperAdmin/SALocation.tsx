@@ -52,7 +52,7 @@ export default function SALocation() {
     socketServcies.initializeSocket();
     emitString();
     socketServcies.on("All_Location", (msg: any) => {
-      // console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%", msg);
+      console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%", msg);
       setRes(msg);
     });
   }, []);

@@ -252,7 +252,7 @@ export default function SALivedata() {
           //   "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++",
           //   ambulanceID
           // );
-          // console.log("-----@@@@@@@@@@@@@@@@@@@@------alcohol", alcoholData);
+          console.log("-----@@@@@@@@@@@@@@@@@@@@------alcohol", alcoholData);
           // console.log(
           //   "------ggggggggggggggggggghvg",
           //   alcoholDataState?.location
