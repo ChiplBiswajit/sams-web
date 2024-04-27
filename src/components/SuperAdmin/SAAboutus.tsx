@@ -5,6 +5,7 @@ import React from "react";
 import { FaAddressCard, FaLinkedin } from "react-icons/fa";
 import { IoCall } from "react-icons/io5";
 import { MdEmail } from "react-icons/md";
+import Spo2Graph from "./Spo2Graph";
 
 export default function SAAboutus() {
   return (
@@ -132,6 +133,7 @@ export default function SAAboutus() {
           </span>
       </div>
     </div>
+    {/* <Spo2Graph/> */}
   </div>
 );
 }

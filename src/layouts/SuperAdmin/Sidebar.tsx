@@ -69,6 +69,7 @@ export default function Sidebar({ children, title = "Amtek" }: prop) {
       });
     }
   };
+  const usernamedata = sessionStorage.getItem("userid");
 
   return (
     <>
@@ -92,7 +93,7 @@ export default function Sidebar({ children, title = "Amtek" }: prop) {
               }`}
             >
               <p className="w-full text-sm font-bold text-black">Welcome!</p>
-              <p className="w-full text-base font-bold text-gray-500">Admin</p>
+              <p className="w-full text-base font-bold text-gray-500">{usernamedata}</p>
             </span>
           </span>
           <span

@@ -13,6 +13,7 @@ import {
   stocks,
 } from "@/src/assets/SuperAdmin/Sidebar/Index";
 import { camera } from "@/src/assets/SuperAdmin/fleets/offcanvas";
+// const usernamedata = sessionStorage.getItem("userid");
 
 export const navbar: SuperAdminnavbar[] = [
   {
@@ -71,13 +72,13 @@ export const navbar: SuperAdminnavbar[] = [
   //   path: "/camera",
   //   pagePath: "camera",
   // },
-  {
-    id: 9,
-    icon: reportamtek,
-    title: "Report",
-    path: "https://24x7healthcare.live/allReport/Admin",
-    pagePath: "report",
-  },
+  // {
+  //   id: 9,
+  //   icon: reportamtek,
+  //   title: "Report",
+  //   path: "{`https://0r4mtgsn-3004.inc1.devtunnels.ms/allReport?adminId=${usernamedata}`}",
+  //   pagePath: "report",
+  // },
   {
     id: 6,
     icon: profilePage,
@@ -107,4 +108,3 @@ export const navbar: SuperAdminnavbar[] = [
   //   pagePath: "hamslogin",
   // },
 ];
-

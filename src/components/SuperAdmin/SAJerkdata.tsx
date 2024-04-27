@@ -8,7 +8,7 @@ export default function SAJerkdata() {
   useEffect(() => {
     socketServcies.initializeSocket();
     socketServcies.on("received_message", (msg: any) => {
-      console.log("Jerk Value response:::::::::::::::", msg?.alcohol[0]?.jerkValue);
+      // console.log("Jerk Value response:::::::::::::::", msg?.alcohol[0]?.jerkValue);
       setRes(JSON.parse(msg?.alcohol[0]?.jerkValue));
     });
   }, []);
@@ -29,12 +29,12 @@ export default function SAJerkdata() {
   
 
   return (
-    <div className="h-[100vh] w-full">
-      <h1 className="text-xl text-center font-normal w-full underline-offset-2 underline">
-        Jerk Value{" "}
+    <div className="h-[80vh] w-full bg-[#8B95E3] p-1 rounded-md">
+      <h1 className="text-xl text-center py-1 text-white font-bold w-full underline-offset-2 ">
+        Jerk Graph
       </h1>
       <Chart
-        className="p-1"
+        // className="p-5"
         width={"100%"}
         height={"400px"}
         chartType="LineChart"

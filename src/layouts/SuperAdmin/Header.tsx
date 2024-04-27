@@ -11,6 +11,7 @@ import FullscreenExitIcon from "@mui/icons-material/FullscreenExit";
 import { useRouter } from "next/router";
 import { superadminprofile } from "@/src/assets/SuperAdmin/dashboard";
 import SADashboard from "@/src/components/SuperAdmin/SaDashboard";
+import { reportamtek } from "@/src/assets/SuperAdmin/Sidebar/Index";
 type prop = {
   title?: string;
   children: ReactElement | ReactElement[];
@@ -71,6 +72,8 @@ export default function Header({ open, setOpen }: any) {
     }
   };
 
+  const usernamedata = sessionStorage.getItem("userid");
+
   return (
     <section className="fixed top-0 w-full z-50">
       <div className="w-full flex p-0  justify-between items-center bg-[#DCDFFF] h-14">
@@ -96,6 +99,15 @@ export default function Header({ open, setOpen }: any) {
         </span>
 
         <div className="flex gap-5 justify-end m-4 center">
+          <a
+            href={`https://smartambulance.in/allReport?adminId=${usernamedata}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex center cursor-pointer bg-[#B2C1E0] rounded-md gap-1 p-2"
+          >
+            <img src={reportamtek.src} className="h-5 w-5" alt="" />
+            <h3 className="text-black text-md font-bold"> All Report</h3>
+          </a>
           <span
             className="flex center cursor-pointer bg-[#B2C1E0] rounded-md gap-1 p-2"
             onClick={handleLogout}

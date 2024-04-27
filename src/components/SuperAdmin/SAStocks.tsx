@@ -12,7 +12,7 @@ export default function SAStocks() {
     undefined
   );
   const [loading, setLoading] = useState(true);
-  const API_URL = "https://24x7healthcare.live/admins/getStocks";
+  const API_URL = "https://smartambulance.in/admins/getStocks";
 
   useEffect(() => {
     fetchData();
