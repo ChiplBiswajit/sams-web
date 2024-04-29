@@ -3,6 +3,8 @@ import { Line } from "react-chartjs-2";
 import Socketconfig from "@/src/utils/Socket/Socketconfig";
 
 export default function Spo2Graph() {
+  const MAX_DATA_POINTS = 1000; // Maximum number of data points to display
+
   const [spo2Data, setSpo2Data] = useState<number[]>([]); // Specify number type for spo2Data
   const [labels, setLabels] = useState<string[]>([]); // Specify string type for labels
 
@@ -10,14 +12,27 @@ export default function Spo2Graph() {
     Socketconfig.initializeSocket();
     Socketconfig.on("1234", (msg: any) => {
       const { patientData, patientId } = JSON.parse(msg);
-      // console.log(patientData);
       if (patientId === "1234" && patientData && patientData?.spo2) {
         const { wave } = patientData.spo2;
-        setSpo2Data((prevData) => [...prevData, wave]);
-        setLabels((prevLabels) => [
-          ...prevLabels,
-          new Date().toLocaleTimeString(),
-        ]);
+
+        // Update data and labels
+        setSpo2Data(prevData => {
+          const updatedData = [...prevData, wave];
+          // If data exceeds maximum limit, remove oldest data point
+          if (updatedData.length > MAX_DATA_POINTS) {
+            updatedData.shift(); // Remove the oldest data point
+          }
+          return updatedData;
+        });
+
+        setLabels(prevLabels => {
+          const updatedLabels = [...prevLabels, new Date().toLocaleTimeString()];
+          // If labels exceed maximum limit, remove oldest label
+          if (updatedLabels.length > MAX_DATA_POINTS) {
+            updatedLabels.shift(); // Remove the oldest label
+          }
+          return updatedLabels;
+        });
       }
     });
   }, []);

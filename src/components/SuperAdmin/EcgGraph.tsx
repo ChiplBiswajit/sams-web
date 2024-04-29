@@ -20,21 +20,18 @@ export default function EcgGraph() {
       // console.log("hiiiiiiiiiiiiiiiiiii",patientData);
       if (patientId === "1234" && patientData && patientData?.ecg?.wave1) {
         const { wave1 } = patientData?.ecg;
-        // console.log("wave1", wave1);
-        setecgdata(prevData => {
-          const newData = [...prevData, wave1];
-          return newData.length > MAX_DATA_POINTS ? newData.slice(-MAX_DATA_POINTS) : newData;
-        });      }
-      if (patientId === "1234" && patientData && patientData?.ecg?.wave2) {
-        const { wave2 } = patientData?.ecg;
-        // console.log("wave2", wave2);
-        setecgdata2((prevData) => [...prevData, wave2]);
-      }
-      if (patientId === "1234" && patientData && patientData?.ecg?.wave3) {
-        const { wave3 } = patientData?.ecg;
-        // console.log("wave3", wave3);
-        setecgdata3((prevData) => [...prevData, wave3]);
-      }
+        console.log("wave1", wave1);
+        setecgdata((prevData) => [...prevData, wave1]);      }
+      // if (patientId === "1234" && patientData && patientData?.ecg?.wave2) {
+      //   const { wave2 } = patientData?.ecg;
+      //   // console.log("wave2", wave2);
+      //   setecgdata2((prevData) => [...prevData, wave2]);
+      // }
+      // if (patientId === "1234" && patientData && patientData?.ecg?.wave3) {
+      //   const { wave3 } = patientData?.ecg;
+      //   // console.log("wave3", wave3);
+      //   setecgdata3((prevData) => [...prevData, wave3]);
+      // }
     });
   }, []);
 
@@ -142,7 +139,6 @@ export default function EcgGraph() {
   };
 
 
-  console.log("wave1", ecgdata);
 
   return (
     <>
@@ -150,14 +146,14 @@ export default function EcgGraph() {
         <h2 className="font-bold py-3">EcgGraph wave1</h2>
         <Line data={wave1} options={Wave1options} />
       </div>
-      <div className="p-5 h-96 center flex flex-col w-full">
+      {/* <div className="p-5 h-96 center flex flex-col w-full">
         <h2 className="font-bold py-3">EcgGraph wave2</h2>
         <Line data={wave2} options={Wave2options}/>
-      </div>
-      <div className="p-5 h-96 center flex flex-col w-full">
+      </div> */}
+      {/* <div className="p-5 h-96 center flex flex-col w-full">
         <h2 className="font-bold py-3">EcgGraph wave3</h2>
         <Line data={wave3} options={Wave3options}/>
-      </div>
+      </div> */}
     </>
   );
 }

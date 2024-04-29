@@ -6,15 +6,12 @@ import RespiratoryGraph from "./RespiratoryGraph";
 
 export default function LarkAiData() {
   const [res, setRes] = useState([]);
-  const [Temprature, setTemprature] = useState('--');
-  const [Systolic, setSystolic] = useState('---');
-  const [diastolic, setdiastolic] = useState('---');
-  const [spo2, setspo2] = useState('--');
-  const [pulserate, setpulserate] = useState('---');
-  const [HeartRate, setHeartRate] = useState('---');
-
-
-
+  const [Temprature, setTemprature] = useState("--");
+  const [Systolic, setSystolic] = useState("---");
+  const [diastolic, setdiastolic] = useState("---");
+  const [spo2, setspo2] = useState("--");
+  const [pulserate, setpulserate] = useState("---");
+  const [HeartRate, setHeartRate] = useState("---");
 
   useEffect(() => {
     Socketconfig.initializeSocket();
@@ -28,7 +25,10 @@ export default function LarkAiData() {
         jsonData.patientData.temperature &&
         jsonData.patientData.temperature.temp1
       ) {
-        setTemprature(jsonData.patientData.temperature.temp1);
+        const temp = parseFloat(jsonData.patientData.temperature.temp1);
+        if (temp >= 0 ) {
+          setTemprature(temp.toString());
+        }
       }
       if (
         jsonData &&
@@ -52,7 +52,12 @@ export default function LarkAiData() {
         jsonData.patientData.oxygenSaturation &&
         jsonData.patientData.oxygenSaturation.wave
       ) {
-        setspo2(jsonData.patientData.oxygenSaturation.wave);
+        const spo2Value = parseFloat(
+          jsonData.patientData.oxygenSaturation.wave
+        );
+        if (spo2Value >= 0 ) {
+          setspo2(spo2Value.toString());
+        }
       }
       if (
         jsonData &&
@@ -60,7 +65,10 @@ export default function LarkAiData() {
         jsonData.patientData.pulseRate &&
         jsonData.patientData.pulseRate.wave
       ) {
-        setpulserate(jsonData.patientData.pulseRate.wave);
+        const pulse = parseFloat(jsonData.patientData.pulseRate.wave);
+        if (pulse >= 0 ) {
+          setpulserate(pulse.toString());
+        }
       }
       if (
         jsonData &&
@@ -68,10 +76,13 @@ export default function LarkAiData() {
         jsonData.patientData.heartRate &&
         jsonData.patientData.heartRate.wave
       ) {
-        setHeartRate(jsonData.patientData.heartRate.wave);
-      }
+        const heart = parseFloat(jsonData.patientData.heartRate.wave);
+        if (heart >= 0) {
+          setHeartRate(heart.toString());
+        }      }
     });
   }, []);
+  // console.log("spo2 data", HeartRate);
 
   useEffect(() => {
     if (res === null) {
@@ -87,7 +98,7 @@ export default function LarkAiData() {
         <span className="  py-1  p-1 flex gap-3">
           <p className="text-lg text-black font-bold">Temprature 1:</p>
           <span className="border text-black border-black rounded-md  px-3 py-1">
-            {Temprature } &#8451;
+            {Temprature} &#8451;
           </span>
         </span>
 
@@ -100,13 +111,13 @@ export default function LarkAiData() {
         <span className="  py-1  p-1 flex gap-3">
           <p className="text-lg text-black font-bold">Blood Pressure :</p>
           <span className="border text-black border-black rounded-md  px-3 py-1">
-            {Systolic} / {diastolic }
+            {Systolic} / {diastolic}
           </span>
         </span>
         <span className="  py-1  p-1 flex gap-3">
           <p className="text-lg text-black font-bold">SpO2</p>
           <span className="border text-black border-black rounded-md  px-3 py-1">
-            {spo2 }
+            {spo2}
           </span>
         </span>
         <span className="  py-1  p-1 flex gap-3">
@@ -124,7 +135,7 @@ export default function LarkAiData() {
       </div>
       <div className=" w-full flex flex-col gap-5 ">
         <Spo2Graph />
-        <EcgGraph />
+        {/* <EcgGraph /> */}
         <RespiratoryGraph />
       </div>
     </div>

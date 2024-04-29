@@ -194,7 +194,7 @@ export default function SALivedata() {
     fetchreportData();
   }, [ambulanceID]);
   const storedCameraTopic = sessionStorage.getItem("cameraTopic");
-console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaa",storedCameraTopic)
+// console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaa",storedCameraTopic)
 
   useEffect(() => {
     <LocationData />;

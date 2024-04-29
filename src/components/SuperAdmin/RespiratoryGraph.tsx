@@ -6,19 +6,29 @@ import Socketconfig from "@/src/utils/Socket/Socketconfig";
 export default function RespiratoryGraph() {
   const [respdata, setrespdata] = useState<number[]>([]); // Specify number type for spo2Data
   const [labels, setLabels] = useState<string[]>([]); // Specify string type for labels
+  const MAX_DATA_POINTS = 1000; // Maximum number of data points to display
+
 
   useEffect(() => {
     Socketconfig.initializeSocket();
     Socketconfig.on("1234", (msg: any) => {
       const { patientData, patientId } = JSON.parse(msg);
-      // console.log(patientData);
       if (patientId === "1234" && patientData && patientData?.respiratoryRate) {
         const { wave } = patientData.respiratoryRate;
-        setrespdata((prevData) => [...prevData, wave]);
-        setLabels((prevLabels) => [
-          ...prevLabels,
-          new Date().toLocaleTimeString(),
-        ]);
+        setrespdata((prevData) => {
+          const updatedData = [...prevData, wave];
+          if (updatedData.length > MAX_DATA_POINTS) {
+            updatedData.shift(); // Remove the oldest data point
+          }
+          return updatedData;
+        });
+        setLabels((prevLabels) => {
+          const updatedLabels = [...prevLabels, new Date().toLocaleTimeString()];
+          if (updatedLabels.length > MAX_DATA_POINTS) {
+            updatedLabels.shift(); // Remove the label corresponding to the oldest data point
+          }
+          return updatedLabels;
+        });
       }
     });
   }, []);
