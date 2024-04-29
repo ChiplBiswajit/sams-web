@@ -30,7 +30,7 @@ useEffect(() => {
 
   const [apiData, setApiData] = useState<ApiData | undefined>(undefined);
   const [loading, setLoading] = useState(true);
-  const API_URL = "https://sams.24x7healthcare.live/admins/getAdmin";
+  const API_URL = "https://samsapi.smartambulance.in/admins/getAdmin";
 
   useEffect(() => {
     fetchData();

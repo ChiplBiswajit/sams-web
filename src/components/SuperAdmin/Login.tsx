@@ -33,7 +33,7 @@ export default function Login() {
       await validationSchema.validate(values, { abortEarly: false });
 
       // API endpoint
-      const apiUrl = "https://sams.24x7healthcare.live/users/login";
+      const apiUrl = "https://samsapi.smartambulance.in/users/login";
       // const apiUrl = "https://24x7healthcare.live/adminLogin";
 
       // console.log("Username:", values.username);

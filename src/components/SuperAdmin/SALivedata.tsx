@@ -741,7 +741,7 @@ export default function SALivedata() {
                       </span>
                       <span className="w-full">
                         <a
-                          href={`http://18.60.124.113:8000/stream?ambulanceId=${storedCameraTopic}`}
+                          href={`${storedCameraTopic}`}
                           target="_blank"
                           rel="noopener noreferrer"
                         >

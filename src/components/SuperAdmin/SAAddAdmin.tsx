@@ -62,7 +62,7 @@ export default function SAAddAdmin({
       try {
         const authToken = sessionStorage.getItem("authToken");
         const response = await axios.post(
-          "https://sams.24x7healthcare.live/users/add",
+          "https://samsapi.smartambulance.in/users/add",
           {
             userId: values.userId,
             name: values.name,
