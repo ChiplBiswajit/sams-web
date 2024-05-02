@@ -78,7 +78,11 @@ export default function Header({ open, setOpen }: any) {
     <section className="fixed top-0 w-full z-50">
       <div className="w-full flex p-0  justify-between items-center bg-[#DCDFFF] h-14">
         <span className="flex gap-16 ml-8 ">
-          <span className=" inline-flex ml-2">
+          <span className=" inline-flex ml-2"
+          onClick={() => {
+            router.push("./dashboard");
+          }}
+          >
             <img
               src={Amteklogo.src}
               alt=""

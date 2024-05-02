@@ -24,12 +24,13 @@ export default function SAJerkdata() {
 
   const chartData = [
     ["Time", "Jerk"],
-    ...(Array.isArray(res) ? res.map((value, index) => [getCurrentTime(), value]) : []),
+    ...(Array.isArray(res)
+      ? res.map((value, index) => [getCurrentTime(), value])
+      : []),
   ];
-  
 
   return (
-    <div className="h-[80vh] w-full bg-[#8B95E3] p-1 rounded-md">
+    <div className=" w-full bg-LAVENDER p-1 rounded-md">
       <h1 className="text-xl text-center py-1 text-white font-bold w-full underline-offset-2 ">
         Jerk Graph
       </h1>

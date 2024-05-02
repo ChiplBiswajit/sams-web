@@ -1,25 +1,10 @@
-import {
-  Air,
-  Alcohol,
-  Humidityc,
-  co,
-  insidecard,
-  oxygenc,
-  temprature,
-  totalcard,
-  triangle,
-  violetback,
-  violethalf,
-  voc,
-} from "@/src/assets/SuperAdmin/fleets";
+import { oxygenc, totalcard, triangle } from "@/src/assets/SuperAdmin/fleets";
 import {
   airqualitysensor,
   camera,
   co2,
   compound,
   drop,
-  jerkvalue,
-  map,
   nodata,
   oxygen,
   summer,
@@ -33,9 +18,6 @@ import { getObjByKey, storeObjByKey } from "@/src/utils/Socket/storage";
 import Loader from "../Loader";
 import { MdOutlineKeyboardDoubleArrowRight } from "react-icons/md";
 import { useRouter } from "next/router";
-import { useMediaQuery } from "react-responsive";
-import { TbFilterDown } from "react-icons/tb";
-
 import {
   Chart,
   Tooltip,
@@ -43,16 +25,13 @@ import {
   ArcElement,
   Legend,
   BarElement,
-  CategoryScale, //x-axis
-  LinearScale, //y-axis
+  CategoryScale,
+  LinearScale,
   PointElement,
-  LineElement, // Add LineElement to the registered elements
-  // PolarAreaElement,
-  // Add PolarAreaElement to the registered elements
-  RadialLinearScale, // Add RadialLinearScale for polar charts
-  DoughnutController, // Add DoughnutController for the donut chart
+  LineElement,
+  RadialLinearScale,
+  DoughnutController,
 } from "chart.js";
-
 Chart.register(
   Tooltip,
   Title,
@@ -62,12 +41,11 @@ Chart.register(
   CategoryScale,
   LinearScale,
   PointElement,
-  LineElement, // Register LineElement
-  // PolarAreaElement, // Register PolarAreaElement
-  RadialLinearScale, // Register RadialLinearScale
-  DoughnutController // Register DoughnutController
+  LineElement,
+  RadialLinearScale,
+  DoughnutController
 );
-import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api"; // Add this import
+import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 import SAJerkdata from "./SAJerkdata";
 import LarkAiData from "./LarkAiData";
 
@@ -137,26 +115,6 @@ const LocationData = ({ lat, lng }: any) => {
 };
 
 export default function SALivedata() {
-  const [cameraTopic, setCameraTopic] = useState("");
-
-  const [showAmtekData, setShowAmtekData] = useState(true); // State to track which data to show
-  // Other state variables and useEffect hooks...
-
-  // Function to toggle between Amtek and Lark AI data
-  const toggleData = () => {
-    setShowAmtekData(true);
-    setShowLarkData(false);
-  };
-
-  const [showLarkData, setShowLarkData] = useState(false); // State to track which data to show
-  // Other state variables and useEffect hooks...
-
-  // Function to toggle between Amtek and Lark AI data
-  const toggleLarkData = () => {
-    setShowLarkData(true);
-    setShowAmtekData(false);
-  };
-
   const router = useRouter();
   const [isvitalCanvasOpen, setIsvitalCanvasOpen] = useState(false);
   const [isOffCanvasOpen, setIsOffCanvasOpen] = useState(false);
@@ -167,8 +125,11 @@ export default function SALivedata() {
   const [loading, setLoading] = useState(true); // Updated to include loading state
   const [alcoholDataState, setAlcoholDataState] = useState(null);
   const [ambulanceID, setAmbulanceID] = useState();
-  useEffect(() => {
+  const [showLarkData, setShowLarkData] = useState(false); // State to track which data to show
+  const [showAmtekData, setShowAmtekData] = useState(true); // State to track which data to show
+  const [cameraTopic, setCameraTopic] = useState("");
 
+  useEffect(() => {
     const fetchreportData = async () => {
       try {
         const authToken = sessionStorage.getItem("authToken");
@@ -185,7 +146,6 @@ export default function SALivedata() {
         sessionStorage.setItem("cameraTopic", data?.result);
         setCameraTopic(data?.result);
         // console.log("jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj", data.result);
-
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -194,11 +154,20 @@ export default function SALivedata() {
     fetchreportData();
   }, [ambulanceID]);
   const storedCameraTopic = sessionStorage.getItem("cameraTopic");
-// console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaa",storedCameraTopic)
 
   useEffect(() => {
     <LocationData />;
   }, [alcoholDataState]);
+
+  const toggleData = () => {
+    setShowAmtekData(true);
+    setShowLarkData(false);
+  };
+
+  const toggleLarkData = () => {
+    setShowLarkData(true);
+    setShowAmtekData(false);
+  };
 
   interface AlcoholDataState {
     oxygen?: {
@@ -352,20 +321,20 @@ export default function SALivedata() {
               className="text-red-600 bg-white text-center font-semibold"
               value="ALS"
             >
-              ALS {/* Ambulance icon */}
+              ALS
             </option>
             <option
               className="text-yellow-600 bg-white text-center font-semibold"
               value="BLS"
             >
-              BLS {/* Ambulance icon */}
+              BLS
             </option>
           </select>
         </div>
       </div>
       {loading && <Loader />}
-      <section className="md:w-[92%] flex flex-col  h-screen md:h-screen pl-[5%] pt-0 md:pt-2  center ">
-        <div className="w-full h-full grid grid-cols-2 md:grid-cols-3 pb-40 center  justify-center items-start">
+      <section className="md:w-[92%] flex flex-col  h-screen md:h-screen pl-[5%] pt-0 md:pt-2   ">
+        <div className="w-full  grid grid-cols-2 md:grid-cols-3  gap-4   justify-start items-start">
           {ambulanceData &&
             ambulanceData?.map((item: any) => {
               const alcoholData = res.find(
@@ -410,7 +379,7 @@ export default function SALivedata() {
                       className="md:w-[290px] w-[225px] "
                     />
                   </span>
-                  <div className=" flex gap-5 relative  w-[95%]">
+                  <div className=" flex gap-5 relative  md:w-[290px] w-[225px]">
                     <span className="flex w-full center gap-[2px] ml-3">
                       <span
                         className={`md:h-2 md:w-2 h-1 w-1 rounded-full ${
@@ -426,7 +395,7 @@ export default function SALivedata() {
                       </p>
                     </span>
 
-                    <span className="w-full flex gap-1 p-1 md:ml-[150px] ml-[140px]">
+                    <span className="w-full flex gap-1 p-1 md:ml-[150px] ml-[110px]">
                       {item.ambulanceType === 1 ? (
                         <span className="center gap-1">
                           <FaAmbulance className="text-red-600 text-xs  md:text-sm" />
@@ -493,7 +462,7 @@ export default function SALivedata() {
                     )}
                   </span>
                   <span
-                    className="bg-[#ECEEF1] border  border-black relative top-2 text-sm font-semibold text-black md:left-[15rem] p-[3px] rounded-xl left-[105px]"
+                    className="bg-[#ECEEF1] border  border-black relative md:top-2 top-1 md:text-sm  text-xs font-semibold text-black md:left-[15rem] p-[3px] rounded-xl left-[15em]"
                     onClick={toggleLarkData}
                   >
                     Vitals
@@ -504,8 +473,8 @@ export default function SALivedata() {
         </div>
 
         {isOffCanvasOpen && alcoholDataState && (
-          <div className=" absolute top-0 right-0 h-full w-full bg-black bg-opacity-15 flex items-center overflow-x-auto overflow-y-auto justify-end ">
-            <div className="w-[85%] md:w-[85%] h-full  flex top-14 flex-col absolute bg-white p-4 overflow-y-auto">
+          <div className=" absolute top-0 right-0 h-screen w-full bg-black bg-opacity-15 flex items-center overflow-x-auto overflow-y-auto justify-end ">
+            <div className="w-[85%] md:w-[85%] bg-WHITE h-full  flex top-14 flex-col absolute  p-4 overflow-y-auto">
               <span className="w-full  mb-2 flex  justify-between center">
                 <span
                   className="w-8 h-7 rounded-full center bg-[#7F88CE]"
@@ -542,8 +511,8 @@ export default function SALivedata() {
                 <>
                   <div className="w-full  gap-3 flex md:flex-row flex-col">
                     <div className="w-full  flex-col flex gap-2 ">
-                      <div className="w-full h-96 bg-[#8B95E3] rounded-md  p-1 mt-2">
-                        <p className="text-center bg-[#8B95E3] text-white rounded-sm text-sm font-bold capitalize">
+                      <div className="w-full h-96 bg-LAVENDER rounded-md  p-1 mt-2">
+                        <p className="text-center bg-LAVENDER text-white rounded-sm text-sm font-bold capitalize">
                           GPS
                         </p>
                         <span className="h-full w-full">
@@ -566,9 +535,9 @@ export default function SALivedata() {
                           alt=""
                           className="w-32 absolute"
                         />
-                        <div className="w-20 h-24 p-1 rounded-md center bg-[#ffffff] relative top-4 left-[10px]">
+                        <div className="w-20 h-24 p-1 rounded-md center bg-WHITE relative top-4 left-[10px]">
                           <div className=" w-[72px] h-[88px]  rounded-md bg-[#EBEDFF]">
-                            <span className=" border-[#8B95E3] rounded-full center pt-2">
+                            <span className=" border-LAVENDER rounded-full center pt-2">
                               <img src={oxygen.src} alt="" className="w-8 " />
                             </span>
 
@@ -599,9 +568,9 @@ export default function SALivedata() {
                           alt=""
                           className="w-32 absolute"
                         />
-                        <div className="w-20 h-24 p-1 rounded-md center bg-[#ffffff] relative top-4 left-[10px]">
+                        <div className="w-20 h-24 p-1 rounded-md center bg-WHITE relative top-4 left-[10px]">
                           <div className="w-[72px] h-[88px]  rounded-md bg-[#EBEDFF]">
-                            <span className=" border-[#8B95E3] rounded-full center pt-2">
+                            <span className=" border-LAVENDER rounded-full center pt-2">
                               <img
                                 src={airqualitysensor.src}
                                 alt=""
@@ -626,9 +595,9 @@ export default function SALivedata() {
                           alt=""
                           className="w-32 absolute"
                         />
-                        <div className="w-20 h-24 p-1 rounded-md center bg-[#ffffff] relative top-4 left-[10px]">
+                        <div className="w-20 h-24 p-1 rounded-md center bg-WHITE relative top-4 left-[10px]">
                           <div className="w-[72px] h-[88px]  rounded-md bg-[#EBEDFF]">
-                            <span className=" border-[#8B95E3] rounded-full center pt-2">
+                            <span className=" border-LAVENDER rounded-full center pt-2">
                               <img src={co2.src} alt="" className="w-8" />
                             </span>
                             <p className=" text-center text-xs font-bold capitalize">
@@ -649,9 +618,9 @@ export default function SALivedata() {
                           alt=""
                           className="w-32 absolute"
                         />
-                        <div className="w-20 h-24 p-1 rounded-md center bg-[#ffffff] relative top-4 left-[10px]">
+                        <div className="w-20 h-24 p-1 rounded-md center bg-WHITE relative top-4 left-[10px]">
                           <div className="w-[72px] h-[88px]  rounded-md bg-[#EBEDFF]">
-                            <span className=" border-[#8B95E3] rounded-full center pt-2">
+                            <span className=" border-LAVENDER rounded-full center pt-2">
                               <img src={summer.src} alt="" className="w-8 " />
                             </span>
                             <p className=" text-center text-xs font-bold capitalize">
@@ -672,9 +641,9 @@ export default function SALivedata() {
                           alt=""
                           className="w-32 absolute"
                         />
-                        <div className="w-20 h-24 p-1 rounded-md center bg-[#ffffff] relative top-4 left-[10px]">
+                        <div className="w-20 h-24 p-1 rounded-md center bg-WHITE relative top-4 left-[10px]">
                           <div className="w-[72px] h-[88px]  rounded-md bg-[#EBEDFF]">
-                            <span className=" border-[#8B95E3] rounded-full center pt-2">
+                            <span className=" border-LAVENDER rounded-full center pt-2">
                               <img src={drop.src} alt="" className="w-8 " />
                             </span>
                             <p className=" text-center text-xs font-bold capitalize">
@@ -695,9 +664,9 @@ export default function SALivedata() {
                           alt=""
                           className="w-32 absolute"
                         />
-                        <div className="w-20 h-24 p-1 rounded-md center bg-[#ffffff] relative top-4 left-[10px]">
+                        <div className="w-20 h-24 p-1 rounded-md center bg-WHITE relative top-4 left-[10px]">
                           <div className="w-[72px] h-[88px]  rounded-md bg-[#EBEDFF]">
-                            <span className=" border-[#8B95E3] rounded-full center pt-2">
+                            <span className=" border-LAVENDER rounded-full center pt-2">
                               <img src={compound.src} alt="" className="w-8 " />
                             </span>
                             <p className=" text-center text-xs font-bold capitalize">
@@ -715,9 +684,9 @@ export default function SALivedata() {
                           alt=""
                           className="w-32 absolute"
                         />
-                        <div className="w-20 h-24 p-1 rounded-md center bg-[#ffffff] relative top-4 left-[10px]">
+                        <div className="w-20 h-24 p-1 rounded-md center bg-WHITE relative top-4 left-[10px]">
                           <div className="w-[72px] h-[88px]  rounded-md bg-[#EBEDFF]">
-                            <span className=" border-[#8B95E3] rounded-full center pt-0">
+                            <span className=" border-LAVENDER rounded-full center pt-0">
                               <img src={testing.src} alt="" className="w-8 " />
                             </span>
                             <p className=" text-center text-xs font-bold capitalize">
@@ -750,9 +719,9 @@ export default function SALivedata() {
                             alt=""
                             className="w-32 absolute"
                           />
-                          <div className="w-20 h-24 p-1 rounded-md center bg-[#ffffff] relative top-4 left-[10px]">
+                          <div className="w-20 h-24 p-1 rounded-md center bg-WHITE relative top-4 left-[10px]">
                             <div className="w-[72px] h-[88px] center flex flex-col rounded-md bg-[#EBEDFF]">
-                              <span className="border-[#8B95E3] rounded-full center pt-0">
+                              <span className="border-LAVENDER rounded-full center pt-0">
                                 <img src={camera.src} alt="" className="w-8" />
                               </span>
                               <p className="text-center font-semibold text-xs">

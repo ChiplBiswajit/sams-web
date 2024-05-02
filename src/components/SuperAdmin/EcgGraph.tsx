@@ -3,9 +3,7 @@ import { Line } from "react-chartjs-2";
 import { ChartData } from "chart.js";
 import Socketconfig from "@/src/utils/Socket/Socketconfig";
 
-
 const MAX_DATA_POINTS = 100; // Define the maximum number of data points to keep
-
 
 export default function EcgGraph() {
   const [ecgdata, setecgdata] = useState<number[]>([]); // Specify number type for spo2Data
@@ -20,8 +18,11 @@ export default function EcgGraph() {
       // console.log("hiiiiiiiiiiiiiiiiiii",patientData);
       if (patientId === "1234" && patientData && patientData?.ecg?.wave1) {
         const { wave1 } = patientData?.ecg;
-        console.log("wave1", wave1);
-        setecgdata((prevData) => [...prevData, wave1]);      }
+        // console.log("wave1", wave1);
+        console.log("wave1", patientData?.ecg);
+
+        setecgdata((prevData) => [...prevData, wave1]);
+      }
       // if (patientId === "1234" && patientData && patientData?.ecg?.wave2) {
       //   const { wave2 } = patientData?.ecg;
       //   // console.log("wave2", wave2);
@@ -36,7 +37,7 @@ export default function EcgGraph() {
   }, []);
 
   // Sample data
-  const wave1: ChartData<'line', number[], string> = {
+  const wave1: ChartData<"line", number[], string> = {
     labels: [],
     datasets: [
       {
@@ -70,7 +71,7 @@ export default function EcgGraph() {
     },
   };
 
-  const wave2: ChartData<'line', number[], string> = {
+  const wave2: ChartData<"line", number[], string> = {
     labels: [],
     datasets: [
       {
@@ -104,7 +105,7 @@ export default function EcgGraph() {
     },
   };
 
-  const wave3: ChartData<'line', number[], string> = {
+  const wave3: ChartData<"line", number[], string> = {
     labels: [],
     datasets: [
       {
@@ -137,8 +138,6 @@ export default function EcgGraph() {
       },
     },
   };
-
-
 
   return (
     <>

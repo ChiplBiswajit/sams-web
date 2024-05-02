@@ -7,6 +7,7 @@ export default function Spo2Graph() {
 
   const [spo2Data, setSpo2Data] = useState<number[]>([]); // Specify number type for spo2Data
   const [labels, setLabels] = useState<string[]>([]); // Specify string type for labels
+  const [dataAvailable, setDataAvailable] = useState<boolean>(true); // Track whether data is available or not
 
   useEffect(() => {
     Socketconfig.initializeSocket();
@@ -33,6 +34,12 @@ export default function Spo2Graph() {
           }
           return updatedLabels;
         });
+        
+        // Data is available
+        setDataAvailable(true);
+      } else {
+        // Data is not available
+        setDataAvailable(false);
       }
     });
   }, []);
@@ -75,7 +82,11 @@ export default function Spo2Graph() {
   return (
     <div className="p-5 h-96 center flex flex-col w-full">
       <h2 className="font-bold py-3">SpO2 Graph</h2>
-      <Line data={data} options={options} />
+      {dataAvailable ? (
+        <Line data={data} options={options} />
+      ) : (
+        <p>No data available</p>
+      )}
     </div>
   );
 }

@@ -94,8 +94,8 @@ export default function LarkAiData() {
 
   return (
     <div className="flex flex-col center gap-10 w-full">
-      <div className="flex gap-4">
-        <span className="  py-1  p-1 flex gap-3">
+      <div className="flex md:flex-row flex-col gap-4">
+        <span className="  py-1  p-1 flex  gap-3">
           <p className="text-lg text-black font-bold">Temprature 1:</p>
           <span className="border text-black border-black rounded-md  px-3 py-1">
             {Temprature} &#8451;
@@ -135,7 +135,7 @@ export default function LarkAiData() {
       </div>
       <div className=" w-full flex flex-col gap-5 ">
         <Spo2Graph />
-        {/* <EcgGraph /> */}
+        <EcgGraph />
         <RespiratoryGraph />
       </div>
     </div>

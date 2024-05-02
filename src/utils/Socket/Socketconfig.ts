@@ -14,8 +14,8 @@ class WSService {
       this.socket = io(SOCKET_URL, {
         transports: ["websocket"],
         auth: {
-            mobile: 7568993142,
-            password: '123456789'
+            mobile: 9776459756,
+            password: 'mo@123'
           },
           query: {
             patientId: '1234'
