@@ -17,7 +17,7 @@ export default function Spo2Graph() {
         const { wave } = patientData.spo2;
 
         // Update data and labels
-        setSpo2Data(prevData => {
+        setSpo2Data((prevData) => {
           const updatedData = [...prevData, wave];
           // If data exceeds maximum limit, remove oldest data point
           if (updatedData.length > MAX_DATA_POINTS) {
@@ -26,15 +26,18 @@ export default function Spo2Graph() {
           return updatedData;
         });
 
-        setLabels(prevLabels => {
-          const updatedLabels = [...prevLabels, new Date().toLocaleTimeString()];
+        setLabels((prevLabels) => {
+          const updatedLabels = [
+            ...prevLabels,
+            new Date().toLocaleTimeString(),
+          ];
           // If labels exceed maximum limit, remove oldest label
           if (updatedLabels.length > MAX_DATA_POINTS) {
             updatedLabels.shift(); // Remove the oldest label
           }
           return updatedLabels;
         });
-        
+
         // Data is available
         setDataAvailable(true);
       } else {
@@ -82,11 +85,9 @@ export default function Spo2Graph() {
   return (
     <div className="p-5 h-96 center flex flex-col w-full">
       <h2 className="font-bold py-3">SpO2 Graph</h2>
-      {dataAvailable ? (
+     
         <Line data={data} options={options} />
-      ) : (
-        <p>No data available</p>
-      )}
+     
     </div>
   );
 }

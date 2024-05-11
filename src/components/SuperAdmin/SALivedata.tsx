@@ -48,71 +48,14 @@ Chart.register(
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 import SAJerkdata from "./SAJerkdata";
 import LarkAiData from "./LarkAiData";
+import AMTEKdata from "./AMTEKdata";
 
-interface Message {
-  location?: {
-    latitude: number;
-    longitude: number;
-  };
-}
-
-const LocationData = ({ lat, lng }: any) => {
-  const containerStyle = {
-    height: "94%",
-    width: "100%",
-  };
-
-  const center = {
-    lat: lat || 0,
-    lng: lng || 0,
-  };
-
-  const mapOptions = {
-    disableDefaultUI: true,
-    styles: [
-      {
-        featureType: "poi",
-        elementType: "labels",
-        stylers: [{ visibility: "off" }],
-      },
-
-      {
-        featureType: "road",
-        elementType: "labels",
-        stylers: [{ visibility: "off" }],
-      },
-    ],
-  };
-
-  const { isLoaded } = useJsApiLoader({
-    id: "google-map-script",
-    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "",
-  });
-
-  return isLoaded ? (
-    <div className="md:h-full md:w-full h-96 ">
-      <GoogleMap
-        mapContainerStyle={containerStyle}
-        center={center}
-        zoom={10}
-        options={mapOptions}
-      >
-        <Marker
-          icon={{
-            url: "/gps.png",
-            scaledSize: { width: 60, height: 60 } as google.maps.Size,
-          }}
-          position={{
-            lat: lat || 0,
-            lng: lng || 0,
-          }}
-        />
-      </GoogleMap>
-    </div>
-  ) : (
-    <></>
-  );
-};
+// interface Message {
+//   location?: {
+//     latitude: number;
+//     longitude: number;
+//   };
+// }
 
 export default function SALivedata() {
   const router = useRouter();
@@ -153,11 +96,10 @@ export default function SALivedata() {
 
     fetchreportData();
   }, [ambulanceID]);
-  const storedCameraTopic = sessionStorage.getItem("cameraTopic");
 
-  useEffect(() => {
-    <LocationData />;
-  }, [alcoholDataState]);
+  // useEffect(() => {
+  //   <LocationData />;
+  // }, [alcoholDataState]);
 
   const toggleData = () => {
     setShowAmtekData(true);
@@ -241,12 +183,10 @@ export default function SALivedata() {
 
   useEffect(() => {
     const usernamedata = sessionStorage.getItem("userid");
-    // console.log("id---------------------------------", usernamedata);
     storeObjByKey("obj", usernamedata);
     socketServcies.initializeSocket();
     socketServcies.on("received_admin_data", (msg: any) => {
-      // console.log("jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj",msg);
-
+      // console.log("jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj", msg);
       setRes(msg);
       setTimeout(() => {
         setLoading(false);
@@ -332,7 +272,9 @@ export default function SALivedata() {
           </select>
         </div>
       </div>
+
       {loading && <Loader />}
+
       <section className="md:w-[92%] flex flex-col  h-screen md:h-screen pl-[5%] pt-0 md:pt-2   ">
         <div className="w-full  grid grid-cols-2 md:grid-cols-3  gap-4   justify-start items-start">
           {ambulanceData &&
@@ -346,15 +288,6 @@ export default function SALivedata() {
                   ? (alcoholData[item.ambulanceId] as { amtekStatus?: number })
                       .amtekStatus || 0
                   : 0;
-              // console.log(
-              //   "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++",
-              //   ambulanceID
-              // );
-              // console.log("-----@@@@@@@@@@@@@@@@@@@@------alcohol", alcoholData);
-              // console.log(
-              //   "------ggggggggggggggggggghvg",
-              //   alcoholDataState?.location
-              // );
 
               return (
                 <div
@@ -368,11 +301,12 @@ export default function SALivedata() {
                     setAlcoholDataState(
                       alcoholData?.[item?.ambulanceId] || null
                     );
-                    // loc  = alcoholData?.[item?.ambulanceId]
+
+                    console.log("222222222222222222222222222", alcoholData);
                     setAmbulanceID(item?.ambulanceId);
                   }}
                 >
-                  <span className=" absolute">
+                  <span className="absolute">
                     <img
                       src={totalcard.src}
                       alt=""
@@ -497,7 +431,6 @@ export default function SALivedata() {
                 </span>
               </span>
 
-              {/* Add a button to toggle between Amtek and Lark AI data */}
               <div className="w-full flex gap-5 center py-6">
                 <button className={`button`} onClick={toggleData}>
                   <p>Amtek</p>
@@ -506,250 +439,13 @@ export default function SALivedata() {
                   <p>Vitals</p>
                 </button>
               </div>
-              {/* .........................amtek data start................................. */}
-              {showAmtekData && (
-                <>
-                  <div className="w-full  gap-3 flex md:flex-row flex-col">
-                    <div className="w-full  flex-col flex gap-2 ">
-                      <div className="w-full h-96 bg-LAVENDER rounded-md  p-1 mt-2">
-                        <p className="text-center bg-LAVENDER text-white rounded-sm text-sm font-bold capitalize">
-                          GPS
-                        </p>
-                        <span className="h-full w-full">
-                          <LocationData
-                            className="md:h-full md:w-full h-96"
-                            lat={
-                              (alcoholDataState as Message)?.location?.latitude
-                            }
-                            lng={
-                              (alcoholDataState as Message)?.location?.longitude
-                            }
-                          />
-                        </span>
-                      </div>
-                    </div>
-                    <div className="w-full grid grid-cols-3  gap-6 md:gap-8">
-                      <span className=" w-full ">
-                        <img
-                          src={triangle.src}
-                          alt=""
-                          className="w-32 absolute"
-                        />
-                        <div className="w-20 h-24 p-1 rounded-md center bg-WHITE relative top-4 left-[10px]">
-                          <div className=" w-[72px] h-[88px]  rounded-md bg-[#EBEDFF]">
-                            <span className=" border-LAVENDER rounded-full center pt-2">
-                              <img src={oxygen.src} alt="" className="w-8 " />
-                            </span>
+              {showAmtekData && <AMTEKdata />}
 
-                            <p className=" text-center text-xs font-bold capitalize">
-                              oxygen
-                            </p>
-                            <p className=" text-center text-xs">
-                              {(() => {
-                                const oxygenFilterValue = (
-                                  alcoholDataState as AlcoholDataState
-                                )?.oxygen?.filterValue;
-                                const displayedOxygenValue =
-                                  typeof oxygenFilterValue === "number"
-                                    ? Math.min(
-                                        Math.max(oxygenFilterValue, 0),
-                                        100
-                                      )
-                                    : 0; // Set a default value (e.g., 0) if oxygenFilterValue is not a number
-                                return displayedOxygenValue + "%";
-                              })()}
-                            </p>
-                          </div>
-                        </div>
-                      </span>
-                      <span className="w-full">
-                        <img
-                          src={triangle.src}
-                          alt=""
-                          className="w-32 absolute"
-                        />
-                        <div className="w-20 h-24 p-1 rounded-md center bg-WHITE relative top-4 left-[10px]">
-                          <div className="w-[72px] h-[88px]  rounded-md bg-[#EBEDFF]">
-                            <span className=" border-LAVENDER rounded-full center pt-2">
-                              <img
-                                src={airqualitysensor.src}
-                                alt=""
-                                className="w-8 "
-                              />
-                            </span>
-                            <p className=" text-center text-xs font-bold capitalize">
-                              air quality
-                            </p>{" "}
-                            <p className=" text-center text-xs">
-                              {
-                                (alcoholDataState as AlcoholDataState)?.aqi
-                                  ?.airIndex
-                              }
-                            </p>
-                          </div>
-                        </div>
-                      </span>
-                      <span className="w-full">
-                        <img
-                          src={triangle.src}
-                          alt=""
-                          className="w-32 absolute"
-                        />
-                        <div className="w-20 h-24 p-1 rounded-md center bg-WHITE relative top-4 left-[10px]">
-                          <div className="w-[72px] h-[88px]  rounded-md bg-[#EBEDFF]">
-                            <span className=" border-LAVENDER rounded-full center pt-2">
-                              <img src={co2.src} alt="" className="w-8" />
-                            </span>
-                            <p className=" text-center text-xs font-bold capitalize">
-                              co2
-                            </p>{" "}
-                            <p className=" text-center text-xs">
-                              {
-                                (alcoholDataState as AlcoholDataState)?.aqi
-                                  ?.eco2
-                              }
-                            </p>
-                          </div>
-                        </div>
-                      </span>
-                      <span className="w-full">
-                        <img
-                          src={triangle.src}
-                          alt=""
-                          className="w-32 absolute"
-                        />
-                        <div className="w-20 h-24 p-1 rounded-md center bg-WHITE relative top-4 left-[10px]">
-                          <div className="w-[72px] h-[88px]  rounded-md bg-[#EBEDFF]">
-                            <span className=" border-LAVENDER rounded-full center pt-2">
-                              <img src={summer.src} alt="" className="w-8 " />
-                            </span>
-                            <p className=" text-center text-xs font-bold capitalize">
-                              temprature
-                            </p>{" "}
-                            <p className=" text-center text-xs">
-                              {
-                                (alcoholDataState as AlcoholDataState)?.aqi
-                                  ?.temp
-                              }
-                            </p>
-                          </div>
-                        </div>
-                      </span>
-                      <span className="w-full">
-                        <img
-                          src={triangle.src}
-                          alt=""
-                          className="w-32 absolute"
-                        />
-                        <div className="w-20 h-24 p-1 rounded-md center bg-WHITE relative top-4 left-[10px]">
-                          <div className="w-[72px] h-[88px]  rounded-md bg-[#EBEDFF]">
-                            <span className=" border-LAVENDER rounded-full center pt-2">
-                              <img src={drop.src} alt="" className="w-8 " />
-                            </span>
-                            <p className=" text-center text-xs font-bold capitalize">
-                              humidity
-                            </p>{" "}
-                            <p className=" text-center text-xs">
-                              {
-                                (alcoholDataState as AlcoholDataState)?.aqi
-                                  ?.humidity
-                              }
-                            </p>
-                          </div>
-                        </div>
-                      </span>
-                      <span className="w-full">
-                        <img
-                          src={triangle.src}
-                          alt=""
-                          className="w-32 absolute"
-                        />
-                        <div className="w-20 h-24 p-1 rounded-md center bg-WHITE relative top-4 left-[10px]">
-                          <div className="w-[72px] h-[88px]  rounded-md bg-[#EBEDFF]">
-                            <span className=" border-LAVENDER rounded-full center pt-2">
-                              <img src={compound.src} alt="" className="w-8 " />
-                            </span>
-                            <p className=" text-center text-xs font-bold capitalize">
-                              VOC
-                            </p>{" "}
-                            <p className=" text-center text-xs">
-                              {(alcoholDataState as AlcoholDataState)?.aqi?.voc}
-                            </p>
-                          </div>
-                        </div>
-                      </span>
-                      <span className="w-full">
-                        <img
-                          src={triangle.src}
-                          alt=""
-                          className="w-32 absolute"
-                        />
-                        <div className="w-20 h-24 p-1 rounded-md center bg-WHITE relative top-4 left-[10px]">
-                          <div className="w-[72px] h-[88px]  rounded-md bg-[#EBEDFF]">
-                            <span className=" border-LAVENDER rounded-full center pt-0">
-                              <img src={testing.src} alt="" className="w-8 " />
-                            </span>
-                            <p className=" text-center text-xs font-bold capitalize">
-                              alcohol
-                            </p>{" "}
-                            <p className=" text-center text-xs">
-                              {
-                                (alcoholDataState as AlcoholDataState)?.alcohol
-                                  ?.alcoholIndex
-                              }
-                            </p>
-                            <p className=" text-center  text-[10px]">
-                              <span className="font-bold"> Alert: </span>
-                              {
-                                (alcoholDataState as AlcoholDataState)?.alcohol
-                                  ?.alert
-                              }
-                            </p>
-                          </div>
-                        </div>
-                      </span>
-                      <span className="w-full">
-                        <a
-                          href={`${storedCameraTopic}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          <img
-                            src={triangle.src}
-                            alt=""
-                            className="w-32 absolute"
-                          />
-                          <div className="w-20 h-24 p-1 rounded-md center bg-WHITE relative top-4 left-[10px]">
-                            <div className="w-[72px] h-[88px] center flex flex-col rounded-md bg-[#EBEDFF]">
-                              <span className="border-LAVENDER rounded-full center pt-0">
-                                <img src={camera.src} alt="" className="w-8" />
-                              </span>
-                              <p className="text-center font-semibold text-xs">
-                                Tab to see
-                                <p className="text-center text-xs">Livefeed</p>
-                              </p>
-                              <MdOutlineKeyboardDoubleArrowRight className="" />
-                            </div>
-                          </div>
-                        </a>
-                      </span>
-                    </div>
-                  </div>
-                  <div className="w-full mt-12 ">
-                    <SAJerkdata />
-                  </div>
-                </>
-              )}
-
-              {/* .........................amtek data end................................. */}
-
-              {/* .........................Lark ai data start..................................... */}
               {showLarkData && (
                 <div>
                   <LarkAiData />
                 </div>
               )}
-              {/* .........................Lark ai data end..................................... */}
             </div>
           </div>
         )}
