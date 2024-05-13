@@ -14,16 +14,12 @@ interface SAAddAdminProps {
   setFormikFunction: (formikFunc: any) => void; // Add this prop
 }
 
-export default function SAAddAdmin({
-  toggleForm,
- 
-}: SAAddAdminProps) {
+export default function SAAddAdmin({ toggleForm }: SAAddAdminProps) {
   //add form details
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({
     userId: "",
     name: "",
-    gender: "",
     password: "",
     contactNo: "",
     emailId: "",
@@ -33,9 +29,6 @@ export default function SAAddAdmin({
   const validationSchema = Yup.object({
     userId: Yup.string().required("User ID is required"),
     name: Yup.string().required("Name is required"),
-    gender: Yup.string()
-      .oneOf(["male", "female", "other"], "Invalid Gender")
-      .required("Gender is required"),
     password: Yup.string().required("Password is required"),
     contactNo: Yup.string()
       .matches(/^[0-9]{10}$/, "Invalid Mobile Number")
@@ -50,7 +43,6 @@ export default function SAAddAdmin({
     initialValues: {
       userId: "",
       name: "",
-      gender: "",
       password: "",
       contactNo: "",
       emailId: "",
@@ -62,11 +54,11 @@ export default function SAAddAdmin({
       try {
         const authToken = sessionStorage.getItem("authToken");
         const response = await axios.post(
-          "https://samsapi.smartambulance.in/users/add",
+          // "https://samsapi.smartambulance.in/users/add",
+         "https://0r4mtgsn-3006.inc1.devtunnels.ms/users/add",
           {
             userId: values.userId,
             name: values.name,
-            gender: values.gender,
             password: values.password,
             contactNo: values.contactNo,
             emailId: values.emailId,
@@ -142,11 +134,10 @@ export default function SAAddAdmin({
                   value={formik.values.userId}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  className={`mt-1 p-2 w-full border rounded-md ${
-                    formik.touched.userId && formik.errors.userId
-                      ? "border-red-500"
-                      : ""
-                  }`}
+                  className={`mt-1 p-2 w-full border rounded-md ${formik.touched.userId && formik.errors.userId
+                    ? "border-red-500"
+                    : ""
+                    }`}
                 />
                 {formik.touched.userId && formik.errors.userId && (
                   <div className="text-red-500 text-sm">
@@ -168,11 +159,10 @@ export default function SAAddAdmin({
                   value={formik.values.name}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  className={`mt-1 p-2 w-full border rounded-md ${
-                    formik.touched.name && formik.errors.name
-                      ? "border-red-500"
-                      : ""
-                  }`}
+                  className={`mt-1 p-2 w-full border rounded-md ${formik.touched.name && formik.errors.name
+                    ? "border-red-500"
+                    : ""
+                    }`}
                 />
                 {formik.touched.name && formik.errors.name && (
                   <div className="text-red-500 text-sm">
@@ -183,38 +173,6 @@ export default function SAAddAdmin({
             </div>
 
             <div className="w-full flex md:flex-row flex-col gap-2">
-              <div className="w-full mb-4">
-                <label
-                  htmlFor="gender"
-                  className="block text-sm font-semibold text-black"
-                >
-                  Gender:
-                </label>
-                <select
-                  id="gender"
-                  name="gender"
-                  value={formik.values.gender}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  className={`mt-1 p-2 w-full border rounded-md ${
-                    formik.touched.gender && formik.errors.gender
-                      ? "border-red-500"
-                      : ""
-                  }`}
-                >
-                  <option value="" disabled>
-                    Select Gender
-                  </option>
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
-                  <option value="other">Other</option>
-                </select>
-                {formik.touched.gender && formik.errors.gender && (
-                  <div className="text-red-500 text-sm">
-                    {formik.errors.gender}
-                  </div>
-                )}
-              </div>
               <div className="mb-4 w-full">
                 <label
                   htmlFor="password"
@@ -229,11 +187,10 @@ export default function SAAddAdmin({
                   value={formik.values.password}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  className={`mt-1 p-2 w-full border rounded-md ${
-                    formik.touched.password && formik.errors.password
-                      ? "border-red-500"
-                      : ""
-                  }`}
+                  className={`mt-1 p-2 w-full border rounded-md ${formik.touched.password && formik.errors.password
+                    ? "border-red-500"
+                    : ""
+                    }`}
                 />
                 {formik.touched.password && formik.errors.password && (
                   <div className="text-red-500 text-sm">
@@ -258,12 +215,11 @@ export default function SAAddAdmin({
                   value={formik.values.organizationName}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  className={`mt-1 p-2 w-full border rounded-md ${
-                    formik.touched.organizationName &&
+                  className={`mt-1 p-2 w-full border rounded-md ${formik.touched.organizationName &&
                     formik.errors.organizationName
-                      ? "border-red-500"
-                      : ""
-                  }`}
+                    ? "border-red-500"
+                    : ""
+                    }`}
                 />
                 {formik.touched.organizationName &&
                   formik.errors.organizationName && (
@@ -286,11 +242,10 @@ export default function SAAddAdmin({
                   value={formik.values.contactNo}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  className={`mt-1 p-2 w-full border rounded-md ${
-                    formik.touched.contactNo && formik.errors.contactNo
-                      ? "border-red-500"
-                      : ""
-                  }`}
+                  className={`mt-1 p-2 w-full border rounded-md ${formik.touched.contactNo && formik.errors.contactNo
+                    ? "border-red-500"
+                    : ""
+                    }`}
                 />
                 {formik.touched.contactNo && formik.errors.contactNo && (
                   <div className="text-red-500 text-sm">
@@ -315,11 +270,10 @@ export default function SAAddAdmin({
                   value={formik.values.emailId}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  className={`mt-1 p-2 w-full border rounded-md ${
-                    formik.touched.emailId && formik.errors.emailId
-                      ? "border-red-500"
-                      : ""
-                  }`}
+                  className={`mt-1 p-2 w-full border rounded-md ${formik.touched.emailId && formik.errors.emailId
+                    ? "border-red-500"
+                    : ""
+                    }`}
                 />
                 {formik.touched.emailId && formik.errors.emailId && (
                   <div className="text-red-500 text-sm">
@@ -330,7 +284,7 @@ export default function SAAddAdmin({
             </div>
           </div>
 
-          <div className="flex justify-center ">
+          <div className="flex justify-center -mt-[2%]">
             <button
               type="button"
               onClick={toggleForm}

@@ -76,9 +76,8 @@ export default function Sidebar({ children, title = "Amtek" }: prop) {
       <Header setOpen={setOpen} />
       <div className="flex md:!h-[calc(160vh-64px)] h-full ">
         <div
-          className={`bg-[#DCDFFF]   p-2 pt-3 w-60 ${
-            open ? "w-60" : "w-[80px]"
-          } ease-in-out transition-all duration-300  top-0 left-0 `}
+          className={`bg-[#DCDFFF]   p-2 pt-3 w-60 ${open ? "w-60" : "w-[80px]"
+            } ease-in-out transition-all duration-300  top-0 left-0 `}
         >
           <span className="fixed inline-flex mt-14 p-2">
             <img
@@ -88,9 +87,8 @@ export default function Sidebar({ children, title = "Amtek" }: prop) {
             />
 
             <span
-              className={`w-full duration-300 center flex flex-col  ${
-                !open && "scale-0"
-              }`}
+              className={`w-full duration-300 center flex flex-col  ${!open && "scale-0"
+                }`}
             >
               <p className="w-full text-sm font-bold text-black">Welcome!</p>
               <p className="w-full text-base font-bold text-gray-500">
@@ -125,9 +123,8 @@ export default function Sidebar({ children, title = "Amtek" }: prop) {
                 </span>
 
                 <span
-                  className={`text-sm text-black font-medium flex-1  ${
-                    router.pathname === item.path ? "text-red-700 " : ""
-                  }  ${!open && "hidden"} `}
+                  className={`text-sm text-black font-medium flex-1  ${router.pathname === item.path ? "text-red-700 " : ""
+                    }  ${!open && "hidden"} `}
                 >
                   {item.title}
                 </span>
