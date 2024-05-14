@@ -11,19 +11,15 @@ import SAAddAdmin from "./SAAddAdmin";
 import { MdDeleteForever } from "react-icons/md";
 import Swal from "sweetalert2";
 
-
-
 interface ApiData {
   status: any; // Adjust the type according to your API response
   admin: any;
-  // Add other properties as needed
 }
 
 export default function SAChiplAdmin() {
   const [showAddAdminForm, setShowAddAdminForm] = useState(false);
   const [showUpdateProfileForm, setShowUpdateProfileForm] = useState(false);
   const [formikFunction, setFormikFunction] = useState<any>(null); // State to hold formik function
-  const [selectedUser, setSelectedUser] = useState(null);
   const [apiData, setApiData] = useState<ApiData | undefined>(undefined);
   const [loading, setLoading] = useState(true);
 
@@ -59,11 +55,30 @@ export default function SAChiplAdmin() {
         }
         setApiData(data);
         console.log("Admin List +++++++++", data);
+        sessionStorage.setItem("adminList", JSON.stringify(data.admin));
+
+        // store adminId for each element
+        if (data.admin && data.admin.length > 0) {
+          data.admin.forEach((admin: any, index: any) => {
+            sessionStorage.setItem(
+              `adminId_${index}`,
+              JSON.stringify(admin.adminId)
+            );
+          });
+        }
+
+        // Retrieve adminId for each element
+        for (let index = 0; index < data.admin.length; index++) {
+          const adminId = JSON.parse(
+            sessionStorage.getItem(`adminId_${index}`) ?? ""
+          );
+          console.log(`Admin ID for element ${index}:`, adminId);
+        }
       } else {
-        // console.error("Error fetching data:", response.statusText);
+        console.error("Error fetching data:", response.statusText);
       }
     } catch (error) {
-      // console.error("Error fetching data:", error);
+      console.error("Error fetching data:", error);
     } finally {
       setLoading(false);
     }
@@ -73,66 +88,16 @@ export default function SAChiplAdmin() {
     setShowAddAdminForm(!showAddAdminForm);
   };
 
-  const openUpdateProfileForm = (user: any) => {
-    setSelectedUser(user);
-    setShowUpdateProfileForm(true);
-  };
+  const [selectedAdminId, setSelectedAdminId] = useState(""); // State variable to hold the selected admin ID
 
+  const openUpdateProfileForm = (adminId: string) => {
+    setShowUpdateProfileForm(true);
+    setSelectedAdminId(adminId);
+    console.log("qqqqqq", adminId);
+  };
   const closeUpdateProfileForm = () => {
     setShowUpdateProfileForm(false);
   };
-
-  const formik = useFormik({
-    initialValues: {
-      name: selectedUser ? selectedUser.name : "",
-      email: selectedUser ? selectedUser.emailId : "",
-      contactNo: selectedUser ? selectedUser.contactNo : ""
-    },
-    validationSchema: Yup.object({
-      name: Yup.string().required("Name is required"),
-      email: Yup.string().email("Invalid email address").required("Email is required"),
-      contactNo: Yup.string().required("Contact number is required")
-    }),
-    onSubmit: async (values) => {
-      try {
-        setLoading(true);
-
-        const response = await axios.put(
-          `https://0r4mtgsn-3006.inc1.devtunnels.ms/users/updateProfile/${selectedUser.id}`,
-          {
-            name: values.name,
-            emailId: values.email,
-            contactNo: values.contactNo
-          }
-        );
-        setLoading(false);
-        if (response.status === 200) {
-          closeUpdateProfileForm();
-          Swal.fire({
-            icon: "success",
-            title: "Profile Updated Successfully",
-            showConfirmButton: false,
-            timer: 1500
-          });
-        } else {
-          Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: "Something went wrong! Please try again.",
-          });
-        }
-      } catch (error) {
-        setLoading(false);
-        console.error("Error updating profile:", error);
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: "Something went wrong! Please try again.",
-        });
-      }
-    },
-  });
-
 
   return (
     <section className="h-screen">
@@ -165,6 +130,8 @@ export default function SAChiplAdmin() {
                     <strong>Fleet Id:</strong> {user?.adminId}
                     <br />
                     <strong>Name:</strong> {user?.name}
+                    <br />
+                    <strong>Email:</strong> {user?.emailId}
                     <br />
                     <strong>Organization Name:</strong> {user?.organizationName}
                     <br />
@@ -265,8 +232,11 @@ export default function SAChiplAdmin() {
             {apiData?.admin?.map((user: any, index: any) => {
               // console.log("hiiiiiiiiiiiiiiiiiiiiiiiii", apiData); // Log apiData here
               return (
-                <tbody key={index} className="bg-white divide-y divide-gray-200">
-                  <tr >
+                <tbody
+                  key={index}
+                  className="bg-white divide-y divide-gray-200"
+                >
+                  <tr>
                     <td className="px-2 py-2 text-center whitespace-nowrap">
                       {index + 1}
                     </td>
@@ -292,7 +262,10 @@ export default function SAChiplAdmin() {
                       {user?.totalUserCreated}
                     </td>
                     <td className="px-2 py-2 text-center whitespace-nowrap">
-                      <button className="text-green-500" onClick={openUpdateProfileForm}>
+                      <button
+                        className="text-green-500"
+                        onClick={() => openUpdateProfileForm(user?.adminId)}
+                      >
                         <FaEdit className="text-xl" />
                       </button>
                     </td>
@@ -312,60 +285,74 @@ export default function SAChiplAdmin() {
           </div>
         )}
       </table>
-      {showAddAdminForm && <SAAddAdmin toggleForm={toggleAddAdminForm} setFormikFunction={setFormikFunction} />}
-
+      {showAddAdminForm && (
+        <SAAddAdmin
+          toggleForm={toggleAddAdminForm}
+          setFormikFunction={setFormikFunction}
+        />
+      )}
 
       {/* Update Profile Form */}
       {showUpdateProfileForm && (
         <div className="fixed top-0 left-0 flex justify-center items-center w-full h-full bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded-lg">
-            <h2 className="text-xl font-bold mb-4">Update Profile</h2>
-            <form onSubmit={formik.handleSubmit}>
+            <h2 className="text-xl font-bold mb-4 center">Update Profile</h2>
+            <h3 className="text-base font-semibold mb-2">
+              Admin ID: {selectedAdminId}
+            </h3>{" "}
+            {/* Display the selected admin ID */}
+            <form
+            // onSubmit={handleSubmit}
+            >
               <div className="mb-4">
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="name"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Name
                 </label>
                 <input
-                  id="name"
                   type="text"
-                  {...formik.getFieldProps("name")}
+                  id="name"
+                  name="name"
+                  // value={profileData.name}
+                  // onChange={handleChange}
                   className="mt-1 p-2 w-full rounded-md border border-black "
                 />
-                {formik.touched.name && formik.errors.name && (
-                  <p className="text-red-500 text-sm mt-1">{formik.errors.name}</p>
-                )}
               </div>
               <div className="mb-4">
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Email
                 </label>
                 <input
-                  id="email"
                   type="email"
-                  {...formik.getFieldProps("email")}
+                  id="email"
+                  name="email"
+                  // value={profileData.email}
+                  // onChange={handleChange}
                   className="mt-1 p-2 w-full rounded-md border border-black "
-
                 />
-                {formik.touched.email && formik.errors.email && (
-                  <p className="text-red-500 text-sm mt-1">{formik.errors.email}</p>
-                )}
               </div>
               <div className="mb-4">
-                <label htmlFor="contactNo" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="contactNo"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Contact Number
                 </label>
                 <input
-                  id="contactNo"
                   type="text"
-                  {...formik.getFieldProps("contactNo")}
+                  id="contactNo"
+                  name="contactNo"
+                  // value={profileData.contactNo}
+                  // onChange={handleChange}
                   className="mt-1 p-2 w-full rounded-md border border-black "
-
                 />
-                {formik.touched.contactNo && formik.errors.contactNo && (
-                  <p className="text-red-500 text-sm mt-1">{formik.errors.contactNo}</p>
-                )}
               </div>
-              <div className="flex justify-end">
+              <div className="flex justify-center">
                 <button
                   type="button"
                   onClick={closeUpdateProfileForm}
