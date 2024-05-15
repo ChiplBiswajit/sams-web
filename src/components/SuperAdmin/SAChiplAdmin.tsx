@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { BiSolidShow } from "react-icons/bi";
@@ -22,6 +22,61 @@ export default function SAChiplAdmin() {
   const [formikFunction, setFormikFunction] = useState<any>(null); // State to hold formik function
   const [apiData, setApiData] = useState<ApiData | undefined>(undefined);
   const [loading, setLoading] = useState(true);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    contactNo: "",
+    adminId: "",
+  });
+
+  const handleInputChange = (field: any, value: any) => {
+    setFormData({
+      ...formData,
+      [field]: value,
+    });
+  };
+
+  const handleSubmit = () => {
+    console.log("Form data submitted:", formData);
+    updateAdminData(); // Call the function to update profile data
+
+    // Close the dialog after submission
+    // setIsDialogOpen(false);
+  };
+
+
+  const updateAdminData = useCallback(async () => {
+    try {
+      const authToken = sessionStorage.getItem("authToken");
+      const adminId = formData.adminId; // Assuming userId is available in formData
+
+      // const API_URL = `https://0r4mtgsn-3006.inc1.devtunnels.ms/users/updateProfile/${userId}`;
+      const API_URL = `https://0r4mtgsn-3006.inc1.devtunnels.ms/users/updateProfile/${adminId}`;
+
+      const response = await fetch(API_URL, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        // console.log("Profile updated successfully");
+        // Optionally, you can perform any actions after successful update
+      } else {
+        // console.error("Failed to update profile");
+        // Handle error case here
+      }
+    } catch (error) {
+      // console.error("Error while updating profile:", error);
+      // Handle error case here
+    }
+  }, [formData.adminId, formData, sessionStorage]);
+
+
+
 
   // useEffect to call the formik function
   useEffect(() => {
@@ -54,8 +109,10 @@ export default function SAChiplAdmin() {
           data.admin = data.admin.slice(1);
         }
         setApiData(data);
-        console.log("Admin List +++++++++", data);
+        // console.log("Admin List +++++++++", data);
         sessionStorage.setItem("adminList", JSON.stringify(data.admin));
+        console.log("tttttttt", data.admin)
+
 
         // store adminId for each element
         if (data.admin && data.admin.length > 0) {
@@ -72,7 +129,7 @@ export default function SAChiplAdmin() {
           const adminId = JSON.parse(
             sessionStorage.getItem(`adminId_${index}`) ?? ""
           );
-          console.log(`Admin ID for element ${index}:`, adminId);
+          // console.log(`Admin ID for element ${index}:`, adminId);
         }
       } else {
         console.error("Error fetching data:", response.statusText);
@@ -93,7 +150,7 @@ export default function SAChiplAdmin() {
   const openUpdateProfileForm = (adminId: string) => {
     setShowUpdateProfileForm(true);
     setSelectedAdminId(adminId);
-    console.log("qqqqqq", adminId);
+    // console.log("qqqqqq", adminId);
   };
   const closeUpdateProfileForm = () => {
     setShowUpdateProfileForm(false);
@@ -315,8 +372,8 @@ export default function SAChiplAdmin() {
                   type="text"
                   id="name"
                   name="name"
-                  // value={profileData.name}
-                  // onChange={handleChange}
+                  value={formData.name}
+                  onChange={(e) => handleInputChange("name", e.target.value)}
                   className="mt-1 p-2 w-full rounded-md border border-black "
                 />
               </div>
@@ -331,8 +388,8 @@ export default function SAChiplAdmin() {
                   type="email"
                   id="email"
                   name="email"
-                  // value={profileData.email}
-                  // onChange={handleChange}
+                  value={formData.email}
+                  onChange={(e) => handleInputChange("email", e.target.value)}
                   className="mt-1 p-2 w-full rounded-md border border-black "
                 />
               </div>
@@ -347,8 +404,8 @@ export default function SAChiplAdmin() {
                   type="text"
                   id="contactNo"
                   name="contactNo"
-                  // value={profileData.contactNo}
-                  // onChange={handleChange}
+                  value={formData.contactNo}
+                  onChange={(e) => handleInputChange("email", e.target.value)}
                   className="mt-1 p-2 w-full rounded-md border border-black "
                 />
               </div>
@@ -362,6 +419,7 @@ export default function SAChiplAdmin() {
                 </button>
                 <button
                   type="submit"
+                  onClick={handleSubmit}
                   className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring focus:ring-blue-400"
                 >
                   Update

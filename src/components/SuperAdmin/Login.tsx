@@ -61,8 +61,8 @@ export default function Login() {
         // Store the token in session storage
         sessionStorage.setItem("authToken", data.token);
         sessionStorage.setItem("ProfileData", JSON.stringify(data.profile)); // Assuming profile data is available in 'data.profile'
-        sessionStorage.setItem("userid", data.profile.userId ); // Assuming profile data is available in 'data.profile'
-        // console.log(data.profile.userId);
+        sessionStorage.setItem("userid", data.profile.userId); // Assuming profile data is available in 'data.profile'
+        console.log("profileeeeeeeeeeee", data.profile);
         // Store the token in local storage
         localStorage.setItem("authToken", data.token);
         localStorage.setItem("ProfileData", JSON.stringify(data.profile));
