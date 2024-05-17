@@ -20,7 +20,7 @@ export default function FlashScreen() {
   return (
     <div
       id="flash-screen"
-      className="fixed top-0 left-0 w-full h-full flex flex-col items-center justify-center bg-white overflow-hidden"
+      className="fixed z-[999] top-0 left-0 w-full h-full flex flex-col items-center justify-center bg-white overflow-hidden"
     >
       <span className="bg-white flex rounded-full overflow-hidden">
         <img

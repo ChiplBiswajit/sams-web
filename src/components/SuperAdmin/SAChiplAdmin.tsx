@@ -24,11 +24,12 @@ export default function SAChiplAdmin() {
   const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
     name: "",
-    email: "",
+    emailId: "",
     contactNo: "",
-    adminId: "",
   });
 
+
+  const [selectedAdminId, setSelectedAdminId] = useState(""); // State variable to hold the selected admin ID
   const handleInputChange = (field: any, value: any) => {
     setFormData({
       ...formData,
@@ -39,19 +40,17 @@ export default function SAChiplAdmin() {
   const handleSubmit = () => {
     console.log("Form data submitted:", formData);
     updateAdminData(); // Call the function to update profile data
-
     // Close the dialog after submission
     // setIsDialogOpen(false);
   };
 
 
-  const updateAdminData = useCallback(async () => {
+  const updateAdminData = async () => {
     try {
       const authToken = sessionStorage.getItem("authToken");
-      const adminId = formData.adminId; // Assuming userId is available in formData
 
       // const API_URL = `https://0r4mtgsn-3006.inc1.devtunnels.ms/users/updateProfile/${userId}`;
-      const API_URL = `https://0r4mtgsn-3006.inc1.devtunnels.ms/users/updateProfile/${adminId}`;
+      const API_URL = `https://0r4mtgsn-3006.inc1.devtunnels.ms/users/updateProfile/${selectedAdminId}`;
 
       const response = await fetch(API_URL, {
         method: "PUT",
@@ -63,18 +62,93 @@ export default function SAChiplAdmin() {
       });
 
       if (response.ok) {
-        // console.log("Profile updated successfully");
+        console.log("Profile updated successfully");
+        fetchData();
+        closeUpdateProfileForm();
+
+        Swal.fire({
+          icon: "success",
+          title: "Data updated Successfully",
+          // text: "You are now logged in.",
+          confirmButtonColor: "#01246F",
+          timer: 1000,
+        });
         // Optionally, you can perform any actions after successful update
       } else {
-        // console.error("Failed to update profile");
+        console.error("Failed to update profile");
         // Handle error case here
+
+        Swal.fire({
+          icon: "error",
+          title: "Data updated Failed",
+          confirmButtonColor: "#01246F",
+        });
       }
     } catch (error) {
-      // console.error("Error while updating profile:", error);
+      console.error("Error while updating profile:", error);
+
+      Swal.fire({
+        icon: "error",
+        title: "Error while updating profile.",
+        confirmButtonColor: "#01246F",
+      });
       // Handle error case here
     }
-  }, [formData.adminId, formData, sessionStorage]);
+  };
 
+
+  const deleteAdmin = async (adminId: string) => {
+    try {
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "Do you really want to delete this admin?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Yes, delete it!",
+      });
+
+      if (result.isConfirmed) {
+        const authToken = sessionStorage.getItem("authToken");
+        const API_URL = `https://0r4mtgsn-3006.inc1.devtunnels.ms/users/delete/${adminId}`;
+        const response = await fetch(API_URL, {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (response.ok) {
+          fetchData();
+
+          Swal.fire({
+            icon: "success",
+            title: "Admin deleted successfully",
+            confirmButtonColor: "#01246F",
+            timer: 1000,
+          });
+        } else {
+          console.error("Failed to delete admin");
+
+          Swal.fire({
+            icon: "error",
+            title: "Admin deletion failed",
+            confirmButtonColor: "#01246F",
+          });
+        }
+      }
+    } catch (error) {
+      console.error("Error while deleting admin:", error);
+
+      Swal.fire({
+        icon: "error",
+        title: "Error while deleting admin.",
+        confirmButtonColor: "#01246F",
+      });
+    }
+  };
 
 
 
@@ -89,6 +163,12 @@ export default function SAChiplAdmin() {
   useEffect(() => {
     fetchData();
   }, []);
+
+  const handleAdminAdded = () => {
+    // Fetch updated admin data after a new admin is added
+    fetchData();
+  };
+
 
   const fetchData = async () => {
     // const API_URL = "https://samsapi.smartambulance.in/admins/getAdmin";
@@ -111,7 +191,7 @@ export default function SAChiplAdmin() {
         setApiData(data);
         // console.log("Admin List +++++++++", data);
         sessionStorage.setItem("adminList", JSON.stringify(data.admin));
-        console.log("tttttttt", data.admin)
+        // console.log("tttttttt", data.admin)
 
 
         // store adminId for each element
@@ -145,11 +225,15 @@ export default function SAChiplAdmin() {
     setShowAddAdminForm(!showAddAdminForm);
   };
 
-  const [selectedAdminId, setSelectedAdminId] = useState(""); // State variable to hold the selected admin ID
 
-  const openUpdateProfileForm = (adminId: string) => {
+  const openUpdateProfileForm = (user: any) => {
     setShowUpdateProfileForm(true);
-    setSelectedAdminId(adminId);
+    setSelectedAdminId(user.adminId);
+    setFormData({
+      name: user.name,
+      emailId: user.emailId,
+      contactNo: user.contactNo,
+    })
     // console.log("qqqqqq", adminId);
   };
   const closeUpdateProfileForm = () => {
@@ -192,7 +276,7 @@ export default function SAChiplAdmin() {
                     <br />
                     <strong>Organization Name:</strong> {user?.organizationName}
                     <br />
-                    <strong> Contact No:</strong> {user?.contactNo}
+                    <strong>Contact No:</strong> {user?.contactNo}
                     <br />
                     <strong>Parent Admin:</strong> {user?.parentAdmin}
                     <br />
@@ -220,122 +304,125 @@ export default function SAChiplAdmin() {
       </div>
 
       <table className="min-w-[99%] divide-y divide-gray-200 m-1  hidden md:table">
-        <thead className="bg-[#b2c1e0] ">
-          <tr className="">
-            <th
-              scope="col"
-              className="px-2 py-3 text-center text-xs font-bold text-black uppercase tracking-wider"
-            >
-              Slno
-            </th>
-            <th
-              scope="col"
-              className="px-2 py-3 text-center text-xs font-bold text-black uppercase tracking-wider"
-            >
-              AdminId
-            </th>
-            <th
-              scope="col"
-              className="px-2 py-3 text-center text-xs font-bold text-black uppercase tracking-wider"
-            >
-              Name
-            </th>
-            <th
-              scope="col"
-              className="px-2 py-3 text-center text-xs font-bold text-black uppercase tracking-wider"
-            >
-              Email id
-            </th>
-            <th
-              scope="col"
-              className="px-2 py-3 text-center text-xs font-bold text-black uppercase tracking-wider"
-            >
-              Organization Name
-            </th>
-            <th
-              scope="col"
-              className="px-2 py-3 text-center text-xs font-bold text-black uppercase tracking-wider"
-            >
-              Contact No
-            </th>
-            <th
-              scope="col"
-              className="px-2 py-3  text-xs text-center font-bold text-black uppercase tracking-wider"
-            >
-              Parent Admin
-            </th>
-            <th
-              scope="col"
-              className="px-2 py-3  text-xs text-center font-bold text-black uppercase tracking-wider"
-            >
-              Total User Created
-            </th>
-            <th
-              scope="col"
-              className="px-2 py-3 text-center text-xs font-bold text-black uppercase tracking-wider"
-            >
-              Edit
-            </th>
-            <th
-              scope="col"
-              className="px-2 py-3  text-xs text-center font-bold text-black uppercase tracking-wider"
-            >
-              Delete
-            </th>
-          </tr>
-        </thead>
+
         {apiData && apiData?.status === 200 ? (
-          <>
-            {apiData?.admin?.map((user: any, index: any) => {
-              // console.log("hiiiiiiiiiiiiiiiiiiiiiiiii", apiData); // Log apiData here
-              return (
-                <tbody
-                  key={index}
-                  className="bg-white divide-y divide-gray-200"
-                >
-                  <tr>
-                    <td className="px-2 py-2 text-center whitespace-nowrap">
-                      {index + 1}
-                    </td>
-                    <td className="px-2 py-2 text-center whitespace-nowrap">
-                      {user?.adminId}
-                    </td>
-                    <td className="px-2 py-2 text-center whitespace-nowrap">
-                      {user?.name}
-                    </td>
-                    <td className="px-2 py-2 text-center whitespace-nowrap">
-                      {user?.emailId}
-                    </td>
-                    <td className="px-2 py-2 text-center whitespace-nowrap">
-                      {user?.organizationName}
-                    </td>
-                    <td className="px-2 py-2 text-center whitespace-nowrap">
-                      {user?.contactNo}
-                    </td>
-                    <td className="px-2 py-2 text-center whitespace-nowrap">
-                      {user?.parentAdmin}
-                    </td>
-                    <td className="px-2 py-2 text-center whitespace-nowrap">
-                      {user?.totalUserCreated}
-                    </td>
-                    <td className="px-2 py-2 text-center whitespace-nowrap">
-                      <button
-                        className="text-green-500"
-                        onClick={() => openUpdateProfileForm(user?.adminId)}
-                      >
-                        <FaEdit className="text-xl" />
-                      </button>
-                    </td>
-                    <td className="px-2 py-2 text-center whitespace-nowrap">
-                      <button className="text-red-500">
-                        <MdDeleteForever className="text-xl" />
-                      </button>
-                    </td>
-                  </tr>
-                </tbody>
-              );
-            })}
-          </>
+          <><thead className="bg-[#b2c1e0] ">
+            <tr className="">
+              <th
+                scope="col"
+                className="px-2 py-3 text-center text-xs font-bold text-black uppercase tracking-wider"
+              >
+                Slno
+              </th>
+              <th
+                scope="col"
+                className="px-2 py-3 text-center text-xs font-bold text-black uppercase tracking-wider"
+              >
+                AdminId
+              </th>
+              <th
+                scope="col"
+                className="px-2 py-3 text-center text-xs font-bold text-black uppercase tracking-wider"
+              >
+                Name
+              </th>
+              <th
+                scope="col"
+                className="px-2 py-3 text-center text-xs font-bold text-black uppercase tracking-wider"
+              >
+                Email id
+              </th>
+              <th
+                scope="col"
+                className="px-2 py-3 text-center text-xs font-bold text-black uppercase tracking-wider"
+              >
+                Organization Name
+              </th>
+              <th
+                scope="col"
+                className="px-2 py-3 text-center text-xs font-bold text-black uppercase tracking-wider"
+              >
+                Contact No
+              </th>
+              <th
+                scope="col"
+                className="px-2 py-3  text-xs text-center font-bold text-black uppercase tracking-wider"
+              >
+                Parent Admin
+              </th>
+              <th
+                scope="col"
+                className="px-2 py-3  text-xs text-center font-bold text-black uppercase tracking-wider"
+              >
+                Total User Created
+              </th>
+              <th
+                scope="col"
+                className="px-2 py-3 text-center text-xs font-bold text-black uppercase tracking-wider"
+              >
+                Edit
+              </th>
+              <th
+                scope="col"
+                className="px-2 py-3  text-xs text-center font-bold text-black uppercase tracking-wider"
+              >
+                Delete
+              </th>
+            </tr>
+          </thead><>
+              {apiData?.admin?.map((user: any, index: any) => {
+                // console.log("hiiiiiiiiiiiiiiiiiiiiiiiii", apiData); // Log apiData here
+                return (
+                  <tbody
+                    key={index}
+                    className="bg-white divide-y divide-gray-200"
+                  >
+                    <tr>
+                      <td className="px-2 py-2 text-center whitespace-nowrap">
+                        {index + 1}
+                      </td>
+                      <td className="px-2 py-2 text-center whitespace-nowrap">
+                        {user?.adminId}
+                      </td>
+                      <td className="px-2 py-2 text-center whitespace-nowrap">
+                        {user?.name}
+                      </td>
+                      <td className="px-2 py-2 text-center whitespace-nowrap">
+                        {user?.emailId}
+                      </td>
+                      <td className="px-2 py-2 text-center whitespace-nowrap">
+                        {user?.organizationName}
+                      </td>
+                      <td className="px-2 py-2 text-center whitespace-nowrap">
+                        {user?.contactNo}
+                      </td>
+                      <td className="px-2 py-2 text-center whitespace-nowrap">
+                        {user?.parentAdmin}
+                      </td>
+                      <td className="px-2 py-2 text-center whitespace-nowrap">
+                        {user?.totalUserCreated}
+                      </td>
+                      <td className="px-2 py-2 text-center whitespace-nowrap">
+                        <button
+                          className="text-green-500"
+                          onClick={() => openUpdateProfileForm(user)}
+                        >
+                          <FaEdit className="text-xl" />
+                        </button>
+                      </td>
+                      <td className="px-2 py-2 text-center whitespace-nowrap">
+                        <button
+                          className="text-red-500"
+                          onClick={() => deleteAdmin(user.adminId)}
+                        >
+                          <MdDeleteForever className="text-xl" />
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                );
+              })}
+            </></>
         ) : (
           <div className="w-full h-[80vh] center font-normal text-2xl  ">
             {loading ? "" : "No data available"}
@@ -346,6 +433,7 @@ export default function SAChiplAdmin() {
         <SAAddAdmin
           toggleForm={toggleAddAdminForm}
           setFormikFunction={setFormikFunction}
+        // onAdminAdded={handleAdminAdded}
         />
       )}
 
@@ -388,8 +476,8 @@ export default function SAChiplAdmin() {
                   type="email"
                   id="email"
                   name="email"
-                  value={formData.email}
-                  onChange={(e) => handleInputChange("email", e.target.value)}
+                  value={formData.emailId}
+                  onChange={(e) => handleInputChange("emailId", e.target.value)}
                   className="mt-1 p-2 w-full rounded-md border border-black "
                 />
               </div>
@@ -405,7 +493,7 @@ export default function SAChiplAdmin() {
                   id="contactNo"
                   name="contactNo"
                   value={formData.contactNo}
-                  onChange={(e) => handleInputChange("email", e.target.value)}
+                  onChange={(e) => handleInputChange("contactNo", e.target.value)}
                   className="mt-1 p-2 w-full rounded-md border border-black "
                 />
               </div>
@@ -418,7 +506,7 @@ export default function SAChiplAdmin() {
                   Cancel
                 </button>
                 <button
-                  type="submit"
+                  type="button"
                   onClick={handleSubmit}
                   className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring focus:ring-blue-400"
                 >

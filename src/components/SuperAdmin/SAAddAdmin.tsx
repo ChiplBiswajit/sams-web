@@ -14,17 +14,10 @@ interface SAAddAdminProps {
   setFormikFunction: (formikFunc: any) => void; // Add this prop
 }
 
-export default function SAAddAdmin({ toggleForm }: SAAddAdminProps) {
+export default function SAAddAdmin({ toggleForm }: SAAddAdminProps,) {
   //add form details
   const [showForm, setShowForm] = useState(false);
-  const [formData, setFormData] = useState({
-    userId: "",
-    name: "",
-    password: "",
-    contactNo: "",
-    emailId: "",
-    organizationName: "",
-  });
+
 
   const validationSchema = Yup.object({
     userId: Yup.string().required("User ID is required"),
@@ -55,7 +48,8 @@ export default function SAAddAdmin({ toggleForm }: SAAddAdminProps) {
         const authToken = sessionStorage.getItem("authToken");
         const response = await axios.post(
           // "https://samsapi.smartambulance.in/users/add",
-         "https://0r4mtgsn-3006.inc1.devtunnels.ms/users/add",
+          // "https://0r4mtgsn-3006.inc1.devtunnels.ms/users/add",
+          " https://0r4mtgsn-3006.inc1.devtunnels.ms/users/add",
           {
             userId: values.userId,
             name: values.name,
@@ -109,7 +103,7 @@ export default function SAAddAdmin({ toggleForm }: SAAddAdminProps) {
 
   return (
     <div className="fixed top-0 left-0 z-[999] w-full h-full bg-gray-800 bg-opacity-50 flex items-center justify-center">
-      <div className="bg-white p-2 rounded-md w-[80%] h-[90%]">
+      <div className="bg-white p-2 rounded-md w-[80%] h-auto">
         <div className="flex w-full justify-between items-center gap-2 mb-3">
           <h2 className="text-lg  font-bold  text-center">Add Chipl Admins</h2>
           <RxCrossCircled
@@ -118,173 +112,167 @@ export default function SAAddAdmin({ toggleForm }: SAAddAdminProps) {
           />
         </div>
         <form onSubmit={formik.handleSubmit} className="p-4 ">
-          <div className="w-full flex flex-col h-[70vh]">
-            <div className="w-full gap-2 flex md:flex-row flex-col">
-              <div className="mb-4 w-full">
-                <label
-                  htmlFor="userId"
-                  className="block text-sm font-semibold text-black"
-                >
-                  User ID:
-                </label>
-                <input
-                  type="text"
-                  id="userId"
-                  name="userId"
-                  value={formik.values.userId}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  className={`mt-1 p-2 w-full border rounded-md ${formik.touched.userId && formik.errors.userId
-                    ? "border-red-500"
-                    : ""
-                    }`}
-                />
-                {formik.touched.userId && formik.errors.userId && (
-                  <div className="text-red-500 text-sm">
-                    {formik.errors.userId}
-                  </div>
-                )}
-              </div>
-              <div className="mb-4 w-full">
-                <label
-                  htmlFor="name"
-                  className="block text-sm font-semibold text-black"
-                >
-                  Name:
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={formik.values.name}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  className={`mt-1 p-2 w-full border rounded-md ${formik.touched.name && formik.errors.name
-                    ? "border-red-500"
-                    : ""
-                    }`}
-                />
-                {formik.touched.name && formik.errors.name && (
-                  <div className="text-red-500 text-sm">
-                    {formik.errors.name}
-                  </div>
-                )}
-              </div>
+          <div className="w-full grid grid-cols-3 gap-2 h-auto">
+
+            <div className="mb-4">
+              <label
+                htmlFor="userId"
+                className="block text-sm font-semibold text-black"
+              >
+                User ID:
+              </label>
+              <input
+                type="text"
+                id="userId"
+                name="userId"
+                value={formik.values.userId}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                className={`mt-1 p-2 w-full border rounded-md ${formik.touched.userId && formik.errors.userId
+                  ? "border-red-500"
+                  : ""
+                  }`}
+              />
+              {formik.touched.userId && formik.errors.userId && (
+                <div className="text-red-500 text-sm">
+                  {formik.errors.userId}
+                </div>
+              )}
             </div>
 
-            <div className="w-full flex md:flex-row flex-col gap-2">
-              <div className="mb-4 w-full">
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-semibold text-black"
-                >
-                  Password:
-                </label>
-                <input
-                  type="password"
-                  id="password"
-                  name="password"
-                  value={formik.values.password}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  className={`mt-1 p-2 w-full border rounded-md ${formik.touched.password && formik.errors.password
-                    ? "border-red-500"
-                    : ""
-                    }`}
-                />
-                {formik.touched.password && formik.errors.password && (
+            <div className="mb-4">
+              <label
+                htmlFor="name"
+                className="block text-sm font-semibold text-black"
+              >
+                Name:
+              </label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                value={formik.values.name}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                className={`mt-1 p-2 w-full border rounded-md ${formik.touched.name && formik.errors.name
+                  ? "border-red-500"
+                  : ""
+                  }`}
+              />
+              {formik.touched.name && formik.errors.name && (
+                <div className="text-red-500 text-sm">
+                  {formik.errors.name}
+                </div>
+              )}
+            </div>
+            <div className="mb-4">
+              <label
+                htmlFor="password"
+                className="block text-sm font-semibold text-black"
+              >
+                Password:
+              </label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                value={formik.values.password}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                className={`mt-1 p-2 w-full border rounded-md ${formik.touched.password && formik.errors.password
+                  ? "border-red-500"
+                  : ""
+                  }`}
+              />
+              {formik.touched.password && formik.errors.password && (
+                <div className="text-red-500 text-sm">
+                  {formik.errors.password}
+                </div>
+              )}
+            </div>
+            <div className="mb-4">
+              <label
+                htmlFor="organizationName"
+                className="block text-sm font-semibold text-black"
+              >
+                Organization Name:
+              </label>
+              <input
+                type="organizationName"
+                id="organizationName"
+                name="organizationName"
+                value={formik.values.organizationName}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                className={`mt-1 p-2 w-full border rounded-md ${formik.touched.organizationName &&
+                  formik.errors.organizationName
+                  ? "border-red-500"
+                  : ""
+                  }`}
+              />
+              {formik.touched.organizationName &&
+                formik.errors.organizationName && (
                   <div className="text-red-500 text-sm">
-                    {formik.errors.password}
+                    {formik.errors.organizationName}
                   </div>
                 )}
-              </div>
             </div>
 
-            <div className="w-full flex md:flex-row flex-col gap-2">
-              <div className="mb-4 w-full">
-                <label
-                  htmlFor="organizationName"
-                  className="block text-sm font-semibold text-black"
-                >
-                  Organization Name:
-                </label>
-                <input
-                  type="organizationName"
-                  id="organizationName"
-                  name="organizationName"
-                  value={formik.values.organizationName}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  className={`mt-1 p-2 w-full border rounded-md ${formik.touched.organizationName &&
-                    formik.errors.organizationName
-                    ? "border-red-500"
-                    : ""
-                    }`}
-                />
-                {formik.touched.organizationName &&
-                  formik.errors.organizationName && (
-                    <div className="text-red-500 text-sm">
-                      {formik.errors.organizationName}
-                    </div>
-                  )}
-              </div>
-              <div className="mb-4 w-full">
-                <label
-                  htmlFor="contactNo"
-                  className="block text-sm font-semibold text-black"
-                >
-                  Mobile Number:
-                </label>
-                <input
-                  type="tel"
-                  id="contactNo"
-                  name="contactNo"
-                  value={formik.values.contactNo}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  className={`mt-1 p-2 w-full border rounded-md ${formik.touched.contactNo && formik.errors.contactNo
-                    ? "border-red-500"
-                    : ""
-                    }`}
-                />
-                {formik.touched.contactNo && formik.errors.contactNo && (
-                  <div className="text-red-500 text-sm">
-                    {formik.errors.contactNo}
-                  </div>
-                )}
-              </div>
+            <div className="mb-4">
+              <label
+                htmlFor="contactNo"
+                className="block text-sm font-semibold text-black"
+              >
+                Mobile Number:
+              </label>
+              <input
+                type="tel"
+                id="contactNo"
+                name="contactNo"
+                value={formik.values.contactNo}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                className={`mt-1 p-2 w-full border rounded-md ${formik.touched.contactNo && formik.errors.contactNo
+                  ? "border-red-500"
+                  : ""
+                  }`}
+              />
+              {formik.touched.contactNo && formik.errors.contactNo && (
+                <div className="text-red-500 text-sm">
+                  {formik.errors.contactNo}
+                </div>
+              )}
             </div>
 
-            <div className="w-full flex md:flex-row flex-col gap-2">
-              <div className="mb-4 md:w-[50%]">
-                <label
-                  htmlFor="emailId"
-                  className="block text-sm font-semibold text-black"
-                >
-                  Email ID:
-                </label>
-                <input
-                  type="email"
-                  id="emailId"
-                  name="emailId"
-                  value={formik.values.emailId}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  className={`mt-1 p-2 w-full border rounded-md ${formik.touched.emailId && formik.errors.emailId
-                    ? "border-red-500"
-                    : ""
-                    }`}
-                />
-                {formik.touched.emailId && formik.errors.emailId && (
-                  <div className="text-red-500 text-sm">
-                    {formik.errors.emailId}
-                  </div>
-                )}
-              </div>
+            <div className="mb-4">
+              <label
+                htmlFor="emailId"
+                className="block text-sm font-semibold text-black"
+              >
+                Email ID:
+              </label>
+              <input
+                type="email"
+                id="emailId"
+                name="emailId"
+                value={formik.values.emailId}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                className={`mt-1 p-2 w-full border rounded-md ${formik.touched.emailId && formik.errors.emailId
+                  ? "border-red-500"
+                  : ""
+                  }`}
+              />
+              {formik.touched.emailId && formik.errors.emailId && (
+                <div className="text-red-500 text-sm">
+                  {formik.errors.emailId}
+                </div>
+              )}
             </div>
           </div>
 
-          <div className="flex justify-center -mt-[2%]">
+
+          <div className="flex justify-center -mb-[2%]">
             <button
               type="button"
               onClick={toggleForm}
@@ -299,8 +287,9 @@ export default function SAAddAdmin({ toggleForm }: SAAddAdminProps) {
               Submit
             </button>
           </div>
+          
         </form>
-      </div>
-    </div>
+      </div >
+    </div >
   );
 }

@@ -1,13 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/router";
 import Swal from "sweetalert2";
 import * as Yup from "yup";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik, Form, useField } from "formik";
 import { loginpageimg } from "../../assets/Login";
-import { BsFillEyeFill, BsFillEyeSlashFill } from "react-icons/bs";
+import { MdVisibilityOff, MdVisibility } from "react-icons/md";
 import Loader from "../Loader";
-import { RecoilRoot, useSetRecoilState } from "recoil"; // Import Recoil components
+import { useSetRecoilState } from "recoil"; // Import Recoil components
 import { authState } from "../../utils/Recoil/authState"; // Import your Recoil atom for auth state
+import {
+  FilledInput,
+  FormControl,
+  IconButton,
+  InputAdornment,
+  InputLabel,
+} from "@mui/material";
 
 const validationSchema = Yup.object().shape({
   username: Yup.string()
@@ -19,25 +26,74 @@ const validationSchema = Yup.object().shape({
   password: Yup.string().required("Password is required"),
 });
 
+const PasswordField = ({ label, ...props }: any) => {
+  const [field, meta] = useField(props);
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleMouseDownPassword = (event: any) => {
+    event.preventDefault();
+  };
+
+  return (
+    <FormControl
+      variant="filled"
+      sx={{ m: 0, width: "30ch" }}
+      className="bg-transparent rounded-md"
+    >
+      <InputLabel htmlFor={props.id || props.name}>{label}</InputLabel>
+      <FilledInput
+        {...field}
+        {...props}
+        type={showPassword ? "text" : "password"}
+        endAdornment={
+          <InputAdornment position="end">
+            <IconButton
+              aria-label="toggle password visibility"
+              onClick={() => setShowPassword(!showPassword)}
+              onMouseDown={handleMouseDownPassword}
+              edge="end"
+            >
+              {showPassword ? <MdVisibility /> : <MdVisibilityOff />}
+            </IconButton>
+          </InputAdornment>
+        }
+      />
+      {meta.touched && meta.error ? (
+        <p className="text-red-500 mt-2 bg-transparent">{meta.error}</p>
+      ) : null}
+    </FormControl>
+  );
+};
+
+const UsernameField = ({ label, ...props }: any) => {
+  const [field, meta] = useField(props);
+
+  return (
+    <FormControl
+      variant="filled"
+      sx={{ m: 0, width: "30ch" }}
+      className="bg-transparent rounded-md"
+    >
+      <InputLabel htmlFor={props.id || props.name}>{label}</InputLabel>
+      <FilledInput {...field} {...props} />
+      {meta.touched && meta.error ? (
+        <p className="text-red-500 mt-2 bg-transparent">{meta.error}</p>
+      ) : null}
+    </FormControl>
+  );
+};
+
 export default function Login() {
   const router = useRouter();
-  const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const setAuth = useSetRecoilState(authState); // Get setter function for auth state
 
-  const handleLogin = async (
-    values: { username: string; password: string },
-    { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
-  ) => {
+  const handleLogin = async (values: any, { setSubmitting }: any) => {
     try {
       await validationSchema.validate(values, { abortEarly: false });
 
-      // API endpoint
       const apiUrl = "https://samsapi.smartambulance.in/users/login";
-      // const apiUrl = "https://24x7healthcare.live/adminLogin";
 
-      // console.log("Username:", values.username);
-      // console.log("Password:", values.password);
       try {
         const response = await fetch(apiUrl, {
           method: "POST",
@@ -50,25 +106,17 @@ export default function Login() {
           }),
         });
 
-        // console.log("Response Status:", response.status);
-
         if (!response.ok) {
           throw new Error(`Login failed. Status: ${response.status}`);
         }
 
         const data = await response.json();
 
-        // Store the token in session storage
         sessionStorage.setItem("authToken", data.token);
-        sessionStorage.setItem("ProfileData", JSON.stringify(data.profile)); // Assuming profile data is available in 'data.profile'
-        sessionStorage.setItem("userid", data.profile.userId); // Assuming profile data is available in 'data.profile'
-        console.log("profileeeeeeeeeeee", data.profile);
-        // Store the token in local storage
+        sessionStorage.setItem("ProfileData", JSON.stringify(data.profile));
+        sessionStorage.setItem("userid", data.profile.userId);
         localStorage.setItem("authToken", data.token);
         localStorage.setItem("ProfileData", JSON.stringify(data.profile));
-
-        // console.log("API Response Data:", data);
-        // console.log("Profile Data:", data.profile);
 
         Swal.fire({
           icon: "success",
@@ -80,16 +128,9 @@ export default function Login() {
 
         router.push("./dashboard");
 
-        // setAuth(true); // Set auth state to true upon successful login
         setSubmitting(false);
-        setIsSubmitting(false); // Set loading state to false after form submission
+        setIsSubmitting(false);
       } catch (error) {
-        // console.error("Login failed:", error);
-
-        if (error instanceof Error) {
-          // console.log("Error Message:", error.message);
-        }
-
         Swal.fire({
           icon: "error",
           title: "Login Failed",
@@ -98,32 +139,27 @@ export default function Login() {
         });
 
         setSubmitting(false);
-        setIsSubmitting(false); // Set loading state to false in case of validation error
+        setIsSubmitting(false);
       }
     } catch (error) {
       setSubmitting(false);
     }
   };
 
-  // useEffect(async () => {
-  //   const authToken = await localStorage.getItem("authToken");
-  //   console.log("rrrrrrrrrrrrrrrrrrrrrrr",authToken);
-  // }, [])
-
   return (
     <section className="w-full h-screen md:h-[100vh] center bg-[#DCDFFF]">
-      <div className="  flex md:flex-row flex-col bg-black bg-opacity-10 rounded-2xl md:p-0 p-6">
-        <div className="w-full h-auto p-5 flex flex-col ">
+      <div className="flex md:flex-row flex-col bg-white bg-opacity-40 rounded-2xl md:p-0 p-6">
+        <div className="w-full h-auto p-5 flex flex-col">
           <div className="w-full h-full flex justify-center items-center">
             <img
               src={loginpageimg.src}
               alt=""
-              className=" h-[35vh]  md:w-[100vh] md:h-[85vh]"
+              className="h-[35vh] md:w-[100vh] md:h-[85vh]"
             />
           </div>
         </div>
 
-        <div className="w-full h-auto  justify-center items-center md:items-start flex flex-col ">
+        <div className="w-full h-auto ml-[3%] justify-center items-center md:items-start flex flex-col">
           <span className="md:text-5xl text-3xl font-bold text-[#100B1D]">
             Welcome to AMTeK
           </span>
@@ -135,66 +171,20 @@ export default function Login() {
             validationSchema={validationSchema}
             onSubmit={handleLogin}
           >
-            <Form className="w-full flex flex-col  md:items-start center ">
-              <span className="mt-8 flex flex-col">
-                <label className="text-lg text-[#100B1D] font-bold">
-                  User ID
-                </label>
-
-                <Field
-                  type="text"
-                  name="username"
-                  className="border-2 border-blue-400  p-2 w-full rounded-xl"
-                />
-                <ErrorMessage name="username">
-                  {(msg) => (
-                    <p className="text-red-500 mt-2">
-                      {msg.includes("required") ? "Username is required" : msg}
-                    </p>
-                  )}
-                </ErrorMessage>
+            <Form className="w-full flex flex-col md:items-start center">
+              <span className="mt-4 w-full md:items-start center flex flex-col">
+                <UsernameField label="Username" name="username" id="username" />
               </span>
 
               <span className="mt-4 w-full md:items-start center flex flex-col">
-                <span className=" flex flex-col md:ml-0 ml-5">
-                  <label className="text-lg  text-[#100B1D] font-bold">
-                    Password
-                  </label>
-
-                  <div className="flex items-center">
-                    <Field
-                      type={showPassword ? "text" : "password"}
-                      name="password"
-                      className="border-2 w-full  border-blue-400 p-2 rounded-xl"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="ml-2 text-xl focus:outline-none  "
-                    >
-                      {showPassword ? (
-                        <BsFillEyeSlashFill />
-                      ) : (
-                        <BsFillEyeFill />
-                      )}
-                    </button>
-                  </div>
-                </span>
-
-                <ErrorMessage name="password">
-                  {(msg) => (
-                    <p className="text-red-500 mt-2">
-                      {msg.includes("required") ? "Password is required" : msg}
-                    </p>
-                  )}
-                </ErrorMessage>
+                <PasswordField label="Password" name="password" id="password" />
               </span>
 
-              <span className="w-[40%]  center ">
+              <span className="w-[50%] center">
                 <button
                   type="submit"
-                  className="mt-8   text-center bg-[#01246F] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded  hover:scale-105"
-                  disabled={isSubmitting} // Disable the button when submitting
+                  className="mt-8 text-center bg-[#01246F] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded hover:scale-105"
+                  disabled={isSubmitting}
                 >
                   {isSubmitting ? <Loader /> : "Login"}
                 </button>
