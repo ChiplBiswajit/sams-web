@@ -17,19 +17,19 @@ export default function SAStocks() {
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [filter, setFilter] = useState("ALL");
-  const [apiData, setApiData] = useState<ApiData | undefined>(undefined);
+  // const [apiData, setApiData] = useState<ApiData | undefined>(undefined);
   const [formData, setFormData] = useState({
     product_no: "",
     device_id: "",
     camera_id: "",
     ambulance_id: "",
     router_sim_no: "",
-
-
   });
+
 
   const toggleForm = () => {
     setShowForm(!showForm);
+
   };
 
   const handleChange = (e: any) => {
@@ -102,7 +102,7 @@ export default function SAStocks() {
         if (data.admin && data.admin.length > 0) {
           data.admin = data.admin.slice(1);
         }
-        setApiData(data);
+        // setApiData(data);
         // console.log("Admin List +++++++++", data);
         sessionStorage.setItem("adminList", JSON.stringify(data.admin));
         // console.log("tttttttt", data.admin)
@@ -136,8 +136,6 @@ export default function SAStocks() {
   };
 
 
-
-
   return (
     <section className="h-screen">
       <div className="w-full p-2 flex justify-end  gap-8">
@@ -145,11 +143,7 @@ export default function SAStocks() {
           <select
             className="px-2 py-2 h-10 rounded-md text-black font-semibold bg-[#ECEEF1]"
             value={filter}
-            onChange={(e) => setFilter(e.target.value)}
-          >
-
-
-
+            onChange={(e) => setFilter(e.target.value)} >
             <option
               className="text-black bg-white  text-center font-semibold"
               value="ALL"
@@ -319,18 +313,6 @@ export default function SAStocks() {
           </tr>
         </thead>
 
-
-
-
-
-
-
-
-
-
-
-
-
         {stocksData && stocksData?.status === 200 ? (
           <>
             {stocksData?.stocks?.map((user: any, index: any) => {
@@ -421,6 +403,7 @@ export default function SAStocks() {
         <div className="fixed top-0 left-0 flex justify-center items-center w-full h-full bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded-lg w-[80%]">
             <div className="flex w-full justify-between items-center gap-2 mb-3">
+
               <h2 className="text-lg  font-bold  text-center">Add Stocks</h2>
               <RxCrossCircled
                 className=" text-3xl text-center text-red-600"
@@ -580,6 +563,7 @@ export default function SAStocks() {
                 <button
                   type="submit"
                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md transition duration-300"
+
                 >
                   Submit
                 </button>
@@ -602,19 +586,12 @@ export default function SAStocks() {
 
 
 
-
-
-
-
-
-
-
-
 // import React, { useEffect, useState } from "react";
 // import { FaEdit } from "react-icons/fa";
 // import Loader from "../Loader";
 // import { MdDeleteForever } from "react-icons/md";
 // import { IoMdAddCircle } from "react-icons/io";
+// import { RxCrossCircled } from "react-icons/rx";
 
 // interface StocksData {
 //   status: any; // Adjust the type according to your API response
@@ -628,13 +605,29 @@ export default function SAStocks() {
 //   );
 //   const [loading, setLoading] = useState(true);
 //   const [showForm, setShowForm] = useState(false);
+//   const [filter, setFilter] = useState("ALL");
 //   const [formData, setFormData] = useState({
-//     name: "",
-//     email: "",
+//     product_no: "",
+//     device_id: "",
+//     camera_id: "",
+//     ambulance_id: "",
+//     router_sim_no: "",
 //   });
+//   const [isEditing, setIsEditing] = useState(false);
+//   const [currentStockId, setCurrentStockId] = useState(null);
 
 //   const toggleForm = () => {
 //     setShowForm(!showForm);
+//     if (!showForm) {
+//       setIsEditing(false);
+//       setFormData({
+//         product_no: "",
+//         device_id: "",
+//         camera_id: "",
+//         ambulance_id: "",
+//         router_sim_no: "",
+//       });
+//     }
 //   };
 
 //   const handleChange = (e: any) => {
@@ -651,14 +644,30 @@ export default function SAStocks() {
 //     console.log("Form submitted:", formData);
 //     // Reset form fields
 //     setFormData({
-//       name: "",
-//       email: "",
-//       // Reset other fields as needed
+//       product_no: "",
+//       device_id: "",
+//       camera_id: "",
+//       ambulance_id: "",
+//       router_sim_no: "",
 //     });
+//   };
+
+//   const handleEdit = (stock: any) => {
+//     setIsEditing(true);
+//     setCurrentStockId(stock.id); // Assuming each stock item has a unique id
+//     setFormData({
+//       product_no: stock.product_no,
+//       device_id: stock.device_Id,
+//       camera_id: stock.camera_id,
+//       ambulance_id: stock.ambulance_id,
+//       router_sim_no: stock.router_sim_no,
+//     });
+//     setShowForm(true);
 //   };
 
 //   useEffect(() => {
 //     fetchData();
+//     fetchDataAdmin();
 //   }, []);
 
 //   const fetchData = async () => {
@@ -686,212 +695,238 @@ export default function SAStocks() {
 //     }
 //   };
 
+//   const fetchDataAdmin = async () => {
+//     const API_URL = "https://0r4mtgsn-3006.inc1.devtunnels.ms/admins/getAdmin";
+//     try {
+//       const authToken = sessionStorage.getItem("authToken");
+//       const response = await fetch(API_URL, {
+//         method: "GET",
+//         headers: {
+//           Authorization: `Bearer ${authToken}`,
+//         },
+//       });
+
+//       if (response.ok) {
+//         const data = await response.json();
+//         // Remove the first index of admin array
+//         if (data.admin && data.admin.length > 0) {
+//           data.admin = data.admin.slice(1);
+//         }
+//         sessionStorage.setItem("adminList", JSON.stringify(data.admin));
+//         // Store adminId for each element
+//         if (data.admin && data.admin.length > 0) {
+//           data.admin.forEach((admin: any, index: any) => {
+//             sessionStorage.setItem(
+//               `adminId_${index}`,
+//               JSON.stringify(admin.adminId)
+//             );
+//           });
+//         }
+
+//         // Retrieve adminId for each element
+//         for (let index = 0; index < data.admin.length; index++) {
+//           const adminId = JSON.parse(
+//             sessionStorage.getItem(`adminId_${index}`) ?? ""
+//           );
+//           // console.log(`Admin ID for element ${index}:`, adminId);
+//         }
+//       } else {
+//         console.error("Error fetching data:", response.statusText);
+//       }
+//     } catch (error) {
+//       console.error("Error fetching data:", error);
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
 //   return (
 //     <section className="h-screen">
-//       <div className="w-full p-2 flex justify-end">
+//       <div className="w-full p-2 flex justify-end  gap-8">
+//         <div className="flex gap-6">
+//           <select
+//             className="px-2 py-2 h-10 rounded-md text-black font-semibold bg-[#ECEEF1]"
+//             value={filter}
+//             onChange={(e) => setFilter(e.target.value)}
+//           >
+//             <option
+//               className="text-black bg-white  text-center font-semibold"
+//               value="ALL"
+//             >
+//               Admin List
+//             </option>
+//             <option
+//               className="text-red-600 bg-white text-center font-semibold"
+//               value="ALS"
+//             >
+//               ALS
+//             </option>
+//             <option
+//               className="text-yellow-600 bg-white text-center font-semibold"
+//               value="BLS"
+//             >
+//               BLS
+//             </option>
+//           </select>
+//         </div>
+
 //         <button
 //           className="bg-blue-500 flex center gap-1 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded-md transition duration-300 transform hover:scale-110"
 //           id="animatedButton"
 //           onClick={toggleForm}
 //         >
 //           <IoMdAddCircle className="text-white text-xl" />
-//           Add Admins
+//           Add Stocks
 //         </button>
 //       </div>
-
-//       {showForm && (
-//         <div className="w-full p-4">
-//           <form onSubmit={handleSubmit} className="bg-white p-4 rounded-md shadow-md">
-//             <div className="mt-4">
-//               <label htmlFor="name" className="block font-medium text-gray-700">
-//                 Name
-//               </label>
-//               <input
-//                 type="text"
-//                 id="name"
-//                 name="name"
-//                 value={formData.name}
-//                 onChange={handleChange}
-//                 className="mt-1 p-2 w-full border rounded-md"
-//               />
-//             </div>
-//             <div className="mt-4">
-//               <label htmlFor="email" className="block font-medium text-gray-700">
-//                 Email
-//               </label>
-//               <input
-//                 type="email"
-//                 id="email"
-//                 name="email"
-//                 value={formData.email}
-//                 onChange={handleChange}
-//                 className="mt-1 p-2 w-full border rounded-md"
-//               />
-//             </div>
-//             {/* Add more input fields as needed */}
-//             <div className="mt-4">
-//               <button
-//                 type="submit"
-//                 className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-md"
-//               >
-//                 Submit
-//               </button>
-//             </div>
-//           </form>
-//         </div>
-//       )}
 
 //       {loading && <Loader />}
 //       <div className="md:hidden center flex flex-col">
 //         {stocksData && stocksData?.status === 200 ? (
 //           <>
-//             {stocksData?.stocks?.map((user: any, index: any) => (
-//               <div
-//                 key={index}
-//                 className="m-2 flex bg-[#d0d6e2] w-[90%] rounded-lg p-2"
-//               >
-//                 <div className="w-[90%]">
-//                   <strong className="">Sl No: {index + 1}</strong>
-//                   <br />
-//                   <strong> Device Id:</strong> {user.device_Id}
-//                   <br />
-//                   <strong> Owner ID:</strong> {user.transfer_owner_id}
-//                   <br />
-//                   <strong> Ambulance ID:</strong> {user.ambulance_id}
-//                   <br />
-//                   <strong> Ambulance Type: </strong>
-//                   <span
-//                     className="font-bold "
-//                     style={{
-//                       color:
-//                         user.ambulance_type === 1
-//                           ? "red"
-//                           : user.ambulance_type === 2
-//                             ? "blue"
-//                             : "inherit",
-//                     }}
-//                   >
-//                     {user.ambulance_type === 1
-//                       ? "ALS"
-//                       : user.ambulance_type === 2
-//                         ? "BLS"
-//                         : "N/A"}
-//                   </span>
-//                   <br />
-//                   <strong> Device Install Status:</strong>{" "}
-//                   <span
-//                     className="font-semibold "
-//                     style={{
-//                       color:
-//                         user.device_install === 1
-//                           ? "green"
-//                           : user.device_install === 0
+//             {stocksData?.stocks?.map((user: any, index: any) => {
+//               return (
+//                 <div
+//                   key={index}
+//                   className="m-2 flex bg-[#d0d6e2] w-[90%] rounded-lg p-2"
+//                 >
+//                   <div className="w-[90%]">
+//                     <strong className="">Sl No: {index + 1}</strong>
+//                     <br />
+//                     <strong> Device Id:</strong> {user.device_Id}
+//                     <br />
+//                     <strong> Owner ID:</strong> {user.transfer_owner_id}
+//                     <br />
+//                     <strong> Ambulance ID:</strong> {user.ambulance_id}
+//                     <br />
+//                     <strong> Ambulance Type: </strong>
+//                     <span
+//                       className="font-bold "
+//                       style={{
+//                         color:
+//                           user.ambulance_type === 1
 //                             ? "red"
-//                             : "inherit",
-//                     }}
-//                   >
-//                     {user.device_install === 1
-//                       ? "Installed"
-//                       : user.device_install === 0
-//                         ? "Not Installed"
-//                         : ""}
-//                   </span>
-//                   <br />
+//                             : user.ambulance_type === 2
+//                               ? "blue"
+//                               : "inherit",
+//                       }}
+//                     >
+//                       {user.ambulance_type === 1
+//                         ? "ALS"
+//                         : user.ambulance_type === 2
+//                           ? "BLS"
+//                           : "N/A"}
+//                     </span>
+//                     <br />
+//                     <strong> Device Install Status:</strong>{" "}
+//                     <span
+//                       className="font-semibold "
+//                       style={{
+//                         color:
+//                           user.device_install === 1
+//                             ? "green"
+//                             : user.device_install === 0
+//                               ? "red"
+//                               : "inherit",
+//                       }}
+//                     >
+//                       {user.device_install === 1
+//                         ? "Installed"
+//                         : user.device_install === 0
+//                           ? "Not Installed"
+//                           : ""}
+//                     </span>
+//                     <br />
+//                   </div>
+//                   <div className="center gap-3 flex flex-col">
+//                     <button className="" onClick={() => handleEdit(user)}>
+//                       <FaEdit className="text-xl" />
+//                     </button>
+//                   </div>
 //                 </div>
-//                 {/* <div className="center gap-3 flex flex-col">
-//                   <button className="">
-//                     <FaEdit className="text-xl" />
-//                   </button>
-//                 </div> */}
-//               </div>
-//             ))}
+//               );
+//             })}
 //           </>
 //         ) : (
-//           <div className="w-full h-[80vh] center font-normal text-2xl">
+//           <div className="w-full h-[80vh] center font-normal text-2xl  ">
 //             {loading ? "" : "No data available"}
 //           </div>
 //         )}
 //       </div>
 
 //       <table className="min-w-[99%] divide-y divide-gray-200 m-1 hidden md:table">
-//         <thead className="bg-[#b2c1e0]">
+//         <thead className="bg-[#b2c1e0] ">
 //           <tr className="">
 //             <th
 //               scope="col"
-//               className="px-6 py-3 text-center text-xs font-bold text-black uppercase tracking-wider"
+//               className="px-2 py-3 text-center text-xs font-bold text-black uppercase tracking-wider"
 //             >
-//               Sl.no.
+//               SL NO.
 //             </th>
 //             <th
 //               scope="col"
-//               className="px-6 py-3 text-center text-xs font-bold text-black uppercase tracking-wider"
+//               className="px-2 py-3 text-center text-xs font-bold text-black uppercase tracking-wider"
 //             >
-//               Device Id
+//               Device ID
 //             </th>
 //             <th
 //               scope="col"
-//               className="px-6 py-3 text-center text-xs font-bold text-black uppercase tracking-wider"
+//               className="px-2 py-3 text-center text-xs font-bold text-black uppercase tracking-wider"
 //             >
 //               Owner ID
 //             </th>
 //             <th
 //               scope="col"
-//               className="px-6 py-3 text-center text-xs font-bold text-black uppercase tracking-wider"
+//               className="px-2 py-3 text-center text-xs font-bold text-black uppercase tracking-wider"
 //             >
 //               Ambulance ID
 //             </th>
 //             <th
 //               scope="col"
-//               className="px-6 py-3 text-center text-xs font-bold text-black uppercase tracking-wider"
+//               className="px-2 py-3 text-center text-xs font-bold text-black uppercase tracking-wider"
 //             >
 //               Ambulance Type
 //             </th>
 //             <th
 //               scope="col"
-//               className="px-6 py-3 text-xs text-center font-bold text-black uppercase tracking-wider"
+//               className="px-2 py-3 text-center text-xs font-bold text-black uppercase tracking-wider"
 //             >
 //               Device Install Status
 //             </th>
 //             <th
 //               scope="col"
-//               className="px-6 py-3 text-xs text-center font-bold text-black uppercase tracking-wider"
+//               className="relative px-2 py-3 text-center text-xs font-medium text-black uppercase tracking-wider"
 //             >
-//               Edit
-//             </th>
-//             <th
-//               scope="col"
-//               className="px-6 py-3 text-xs text-center font-bold text-black uppercase tracking-wider"
-//             >
-//               Delete
+//               Action
 //             </th>
 //           </tr>
 //         </thead>
-//         {stocksData && stocksData?.status === 200 ? (
-//           <>
-//             {stocksData?.stocks?.map((user: any, index: any) => (
-//               <tbody key={index} className="bg-white divide-y divide-gray-200">
-//                 <tr>
-//                   <td className="px-6 py-2 text-center whitespace-nowrap">
+//         <tbody className="bg-white divide-y divide-gray-200">
+//           {stocksData &&
+//             stocksData?.stocks?.map((user: any, index: any) => {
+//               return (
+//                 <tr key={index}>
+//                   <td className="px-2 py-4 whitespace-nowrap text-center text-sm font-medium text-gray-900">
 //                     {index + 1}
 //                   </td>
-//                   <td className="px-6 py-2 text-center whitespace-nowrap">
+//                   <td className="px-2 py-4 whitespace-nowrap text-center text-sm font-medium text-gray-900">
 //                     {user.device_Id}
 //                   </td>
-//                   <td className="px-6 py-2 text-center whitespace-nowrap">
+//                   <td className="px-2 py-4 whitespace-nowrap text-center text-sm font-medium text-gray-900">
 //                     {user.transfer_owner_id}
 //                   </td>
-//                   <td className="px-6 py-2 text-center whitespace-nowrap">
-//                     {user.ambulance_id ? user.ambulance_id : "Not Assigned"}
+//                   <td className="px-2 py-4 whitespace-nowrap text-center text-sm font-medium text-gray-900">
+//                     {user.ambulance_id}
 //                   </td>
-//                   <td className="px-6 py-2 text-center whitespace-nowrap">
+//                   <td className="px-2 py-4 whitespace-nowrap text-center text-sm font-bold text-gray-900">
 //                     <span
-//                       className="font-bold"
+//                       className="font-bold "
 //                       style={{
 //                         color:
 //                           user.ambulance_type === 1
 //                             ? "red"
 //                             : user.ambulance_type === 2
-//                               ? "green"
+//                               ? "blue"
 //                               : "inherit",
 //                       }}
 //                     >
@@ -902,9 +937,9 @@ export default function SAStocks() {
 //                           : "N/A"}
 //                     </span>
 //                   </td>
-//                   <td className="px-6 py-2 text-center whitespace-nowrap">
+//                   <td className="px-2 py-4 whitespace-nowrap text-center text-sm font-semibold text-gray-900">
 //                     <span
-//                       className="font-semibold"
+//                       className="font-semibold "
 //                       style={{
 //                         color:
 //                           user.device_install === 1
@@ -921,26 +956,120 @@ export default function SAStocks() {
 //                           : ""}
 //                     </span>
 //                   </td>
-//                   <td className="px-6 py-2 text-center whitespace-nowrap">
-//                     <button className="text-green-500">
+//                   <td className="px-2 py-4 whitespace-nowrap text-center text-sm font-medium">
+//                     <button
+//                       className="text-indigo-600 hover:text-indigo-900"
+//                       onClick={() => handleEdit(user)}
+//                     >
 //                       <FaEdit className="text-xl" />
 //                     </button>
 //                   </td>
-//                   <td className="px-2 py-2 text-center whitespace-nowrap">
-//                     <button className="text-red-500">
-//                       <MdDeleteForever className="text-xl" />
-//                     </button>
-//                   </td>
 //                 </tr>
-//               </tbody>
-//             ))}
-//           </>
-//         ) : (
-//           <div className="w-full h-[80vh] center font-normal text-2xl">
-//             {loading ? "" : "No data available"}
-//           </div>
-//         )}
+//               );
+//             })}
+//         </tbody>
 //       </table>
+
+//       {showForm && (
+//         <div
+//           className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50"
+//           onClick={toggleForm}
+//         >
+//           <div
+//             className="bg-white p-8 rounded-lg w-[95%] h-[70vh] shadow-md relative overflow-y-auto md:w-[50%]"
+//             onClick={(e) => e.stopPropagation()}
+//           >
+//             <div
+//               className="absolute top-2 right-2 cursor-pointer"
+//               onClick={toggleForm}
+//             >
+//               <RxCrossCircled className="text-red-600 text-3xl font-bold" />
+//             </div>
+//             <form onSubmit={handleSubmit} className="overflow-y-auto h-[100%]">
+//               <h2 className="text-2xl font-bold mb-4">
+//                 {isEditing ? "Update Stock" : "Add Stock"}
+//               </h2>
+//               <div className="mb-4">
+//                 <label className="block text-gray-700 font-bold mb-2">
+//                   Product Number
+//                 </label>
+//                 <input
+//                   type="text"
+//                   name="product_no"
+//                   value={formData.product_no}
+//                   onChange={handleChange}
+//                   className="w-full px-3 py-2 border rounded"
+//                 />
+//               </div>
+//               <div className="mb-4">
+//                 <label className="block text-gray-700 font-bold mb-2">
+//                   Device ID
+//                 </label>
+//                 <input
+//                   type="text"
+//                   name="device_id"
+//                   value={formData.device_id}
+//                   onChange={handleChange}
+//                   className="w-full px-3 py-2 border rounded"
+//                 />
+//               </div>
+//               <div className="mb-4">
+//                 <label className="block text-gray-700 font-bold mb-2">
+//                   Camera ID
+//                 </label>
+//                 <input
+//                   type="text"
+//                   name="camera_id"
+//                   value={formData.camera_id}
+//                   onChange={handleChange}
+//                   className="w-full px-3 py-2 border rounded"
+//                 />
+//               </div>
+//               <div className="mb-4">
+//                 <label className="block text-gray-700 font-bold mb-2">
+//                   Ambulance ID
+//                 </label>
+//                 <input
+//                   type="text"
+//                   name="ambulance_id"
+//                   value={formData.ambulance_id}
+//                   onChange={handleChange}
+//                   className="w-full px-3 py-2 border rounded"
+//                 />
+//               </div>
+//               <div className="mb-4">
+//                 <label className="block text-gray-700 font-bold mb-2">
+//                   Router SIM Number
+//                 </label>
+//                 <input
+//                   type="text"
+//                   name="router_sim_no"
+//                   value={formData.router_sim_no}
+//                   onChange={handleChange}
+//                   className="w-full px-3 py-2 border rounded"
+//                 />
+//               </div>
+//               <div className="flex justify-end">
+//                 <button
+//                   type="submit"
+//                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+//                 >
+//                   {isEditing ? "Update" : "Add"}
+//                 </button>
+//               </div>
+//             </form>
+//           </div>
+//         </div>
+//       )}
 //     </section>
 //   );
 // }
+
+
+
+
+
+
+
+
+
