@@ -388,7 +388,7 @@ export default function SAChiplAdmin() {
                   <tbody
                     key={index}
                     className="bg-white divide-y divide-gray-200"
-                  >
+                  >       
                     <tr>
                       <td className="px-2 py-2 text-center whitespace-nowrap">
                         {index + 1}
