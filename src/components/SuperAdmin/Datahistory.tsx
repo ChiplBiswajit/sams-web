@@ -122,7 +122,7 @@ export default function Datahistory() {
                             <button
                                 key={tab}
                                 type="button"
-                                className={`text-white  bg-purple-700 center hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-sm px-7 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900 w-[12%] ${activeTab === tab ? 'bg-green-500 text-black' : ''}`}
+                                className={`text-white  bg-purple-700 center hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-sm px-7 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900 w-[12%] ${activeTab === tab?'bg-green-500 text-black' : ''}`}
                                 onClick={() => handleTabClick(tab)}
                             >
                                 {tab}
@@ -136,4 +136,5 @@ export default function Datahistory() {
         </section>
     );
 }
+
 

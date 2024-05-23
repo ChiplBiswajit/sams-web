@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { fleets } from "@/src/assets/SuperAdmin/Sidebar/Index";
+import { RxCrossCircled } from "react-icons/rx";
 import {
   activedevices,
   fleetadmins,
@@ -228,7 +229,7 @@ export default function SADashboard() {
   };
 
   return (
-    <section className="w-full h-full bg-[#EEF1FC] ">
+    <section className="w-full h-full bg-[#EEF1FC] relative ">
       <div className="w-full  flex flex-col">
         <span className="w-full flex md:flex-row  p-2 gap-4">
           <div className="w-full p-1 flex flex-col gap-2 center rounded-md bg-gradient-to-r from-[#BA3664]  to-[#272770]">
@@ -330,80 +331,99 @@ export default function SADashboard() {
         </span>
 
         {isFormVisible && (
-          // <div className="mt-2 p-2 bg-white rounded-md shadow-md">
-            <div className="bg-white p-2 rounded-md w-[80%] h-[80%]">
-            <h2 className="text-lg font-semibold">Form Title</h2>
-            <form>
-              {/* Add your form fields here */}
-              <div className="relative overflow-x-auto">
-                <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                  <thead className="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
-                    <tr>
-                      <th scope="col" className="px-6 py-3 rounded-s-lg">
-                      District name
-                      </th>
-                      <th scope="col" className="px-6 py-3">
-                        Qty
-                      </th>
-                      <th scope="col" className="px-6 py-3 rounded-e-lg">
-                      No of assign devices
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr className="bg-white dark:bg-gray-800">
-                      <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        Apple MacBook Pro 17"
-                      </th>
-                      <td className="px-6 py-4">
-                        1
-                      </td>
-                      <td className="px-6 py-4">
-                        $2999
-                      </td>
-                    </tr>
-                    <tr className="bg-white dark:bg-gray-800">
-                      <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        Microsoft Surface Pro
-                      </th>
-                      <td className="px-6 py-4">
-                        1
-                      </td>
-                      <td className="px-6 py-4">
-                        $1999
-                      </td>
-                    </tr>
-                    <tr className="bg-white dark:bg-gray-800">
-                      <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        Magic Mouse 2
-                      </th>
-                      <td className="px-6 py-4">
-                        1
-                      </td>
-                      <td className="px-6 py-4">
-                        $99
-                      </td>
-                    </tr>
-                  </tbody>
-                  <tfoot>
-                    <tr className="font-semibold text-gray-900 dark:text-white">
-                      <th scope="row" className="px-6 py-3 text-base">Total</th>
-                      <td className="px-6 py-3">3</td>
-                      <td className="px-6 py-3">21,000</td>
-                    </tr>
-                  </tfoot>
-                </table>
+          <div className="fixed top-0 left-0 flex justify-center items-center w-full h-full bg-black bg-opacity-50">
+            <div className="bg-white p-6 rounded-lg w-[80%]">
+              <div className="flex w-full justify-between items-center gap-2 mb-3">
+                <h2 className="text-lg  font-bold  text-center">Total device in District</h2>
+                <RxCrossCircled
+                  className=" text-3xl text-center text-red-600"
+                  onClick={toggleFormVisibility}
+                />
               </div>
 
-              <button
-                type="button"
-                onClick={toggleFormVisibility}
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                Close
-              </button>
-            </form>
+              <form  className="p-4 ">
+
+
+                <div className="relative overflow-x-auto">
+                  <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                    <thead className="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
+                      <tr>
+                        <th scope="col" className="px-6 py-3 rounded-s-lg">
+                         District list
+                        </th>
+                        <th scope="col" className="px-6 py-3">
+                          Qty
+                        </th>
+                        <th scope="col" className="px-6 py-3 rounded-e-lg">
+                        No. of devices Assigned devices
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr className="bg-white dark:bg-gray-800">
+                        <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                          Apple MacBook Pro 17"
+                        </th>
+                        <td className="px-6 py-4">
+                          1
+                        </td>
+                        <td className="px-6 py-4">
+                          $2999
+                        </td>
+                      </tr>
+                      <tr className="bg-white dark:bg-gray-800">
+                        <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                          Microsoft Surface Pro
+                        </th>
+                        <td className="px-6 py-4">
+                          1
+                        </td>
+                        <td className="px-6 py-4">
+                          $1999
+                        </td>
+                      </tr>
+                      <tr className="bg-white dark:bg-gray-800">
+                        <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                          Magic Mouse 2
+                        </th>
+                        <td className="px-6 py-4">
+                          1
+                        </td>
+                        <td className="px-6 py-4">
+                          $99
+                        </td>
+                      </tr>
+                    </tbody>
+                    <tfoot>
+                      <tr className="font-semibold text-gray-900 dark:text-white">
+                        <th scope="row" className="px-6 py-3 text-base">Total</th>
+                        <td className="px-6 py-3">3</td>
+                        <td className="px-6 py-3">21,000</td>
+                      </tr>
+                    </tfoot>
+                  </table>
+                </div>
+
+
+                <div className="flex justify-center -mb-[2%]">
+                  <button
+                    type="button"
+                    onClick={toggleFormVisibility}
+                    className="mr-2 bg-red-600 hover:bg-red-500 text-white font-bold py-2 px-4 rounded-md transition duration-300"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md transition duration-300"
+                  >
+                    Submit
+                  </button>
+                </div>
+              </form>
+
+            </div>
           </div>
-          // </div>
         )}
         <div className="w-full center  h-full">
           <div className="w-full h-full center">
