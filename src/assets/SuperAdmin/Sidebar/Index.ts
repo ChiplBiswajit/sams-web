@@ -9,3 +9,5 @@ export {default as help} from "./help.png";
 export {default as Aboutus} from "./About-us.png";
 export {default as jerk} from "./line-chart.png";
 export {default as location} from "./google-maps.png";
+export { default as maintenance } from "./maintenance.webp";
+export { default as history } from "./history.webp";

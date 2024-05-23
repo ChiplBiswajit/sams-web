@@ -5,9 +5,11 @@ import {
   dashboard,
   fleets,
   help,
+  history,
   jerk,
   live,
   location,
+  maintenance,
   profilePage,
   reportamtek,
   stocks,
@@ -23,27 +25,7 @@ export const navbar: SuperAdminnavbar[] = [
     path: "/dashboard",
     pagePath: "dashboard",
   },
-  {
-    id: 2,
-    icon: ChiplAdmin,
-    title: "Admin",
-    path: "/admin",
-    pagePath: "admin",
-  },
-  // {
-  //   id: 3,
-  //   icon: fleets,
-  //   title: "Fleets",
-  //   path: "/fleets",
-  //   pagePath: "Fleets",
-  // },
-  {
-    id: 4,
-    icon: stocks,
-    title: "Stocks",
-    path: "/stocks",
-    pagePath: "Stocks",
-  },
+
   {
     id: 5,
     icon: live,
@@ -51,13 +33,7 @@ export const navbar: SuperAdminnavbar[] = [
     path: "/liveData",
     pagePath: "LiveData",
   },
-  // {
-  //   id: 10,
-  //   icon: jerk,
-  //   title: "Jerk",
-  //   path: "/SuperAdmin/jerk",
-  //   pagePath: "jerk",
-  // },
+
   {
     id: 11,
     icon: location,
@@ -65,6 +41,69 @@ export const navbar: SuperAdminnavbar[] = [
     path: "/location",
     pagePath: "location",
   },
+
+  {
+    id: 2,
+    icon: ChiplAdmin,
+    title: "Admin",
+    path: "/admin",
+    pagePath: "admin",
+  },
+
+  {
+    id: 6,
+    icon: profilePage,
+    title: "Profile",
+    path: "/profile",
+    pagePath: "Profile",
+  },
+
+  {
+    id:9 ,
+    icon:maintenance,
+    title: "Maintenance",
+    path: "/maintenance",
+    pagePath: "Maintenance",
+  },
+  {
+    id: 10,
+    icon:history,
+    title: "Data History",
+    path: "/datahistory",
+    pagePath: "datahistory",
+  },
+
+
+
+
+
+
+
+
+
+  // {
+  //   id: 3,
+  //   icon: fleets,
+  //   title: "Fleets",
+  //   path: "/fleets",
+  //   pagePath: "Fleets",
+  // },
+  // {
+  //   id: 4,
+  //   icon: stocks,
+  //   title: "Stocks",
+  //   path: "/stocks",
+  //   pagePath: "Stocks",
+  // },
+
+  // {
+  //   id: 10,
+  //   icon: jerk,
+  //   title: "Jerk",
+  //   path: "/SuperAdmin/jerk",
+  //   pagePath: "jerk",
+  // },
+  
   // {
   //   id: 13,
   //   icon: camera,
@@ -79,13 +118,7 @@ export const navbar: SuperAdminnavbar[] = [
   //   path: "{`https://0r4mtgsn-3004.inc1.devtunnels.ms/allReport?adminId=${usernamedata}`}",
   //   pagePath: "report",
   // },
-  {
-    id: 6,
-    icon: profilePage,
-    title: "Profile",
-    path: "/profile",
-    pagePath: "Profile",
-  },
+
   // {
   //   id: 7,
   //   icon: help,
