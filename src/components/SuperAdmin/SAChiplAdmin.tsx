@@ -28,6 +28,18 @@ export default function SAChiplAdmin() {
     contactNo: "",
   });
 
+  // Pagination states
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10);
+
+  
+  // Calculate the range of items to display
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = apiData?.admin.slice(indexOfFirstItem, indexOfLastItem);
+
+  // Function to change the page
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
   const [selectedAdminId, setSelectedAdminId] = useState(""); // State variable to hold the selected admin ID
   const handleInputChange = (field: any, value: any) => {
@@ -303,68 +315,68 @@ export default function SAChiplAdmin() {
         )}
       </div>
 
-      <table className="min-w-[99%] divide-y divide-gray-200 m-1  hidden md:table">
+      <table className="min-w-[99%] divide-y divide-gray-200 m-1  hidden md:table ">
 
         {apiData && apiData?.status === 200 ? (
-          <><thead className="bg-[#b2c1e0] ">
-            <tr className="">
+          <><thead className="bg-[#b2c1e0] border-b border-gray-300">
+            <tr className="border border-gray-300">
               <th
                 scope="col"
-                className="px-2 py-3 text-center text-xs font-bold text-black uppercase tracking-wider"
+                className="px-2 py-3 text-center text-sm font-bold text-black  tracking-wider border border-gray-300"
               >
-                Slno
+                Sl no
               </th>
               <th
                 scope="col"
-                className="px-2 py-3 text-center text-xs font-bold text-black uppercase tracking-wider"
+                className="px-2 py-3 text-center text-sm font-bold text-black  tracking-wider border border-gray-300"
               >
-                AdminId
+                Admin Id
               </th>
               <th
                 scope="col"
-                className="px-2 py-3 text-center text-xs font-bold text-black uppercase tracking-wider"
+                className="px-2 py-3 text-center text-sm font-bold text-black  tracking-wider border border-gray-300"
               >
                 Name
               </th>
               <th
                 scope="col"
-                className="px-2 py-3 text-center text-xs font-bold text-black uppercase tracking-wider"
+                className="px-2 py-3 text-center text-sm font-bold text-black  tracking-wider border border-gray-300"
               >
                 Email id
               </th>
               <th
                 scope="col"
-                className="px-2 py-3 text-center text-xs font-bold text-black uppercase tracking-wider"
+                className="px-2 py-3 text-center text-sm font-bold text-black  tracking-wider border border-gray-300"
               >
                 Organization Name
               </th>
               <th
                 scope="col"
-                className="px-2 py-3 text-center text-xs font-bold text-black uppercase tracking-wider"
+                className="px-2 py-3 text-center text-sm font-bold text-black  tracking-wider border border-gray-300"
               >
                 Contact No
               </th>
               <th
                 scope="col"
-                className="px-2 py-3  text-xs text-center font-bold text-black uppercase tracking-wider"
+                className="px-2 py-3  text-sm text-center font-bold text-black  tracking-wider border border-gray-300"
               >
                 Parent Admin
               </th>
               <th
                 scope="col"
-                className="px-2 py-3  text-xs text-center font-bold text-black uppercase tracking-wider"
+                className="px-2 py-3  text-sm text-center font-bold text-black  tracking-wider border border-gray-300"
               >
                 Total User Created
               </th>
               <th
                 scope="col"
-                className="px-2 py-3 text-center text-xs font-bold text-black uppercase tracking-wider"
+                className="px-2 py-3 text-center text-sm font-bold text-black  tracking-wider border border-gray-300"
               >
                 Edit
               </th>
               <th
                 scope="col"
-                className="px-2 py-3  text-xs text-center font-bold text-black uppercase tracking-wider"
+                className="px-2 py-3  text-sm text-center font-bold text-black  tracking-wider border border-gray-300"
               >
                 Delete
               </th>
@@ -429,6 +441,7 @@ export default function SAChiplAdmin() {
           </div>
         )}
       </table>
+
       {showAddAdminForm && (
         <SAAddAdmin
           toggleForm={toggleAddAdminForm}

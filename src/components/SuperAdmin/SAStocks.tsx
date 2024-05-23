@@ -5,6 +5,10 @@ import { MdDeleteForever } from "react-icons/md";
 import { IoMdAddCircle } from "react-icons/io";
 import { RxCrossCircled } from "react-icons/rx";
 
+interface ApiData {
+  status: any; // Adjust the type according to your API response
+  admin: any;
+}
 interface StocksData {
   status: any; // Adjust the type according to your API response
   stocks: any;
@@ -17,7 +21,7 @@ export default function SAStocks() {
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [filter, setFilter] = useState("ALL");
-  // const [apiData, setApiData] = useState<ApiData | undefined>(undefined);
+  const [apiData, setApiData] = useState<ApiData | undefined>(undefined);
   const [formData, setFormData] = useState({
     product_no: "",
     device_id: "",
@@ -26,10 +30,8 @@ export default function SAStocks() {
     router_sim_no: "",
   });
 
-
   const toggleForm = () => {
     setShowForm(!showForm);
-
   };
 
   const handleChange = (e: any) => {
@@ -52,7 +54,6 @@ export default function SAStocks() {
       router_sim_no: "",
     });
   };
-
 
   useEffect(() => {
     fetchData();
@@ -107,7 +108,6 @@ export default function SAStocks() {
         sessionStorage.setItem("adminList", JSON.stringify(data.admin));
         // console.log("tttttttt", data.admin)
 
-
         // store adminId for each element
         if (data.admin && data.admin.length > 0) {
           data.admin.forEach((admin: any, index: any) => {
@@ -135,7 +135,6 @@ export default function SAStocks() {
     }
   };
 
-
   return (
     <section className="h-screen">
       <div className="w-full p-2 flex justify-end  gap-8">
@@ -143,7 +142,8 @@ export default function SAStocks() {
           <select
             className="px-2 py-2 h-10 rounded-md text-black font-semibold bg-[#ECEEF1]"
             value={filter}
-            onChange={(e) => setFilter(e.target.value)} >
+            onChange={(e) => setFilter(e.target.value)}
+          >
             <option
               className="text-black bg-white  text-center font-semibold"
               value="ALL"
@@ -173,7 +173,6 @@ export default function SAStocks() {
           <IoMdAddCircle className="text-white text-xl" />
           Add Stocks
         </button>
-
       </div>
 
       {loading && <Loader />}
@@ -204,15 +203,15 @@ export default function SAStocks() {
                           user.ambulance_type === 1
                             ? "red"
                             : user.ambulance_type === 2
-                              ? "blue"
-                              : "inherit",
+                            ? "blue"
+                            : "inherit",
                       }}
                     >
                       {user.ambulance_type === 1
                         ? "ALS"
                         : user.ambulance_type === 2
-                          ? "BLS"
-                          : "N/A"}
+                        ? "BLS"
+                        : "N/A"}
                     </span>
                     <br />
                     <strong> Device Install Status:</strong>{" "}
@@ -223,15 +222,15 @@ export default function SAStocks() {
                           user.device_install === 1
                             ? "green"
                             : user.device_install === 0
-                              ? "red"
-                              : "inherit",
+                            ? "red"
+                            : "inherit",
                       }}
                     >
                       {user.device_install === 1
                         ? "Installed"
                         : user.device_install === 0
-                          ? "Not Installed"
-                          : ""}
+                        ? "Not Installed"
+                        : ""}
                     </span>
                     <br />
                   </div>
@@ -318,7 +317,10 @@ export default function SAStocks() {
             {stocksData?.stocks?.map((user: any, index: any) => {
               // console.log("hiiiiiiiiiiiiiiiiiiiiiiiii", stocksData); // Log apiData here
               return (
-                <tbody key={index} className="bg-white divide-y divide-gray-200">
+                <tbody
+                  key={index}
+                  className="bg-white divide-y divide-gray-200"
+                >
                   <tr>
                     <td className="px-2 py-2 text-center whitespace-nowrap">
                       {index + 1}
@@ -344,15 +346,15 @@ export default function SAStocks() {
                             user.ambulance_type === 1
                               ? "red"
                               : user.ambulance_type === 2
-                                ? "green"
-                                : "inherit",
+                              ? "green"
+                              : "inherit",
                         }}
                       >
                         {user.ambulance_type === 1
                           ? "ALS"
                           : user.ambulance_type === 2
-                            ? "BLS"
-                            : "N/A"}
+                          ? "BLS"
+                          : "N/A"}
                       </span>
                     </td>
 
@@ -364,15 +366,15 @@ export default function SAStocks() {
                             user.device_install === 1
                               ? "green"
                               : user.device_install === 0
-                                ? "red"
-                                : "inherit",
+                              ? "red"
+                              : "inherit",
                         }}
                       >
                         {user.device_install === 1
                           ? "Installed"
                           : user.device_install === 0
-                            ? "Not Installed"
-                            : ""}
+                          ? "Not Installed"
+                          : ""}
                       </span>
                     </td>
                     <td className="px-2 py-2 text-center whitespace-nowrap">
@@ -381,9 +383,8 @@ export default function SAStocks() {
                       </button>
                     </td>
                     <td className="px-2 py-2 text-center whitespace-nowrap">
-                      <button
-                        className="text-red-500">
-                        < MdDeleteForever className="text-xl" />
+                      <button className="text-red-500">
+                        <MdDeleteForever className="text-xl" />
                       </button>
                     </td>
                   </tr>
@@ -399,11 +400,9 @@ export default function SAStocks() {
       </table>
 
       {showForm && (
-
         <div className="fixed top-0 left-0 flex justify-center items-center w-full h-full bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded-lg w-[80%]">
             <div className="flex w-full justify-between items-center gap-2 mb-3">
-
               <h2 className="text-lg  font-bold  text-center">Add Stocks</h2>
               <RxCrossCircled
                 className=" text-3xl text-center text-red-600"
@@ -411,10 +410,8 @@ export default function SAStocks() {
               />
             </div>
 
-
             <form onSubmit={handleSubmit} className="p-4 ">
               <div className="w-full grid grid-cols-3 gap-2 h-auto">
-
                 <div className="mb-4">
                   <label
                     htmlFor="product_no"
@@ -427,13 +424,13 @@ export default function SAStocks() {
                     id="product_no"
                     name="product_no"
                     className="mt-1 p-2 w-full border rounded-md "
-                  // value={formik.values.userId}
-                  // onChange={formik.handleChange}
-                  // onBlur={formik.handleBlur}
-                  // className={`mt-1 p-2 w-full border rounded-md ${formik.touched.userId && formik.errors.userId
-                  //   ? "border-red-500"
-                  //   : ""
-                  //   }`}
+                    // value={formik.values.userId}
+                    // onChange={formik.handleChange}
+                    // onBlur={formik.handleBlur}
+                    // className={`mt-1 p-2 w-full border rounded-md ${formik.touched.userId && formik.errors.userId
+                    //   ? "border-red-500"
+                    //   : ""
+                    //   }`}
                   />
                   {/* {formik.touched.userId && formik.errors.userId && (
                     <div className="text-red-500 text-sm">
@@ -454,13 +451,13 @@ export default function SAStocks() {
                     id="device_id"
                     name="device_id"
                     className="mt-1 p-2 w-full border rounded-md "
-                  // value={formik.values.name}
-                  // onChange={formik.handleChange}
-                  // onBlur={formik.handleBlur}
-                  // className={`mt-1 p-2 w-full border rounded-md ${formik.touched.name && formik.errors.name
-                  //   ? "border-red-500"
-                  //   : ""
-                  // }`}
+                    // value={formik.values.name}
+                    // onChange={formik.handleChange}
+                    // onBlur={formik.handleBlur}
+                    // className={`mt-1 p-2 w-full border rounded-md ${formik.touched.name && formik.errors.name
+                    //   ? "border-red-500"
+                    //   : ""
+                    // }`}
                   />
                   {/* {formik.touched.name && formik.errors.name && (
                     <div className="text-red-500 text-sm">
@@ -480,13 +477,13 @@ export default function SAStocks() {
                     id="camera_id"
                     name="camera_id"
                     className="mt-1 p-2 w-full border rounded-md "
-                  // value={formik.values.password}
-                  // onChange={formik.handleChange}
-                  // onBlur={formik.handleBlur}
-                  // className={`mt-1 p-2 w-full border rounded-md ${formik.touched.password && formik.errors.password
-                  //   ? "border-red-500"
-                  //   : ""
-                  //   }`}
+                    // value={formik.values.password}
+                    // onChange={formik.handleChange}
+                    // onBlur={formik.handleBlur}
+                    // className={`mt-1 p-2 w-full border rounded-md ${formik.touched.password && formik.errors.password
+                    //   ? "border-red-500"
+                    //   : ""
+                    //   }`}
                   />
                   {/* {formik.touched.password && formik.errors.password && (
                     <div className="text-red-500 text-sm">
@@ -506,14 +503,14 @@ export default function SAStocks() {
                     id="ambulance_id"
                     name="ambulance_id"
                     className="mt-1 p-2 w-full border rounded-md "
-                  // value={formik.values.organizationName}
-                  // onChange={formik.handleChange}
-                  // onBlur={formik.handleBlur}
-                  // className={`mt-1 p-2 w-full border rounded-md ${formik.touched.organizationName &&
-                  //   formik.errors.organizationName
-                  //   ? "border-red-500"
-                  //   : ""
-                  //   }`}
+                    // value={formik.values.organizationName}
+                    // onChange={formik.handleChange}
+                    // onBlur={formik.handleBlur}
+                    // className={`mt-1 p-2 w-full border rounded-md ${formik.touched.organizationName &&
+                    //   formik.errors.organizationName
+                    //   ? "border-red-500"
+                    //   : ""
+                    //   }`}
                   />
                   {/* {formik.touched.organizationName &&
                     formik.errors.organizationName && (
@@ -535,13 +532,13 @@ export default function SAStocks() {
                     id="router_sim_no"
                     name="router_sim_no"
                     className="mt-1 p-2 w-full border rounded-md "
-                  // value={formik.values.contactNo}
-                  // onChange={formik.handleChange}
-                  // onBlur={formik.handleBlur}
-                  // className={`mt-1 p-2 w-full border rounded-md ${formik.touched.contactNo && formik.errors.contactNo
-                  //   ? "border-red-500"
-                  //   : ""
-                  //   }`}
+                    // value={formik.values.contactNo}
+                    // onChange={formik.handleChange}
+                    // onBlur={formik.handleBlur}
+                    // className={`mt-1 p-2 w-full border rounded-md ${formik.touched.contactNo && formik.errors.contactNo
+                    //   ? "border-red-500"
+                    //   : ""
+                    //   }`}
                   />
                   {/* {formik.touched.contactNo && formik.errors.contactNo && (
                     <div className="text-red-500 text-sm">
@@ -550,7 +547,6 @@ export default function SAStocks() {
                   )} */}
                 </div>
               </div>
-
 
               <div className="flex justify-center -mb-[2%]">
                 <button
@@ -563,7 +559,6 @@ export default function SAStocks() {
                 <button
                   type="submit"
                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md transition duration-300"
-
                 >
                   Submit
                 </button>
@@ -575,16 +570,6 @@ export default function SAStocks() {
     </section>
   );
 }
-
-
-
-
-
-
-
-
-
-
 
 // import React, { useEffect, useState } from "react";
 // import { FaEdit } from "react-icons/fa";
@@ -1064,12 +1049,3 @@ export default function SAStocks() {
 //     </section>
 //   );
 // }
-
-
-
-
-
-
-
-
-
