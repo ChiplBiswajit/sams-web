@@ -6,10 +6,9 @@ import {
   fleetadmins,
   installdevices,
   production,
- 
 } from "@/src/assets/SuperAdmin/dashboard";
 import { MdInsights } from "react-icons/md";
-import {PolarArea, Doughnut } from "react-chartjs-2";
+import { PolarArea, Doughnut } from "react-chartjs-2";
 import {
   Chart,
   Tooltip,
@@ -26,8 +25,8 @@ import {
   RadialLinearScale, // Add RadialLinearScale for polar charts
   DoughnutController, // Add DoughnutController for the donut chart
 } from "chart.js";
-import Link from "next/link";
-
+import socketServcies from "@/src/utils/Socket/socketService";
+import { storeObjByKey } from "@/src/utils/Socket/storage";
 Chart.register(
   Tooltip,
   Title,
@@ -48,31 +47,21 @@ export default function SADashboard() {
     setIsFormVisible(!isFormVisible);
   };
 
-
-  const donutData = {
-    labels: ["All Devices", "Active", "Inactive"],
-    datasets: [
-      {
-        label: "Total devices",
-        data: [15, 5, 10],
-        backgroundColor: [
-          "rgb(54, 162, 235)",
-          "rgb(0, 255, 0)",
-          "rgb(255, 0, 0)",
-        ],
-        hoverOffset: 4,
-      },
-    ],
-  };
-
-  const donutOptions = {
-    plugins: {
-      legend: {
-        display: true,
-        position: "bottom",
-      },
-    },
-  };
+  // const donutData = {
+  //   labels: ["All Devices", "Active", "Inactive"],
+  //   datasets: [
+  //     {
+  //       label: "Total devices",
+  //       data: [15, 5, 10],
+  //       backgroundColor: [
+  //         "rgb(54, 162, 235)",
+  //         "rgb(0, 255, 0)",
+  //         "rgb(255, 0, 0)",
+  //       ],
+  //       hoverOffset: 4,
+  //     },
+  //   ],
+  // };
 
   const polarData2 = {
     labels: ["Production ", " Refurbished"],
@@ -105,134 +94,51 @@ export default function SADashboard() {
     },
   };
 
-  const data = {
-    labels: ["January", "February", "March", "April", "May"],
+  const [res, setRes] = useState([]);
+
+  useEffect(() => {
+    const usernamedata = sessionStorage.getItem("userid");
+    storeObjByKey("obj", usernamedata);
+    socketServcies.initializeSocket();
+    socketServcies.on("received_admin_data", (msg: any) => {
+      console.log("ddddddddddddd", msg);
+      setRes(msg);
+      setTimeout(() => {
+        // setLoading(false);
+        // setModalVisible(false);
+      }, 10000);
+    });
+  }, []);
+
+  const donutData = {
+    labels: ["Active", "Inactive", "All Devices"],
     datasets: [
       {
-        label: "Monthly Sales",
-        data: [18000, 317000],
-        fill: false,
-        borderColor: "rgb(75, 192, 192)",
-        tension: 0.1,
+        label: "Total devices",
+        data: [
+          (res[0] as any)?.onlineDevice || 0,
+          (res[0] as any)?.oflineDevice || 0,
+          (res[0] as any)?.totalDevice || 0,
+        ],
+        backgroundColor: [
+          "rgb(54, 162, 235)",
+          "rgb(0, 255, 0)",
+          "rgb(255, 0, 0)",
+        ],
+        hoverOffset: 4,
       },
     ],
   };
 
-  const options = {
-    scales: {
-      x: {
-        type: "category",
-        labels: ["January", "February", "March", "April", "May"],
-      },
-      y: {
-        beginAtZero: true,
-      },
-    },
-  };
+  // Render loading state if res is empty
+  const isLoading = !res.length;
 
-  const bardata = {
-    labels: [""],
-    datasets: [
-      {
-        label: "Total device in stock",
-        data: [15],
-        backgroundColor: "rgba(75, 192, 192, 0.2)",
-        borderColor: "rgb(75, 192, 192)",
-        borderWidth: 1,
-      },
-      {
-        label: "january",
-        data: [0],
-        backgroundColor: "rgba(255, 99, 132, 0.2)",
-        borderColor: "rgb(255, 99, 132)",
-        borderWidth: 1,
-      },
-      {
-        label: "february",
-        data: [8],
-        backgroundColor: "rgba(255, 159, 64, 0.2)",
-        borderColor: "rgb(255, 159, 64)",
-        borderWidth: 1,
-      },
-      {
-        label: "march",
-        data: [0],
-        backgroundColor: "rgba(255, 205, 86, 0.2)",
-        borderColor: "rgb(255, 205, 86)",
-        borderWidth: 1,
-      },
-      {
-        label: "april",
-        data: [0],
-        backgroundColor: "rgba(255, 159, 64, 0.2)",
-        borderColor: "rgb(255, 159, 64)",
-        borderWidth: 1,
-      },
-      {
-        label: "may",
-        data: [0],
-        backgroundColor: "rgba(75, 192, 192, 0.2)",
-        borderColor: "rgb(75, 192, 192)",
-        borderWidth: 1,
-      },
-      {
-        label: "june",
-        data: [0],
-        backgroundColor: "rgba(255, 99, 132, 0.2)",
-        borderColor: "rgb(255, 99, 132)",
-        borderWidth: 1,
-      },
-      {
-        label: "july",
-        data: [0],
-        backgroundColor: "rgba(255, 159, 64, 0.2)",
-        borderColor: "rgb(255, 159, 64)",
-        borderWidth: 1,
-      },
-      {
-        label: "august",
-        data: [0],
-        backgroundColor: "rgba(255, 205, 86, 0.2)",
-        borderColor: "rgb(255, 205, 86)",
-        borderWidth: 1,
-      },
-      {
-        label: "september",
-        data: [0],
-        backgroundColor: "rgba(255, 159, 64, 0.2)",
-        borderColor: "rgb(255, 159, 64)",
-        borderWidth: 1,
-      },
-      {
-        label: "october",
-        data: [0],
-        backgroundColor: "rgba(75, 192, 192, 0.2)",
-        borderColor: "rgb(75, 192, 192)",
-        borderWidth: 1,
-      },
-      {
-        label: "november",
-        data: [0],
-        backgroundColor: "rgba(255, 99, 132, 0.2)",
-        borderColor: "rgb(255, 99, 132)",
-        borderWidth: 1,
-      },
-      {
-        label: "december",
-        data: [0],
-        backgroundColor: "rgba(255, 205, 86, 0.2)",
-        borderColor: "rgb(255, 205, 86)",
-        borderWidth: 1,
-      },
-      // Add more datasets as needed
-    ],
-  };
-
+  // bg-[#EEF1FC]
   return (
-    <section className="w-full h-full bg-[#EEF1FC] relative ">
+    <section className="w-full h-full  relative ">
       <div className="w-full  flex flex-col">
         <span className="w-full flex md:flex-row  p-2 gap-4">
-          <div className="w-full p-1 flex flex-col gap-2 center rounded-md bg-gradient-to-r from-[#BA3664]  to-[#272770]">
+          <div className="w-full p-1 flex flex-col gap-2 center rounded-md bg-gradient-to-r from-[#272770]  to-[#BA3664]">
             <span className=" w-full flex flex-col pl-2">
               <p className="text-white md:text-lg  font-semibold ">
                 Total Number of Fleets
@@ -255,11 +161,14 @@ export default function SADashboard() {
               </p>
             </span>
           </div>
-          
-          <div className="w-full p-1 flex flex-col gap-2 rounded-md bg-gradient-to-r from-[#8056F8]  to-[#7691FE]" onClick={toggleFormVisibility}>
+
+          <div
+            className="w-full p-1 flex flex-col gap-2 rounded-md bg-gradient-to-r from-[#7691FE]   to-[#8056F8]"
+            onClick={toggleFormVisibility}
+          >
             <span className=" w-full flex flex-col pl-2">
               <p className="text-white md:text-lg  font-semibold ">
-             No of Devices in total 
+                Total No of Devices in total
               </p>
               <p className="text-white md:text-lg  font-semibold ">District</p>
             </span>
@@ -280,7 +189,7 @@ export default function SADashboard() {
           </div>
         </span>
         <span className="w-full flex gap-4 p-2  ">
-          <div className="w-full p-1 flex flex-col center gap-2 rounded-md bg-gradient-to-r from-[#D1520C]   to-[#F77F02]">
+          <div className="w-full p-1 flex flex-col center gap-2 rounded-md bg-gradient-to-r from-[#8056F8]  to-[#7691FE]">
             <span className=" w-full flex flex-col pl-2">
               <p className="text-white md:text-lg  font-semibold ">
                 Total Number of Active
@@ -292,7 +201,7 @@ export default function SADashboard() {
                 <img src={activedevices.src} alt="" className="w-6 h-6 " />
               </span>
               <span className="w-full text-white text-xl md:pr-11 pr-3 font-bold text-end">
-                5
+                {(res[0] as any)?.onlineDevice || 0}
               </span>
             </span>
             <span className="w-full flex ">
@@ -302,23 +211,20 @@ export default function SADashboard() {
               </p>
             </span>
           </div>
-          
 
           <div className="w-full p-1 flex flex-col gap-2 center rounded-md bg-gradient-to-r from-[#BA3664]  to-[#272770]">
             <span className=" w-full flex flex-col pl-2">
               <p className="text-white md:text-lg  font-semibold ">
-                Total Number of  InActive 
+                Total Number of InActive
               </p>
-              <p className="text-white md:text-lg  font-semibold ">
-               Devices
-              </p>
+              <p className="text-white md:text-lg  font-semibold ">Devices</p>
             </span>
             <span className="w-full flex center pl-2   justify-between">
               <span className="w-full p-1">
                 <img src={production.src} alt="" className="w-6 h-6" />
               </span>
               <span className="w-full text-white text-xl md:pr-11 pr-3 font-bold text-end">
-                77
+                {(res[0] as any)?.oflineDevice || 0}
               </span>
             </span>
             <span className="w-full flex ">
@@ -332,107 +238,91 @@ export default function SADashboard() {
 
         {isFormVisible && (
           <div className="fixed top-0 left-0 flex justify-center items-center w-full h-full bg-black bg-opacity-50">
-            <div className="bg-white p-6 rounded-lg w-[80%]">
-              <div className="flex w-full justify-between items-center gap-2 mb-3">
-                <h2 className="text-lg  font-bold  text-center">Total device in District</h2>
-                <RxCrossCircled
-                  className=" text-3xl text-center text-red-600"
-                  onClick={toggleFormVisibility}
-                />
+            <div className="bg-white p-2 rounded-lg w-[50%] h-[60%] overflow-y-auto">
+              <div className="flex justify-between">
+                <div className="flex w-full justify-center items-center gap-2 mb-3">
+                  <h2 className="text-lg  font-bold  text-center">
+                    Total device in District
+                  </h2>
+                </div>
+                <div className="flex justify-end items-center">
+                  <RxCrossCircled
+                    className=" text-3xl text-center text-red-600"
+                    onClick={toggleFormVisibility}
+                  />
+                </div>
               </div>
 
-              <form  className="p-4 ">
-
-
+              <div className="p-4 ">
                 <div className="relative overflow-x-auto">
                   <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                     <thead className="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
                       <tr>
-                        <th scope="col" className="px-6 py-3 rounded-s-lg">
-                         District list
+                        <th
+                          scope="col"
+                          className="px-6 py-3 text-center rounded-s-lg"
+                        >
+                          District Name
                         </th>
-                        <th scope="col" className="px-6 py-3">
-                          Qty
-                        </th>
-                        <th scope="col" className="px-6 py-3 rounded-e-lg">
-                        No. of devices Assigned devices
+
+                        <th
+                          scope="col"
+                          className="px-6 py-3 text-center rounded-e-lg"
+                        >
+                          No. of devices Assigned devices
                         </th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr className="bg-white dark:bg-gray-800">
-                        <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          Apple MacBook Pro 17"
+                      <tr className="bg-white text-center dark:bg-gray-800">
+                        <th
+                          scope="row"
+                          className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                        >
+                          Apple MacBook Pro 17
                         </th>
-                        <td className="px-6 py-4">
-                          1
-                        </td>
-                        <td className="px-6 py-4">
-                          $2999
-                        </td>
+                        <td className="px-6 py-4">1</td>
                       </tr>
-                      <tr className="bg-white dark:bg-gray-800">
-                        <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                      <tr className="bg-white text-center dark:bg-gray-800">
+                        <th
+                          scope="row"
+                          className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                        >
                           Microsoft Surface Pro
                         </th>
-                        <td className="px-6 py-4">
-                          1
-                        </td>
-                        <td className="px-6 py-4">
-                          $1999
-                        </td>
+                        <td className="px-6 py-4">1</td>
                       </tr>
-                      <tr className="bg-white dark:bg-gray-800">
-                        <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                      <tr className="bg-white text-center dark:bg-gray-800">
+                        <th
+                          scope="row"
+                          className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                        >
                           Magic Mouse 2
                         </th>
-                        <td className="px-6 py-4">
-                          1
-                        </td>
-                        <td className="px-6 py-4">
-                          $99
-                        </td>
+                        <td className="px-6 py-4">1</td>
                       </tr>
                     </tbody>
-                    <tfoot>
-                      <tr className="font-semibold text-gray-900 dark:text-white">
-                        <th scope="row" className="px-6 py-3 text-base">Total</th>
-                        <td className="px-6 py-3">3</td>
-                        <td className="px-6 py-3">21,000</td>
-                      </tr>
-                    </tfoot>
                   </table>
                 </div>
-
-
-                <div className="flex justify-center -mb-[2%]">
-                  <button
-                    type="button"
-                    onClick={toggleFormVisibility}
-                    className="mr-2 bg-red-600 hover:bg-red-500 text-white font-bold py-2 px-4 rounded-md transition duration-300"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md transition duration-300"
-                  >
-                    Submit
-                  </button>
-                </div>
-              </form>
-
+              </div>
             </div>
           </div>
         )}
         <div className="w-full center  h-full">
-          <div className="w-full h-full center">
-            <div className="w-[70%] h-[70%]">
-              <Doughnut
-                data={donutData}
-                // options={donutOptions}
-              />{" "}
-            </div>
+          <div className="w-full h-ful relative">
+            {isLoading ? (
+              <div className="p-2 center text-lg">Loading Chart...</div>
+            ) : (
+              <div className="w-full flex flex-col">
+                {/* Your other JSX code */}
+                <div className="w-full center">
+                  <div className="w-[70%] h-[70%]">
+                    <Doughnut data={donutData} />
+                  </div>
+                </div>
+                {/* Your other JSX code */}
+              </div>
+            )}
           </div>
           <div className="w-full center">
             <div className="w-[70%] h-[70%]">
@@ -444,4 +334,3 @@ export default function SADashboard() {
     </section>
   );
 }
-

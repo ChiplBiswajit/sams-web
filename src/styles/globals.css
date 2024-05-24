@@ -58,6 +58,60 @@ body {
 }
 
 
+
+
+/* Custom scrollbar for Webkit browsers */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 2px;
+  margin-left: 2px; /* Add left margin */
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: red; /* Change color to red */
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Change this to your desired hover color */
+}
+
+/* Custom scrollbar for Firefox */
+.custom-scrollbar {
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: #888 #f1f1f1; /* Change these to your desired thumb and track colors */
+}
+
+
+
+/* Hide scrollbar for Webkit browsers */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge, and Firefox */
+.hide-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none;    /* Firefox */
+}
+
+
+
+/* Triangle arrow for active link */
+/* Triangle arrow for active link */
+.triangle-arrow::after {
+  content: '';
+  display: inline-block;
+  margin-left: 8px;
+  border-top: 7px solid transparent; /* Increased from 5px */
+  border-bottom: 7px solid transparent; /* Increased from 5px */
+  border-left: 10px solid #ff0000; /* Increased from 8px */
+}
+
+
 @keyframes fadeInAnimation {
   from {
     opacity: 0;

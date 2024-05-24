@@ -78,10 +78,11 @@ export default function Header({ open, setOpen }: any) {
     <section className="fixed top-0 w-full z-50">
       <div className="w-full flex p-0  justify-between items-center bg-[#DCDFFF] h-14">
         <span className="flex gap-16 ml-8 ">
-          <span className=" inline-flex ml-2"
-          onClick={() => {
-            router.push("./dashboard");
-          }}
+          <span
+            className=" inline-flex ml-2"
+            onClick={() => {
+              router.push("./dashboard");
+            }}
           >
             <img
               src={Amteklogo.src}
@@ -92,13 +93,13 @@ export default function Header({ open, setOpen }: any) {
               <span className="h-10 w-1 rounded-full bg-[#01339F] mr-3"></span>
               <p className="w-full text-xl font-bold text-[#01339F]">AMTeK</p>
             </span>
-            <div className="pl-4 md:pl-11">
+            {/* <div className="pl-4 md:pl-11">
               <MdMenuOpen
                 className={`text-black text-4xl cursor-pointer 
               ${!open && "rotate-180"}`}
                 onClick={() => setOpen((open: any) => !open)}
               />
-            </div>
+            </div> */}
           </span>
         </span>
 

@@ -128,7 +128,9 @@ export default function AMTEKdata() {
   useEffect(() => {
     socketServcies.initializeSocket();
     socketServcies.on("received_message", (msg: any) => {
-      // console.log("Received AMTEK VALUE Message :", msg); // Log msg here
+          // socketServcies.on("received_admin_data", (msg: any) => {
+
+      // console.log("Received AMTEK VALUE Message :", msg    ); // Log msg here
       try {
         let parsedMsg = msg;
         if (typeof msg === "string") {
@@ -143,7 +145,7 @@ export default function AMTEKdata() {
     });
   }, []);
 
-  console.log("Received AMTEK VALUE Message :", amtekres); // Log msg here
+  // console.log("Received AMTEK VALUE Message :", amtekres); // Log msg here
 
   useEffect(() => {
     <LocationData />;

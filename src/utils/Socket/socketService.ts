@@ -2,7 +2,8 @@ import { io } from "socket.io-client";
 import { getObjByKey } from "./storage";
 // const SOCKET_URL = 'https:apiman.in'
 // const SOCKET_URL = "https://0r4mtgsn-3004.inc1.devtunnels.ms/";
-const SOCKET_URL = 'https://smartambulance.in/'
+// const SOCKET_URL = 'https://smartambulance.in/'
+const SOCKET_URL = 'https://0r4mtgsn-8004.inc1.devtunnels.ms/'
 // const SOCKET_URL = "https://0r4mtgsn-3004.inc1.devtunnels.ms/"; //last local
 // const SOCKET_URL = 'http://24x7healthcare.live/'//last lo cal/'
 // const SOCKET_URL = "http://46.28.44.138:3004/"; //last lo cal/'

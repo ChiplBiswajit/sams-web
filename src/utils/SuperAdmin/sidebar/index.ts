@@ -51,35 +51,27 @@ export const navbar: SuperAdminnavbar[] = [
   },
 
   {
-    id: 6,
-    icon: profilePage,
-    title: "Profile",
-    path: "/profile",
-    pagePath: "Profile",
-  },
-
-  {
-    id:9 ,
-    icon:maintenance,
+    id: 9,
+    icon: maintenance,
     title: "Maintenance",
     path: "/maintenance",
     pagePath: "Maintenance",
   },
   {
     id: 10,
-    icon:history,
+    icon: history,
     title: "Data History",
     path: "/datahistory",
     pagePath: "datahistory",
   },
 
-
-
-
-
-
-
-
+  {
+    id: 6,
+    icon: profilePage,
+    title: "Profile",
+    path: "/profile",
+    pagePath: "Profile",
+  },
 
   // {
   //   id: 3,
@@ -103,7 +95,7 @@ export const navbar: SuperAdminnavbar[] = [
   //   path: "/SuperAdmin/jerk",
   //   pagePath: "jerk",
   // },
-  
+
   // {
   //   id: 13,
   //   icon: camera,

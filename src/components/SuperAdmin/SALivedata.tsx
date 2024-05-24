@@ -50,13 +50,6 @@ import SAJerkdata from "./SAJerkdata";
 import LarkAiData from "./LarkAiData";
 import AMTEKdata from "./AMTEKdata";
 
-// interface Message {
-//   location?: {
-//     latitude: number;
-//     longitude: number;
-//   };
-// }
-
 export default function SALivedata() {
   const router = useRouter();
   const [isvitalCanvasOpen, setIsvitalCanvasOpen] = useState(false);
@@ -71,6 +64,65 @@ export default function SALivedata() {
   const [showLarkData, setShowLarkData] = useState(false); // State to track which data to show
   const [showAmtekData, setShowAmtekData] = useState(true); // State to track which data to show
   const [cameraTopic, setCameraTopic] = useState("");
+
+  const [selectedAdmin, setSelectedAdmin] = useState("");
+
+  const AdminDropdown = () => {
+    const [admins, setAdmins] = useState([]);
+    const authToken = sessionStorage.getItem("authToken");
+
+    const fetchAdmins = async () => {
+      // console.log("777");
+      try {
+        const response = await fetch(
+          "https://0r4mtgsn-3006.inc1.devtunnels.ms/admins/getAdmin",
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+            },
+          }
+        );
+        const data = await response.json();
+        // console.log("Fetched data:", data); // Log the data to verify its structure
+        setAdmins(data.admin); // Assuming data.admin contains the array of admins
+      } catch (error) {
+        console.error("Error fetching admins:", error);
+      }
+    };
+
+    useEffect(() => {
+      fetchAdmins();
+      // console.log("00000000000000000000000000000000");
+      // console.log("Updated admins state:", admins); // Log the updated state to verify
+    }, []);
+
+    // console.log("22222222222222222222222");
+    const handleAdminChange = (event: any) => {
+      const adminId = event.target.value;
+      setSelectedAdmin(adminId);
+      // console.log("hooooooooooooo");
+      // onSelectAdmin(adminId); // Call the parent function to notify the selection
+    };
+
+    return (
+      <div>
+        <select id="admins" value=""
+                    className="px-2 py-2 h-10 rounded-md text-black font-semibold bg-[#ECEEF1]"
+        onChange={handleAdminChange}>
+          <option value="">Select an admin </option>
+          {admins.map((admin:any) => (
+            <option
+            className="text-black bg-white  text-center font-semibold"
+            key={admin.adminId} value={admin.adminId}>
+              {admin.adminId}
+            </option>
+          ))}
+        </select>
+        {/* {selectedAdmin && <p>You selected: {selectedAdmin}</p>} */}
+      </div>
+    );
+  };
 
   useEffect(() => {
     const fetchreportData = async () => {
@@ -97,14 +149,12 @@ export default function SALivedata() {
     fetchreportData();
   }, [ambulanceID]);
 
-  // useEffect(() => {
-  //   <LocationData />;
-  // }, [alcoholDataState]);
-
   const toggleData = () => {
     setShowAmtekData(true);
     setShowLarkData(false);
   };
+
+  // console.log("999999");
 
   const toggleLarkData = () => {
     setShowLarkData(true);
@@ -155,7 +205,9 @@ export default function SALivedata() {
       // const filter = ""; // Define your filter here
       const response = await fetch(
         // `https://24x7healthcare.live/v1fetchAmbulanceList/${filter}`,
-        `https://smartambulance.in/admins/getFilterAmbulance?ambulanceType=${filter}`,
+        // `https://smartambulance.in/admins/getFilterAmbulance?ambulanceType=${filter}`,
+        `https://0r4mtgsn-8004.inc1.devtunnels.ms/admins/getFilterAmbulance?ambulanceType=${filter}&adminId=${selectedAdmin}`,
+
         {
           method: "GET",
           headers: {
@@ -181,6 +233,17 @@ export default function SALivedata() {
     }
   };
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(9);
+
+  // Pagination logic to slice ambulanceData array
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = ambulanceData.slice(indexOfFirstItem, indexOfLastItem);
+
+  // Change page
+  const paginate = (pageNumber: any) => setCurrentPage(pageNumber);
+
   useEffect(() => {
     const usernamedata = sessionStorage.getItem("userid");
     storeObjByKey("obj", usernamedata);
@@ -200,7 +263,7 @@ export default function SALivedata() {
   }, []);
   useEffect(() => {
     fetchAmbulanceData();
-  }, [filter]);
+  }, [filter, selectedAdmin]);
 
   return (
     <>
@@ -216,36 +279,16 @@ export default function SALivedata() {
               {(res[0] as any)?.onlineDevice || 0}
             </p>
           </div>
-          {/* <div className="bg-[#eceef1] px-2 py-2 rounded-md flex flex-col center">
+          <div className="bg-[#eceef1] px-2 py-2 rounded-md flex flex-col center">
             <p className="text-sm font-semibold">Total Inactive Ambulance</p>
-            <p className="text-sm text-red-600 font-bold">15</p>
-          </div> */}
+            <p className="text-sm text-red-600 font-bold">
+              {(res[0] as any)?.oflineDevice || 0}
+            </p>
+          </div>
         </div>
         <div className="flex gap-6">
-          {/* <select
-            className="px-2 py-2 h-10 rounded-md text-black font-semibold center bg-[#ECEEF1]"
-            value={filter}
-            // onChange={(e) => setFilter(e.target.value)}
-          >
-            <option
-              className="text-black bg-white px-0 py-0 font-semibold text-center"
-              value="ALL"
-            >
-              All ambulance
-            </option>
-            <option
-              className="text-green-600 bg-white font-semibold text-center"
-              value="ALS"
-            >
-              Active
-            </option>
-            <option
-              className="text-red-600 bg-white font-semibold text-center"
-              value="BLS"
-            >
-              Inactive
-            </option>
-          </select> */}
+          <AdminDropdown />
+
           <select
             className="px-2 py-2 h-10 rounded-md text-black font-semibold bg-[#ECEEF1]"
             value={filter}
@@ -273,7 +316,7 @@ export default function SALivedata() {
         </div>
       </div>
 
-      {loading && <Loader />}
+      {/* {loading && <Loader />} */}
 
       <section className="md:w-[92%] flex flex-col  h-screen md:h-screen pl-[5%] pt-0 md:pt-2   ">
         <div className="w-full  grid grid-cols-2 md:grid-cols-3  gap-4   justify-start items-start">
@@ -302,7 +345,7 @@ export default function SALivedata() {
                       alcoholData?.[item?.ambulanceId] || null
                     );
 
-                    console.log("222222222222222222222222222", alcoholData);
+                    // console.log("222222222222222222222222222", alcoholData);
                     setAmbulanceID(item?.ambulanceId);
                   }}
                 >
