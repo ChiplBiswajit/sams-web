@@ -34,6 +34,7 @@ class WSService {
     }
   };
 
+  
   retrieveData = async () => {
     try {
       const storedData = await getObjByKey("obj");
@@ -49,7 +50,7 @@ class WSService {
   emitStringOnceConnected = async () => {
     // Made this function async
     await this.retrieveData(); // Wait for data retrieval
-    this.socket.emit("emit data", stringToSend);
+    this.socket.emit("emit data", stringToSend  );
   };
   socket: any;
   //--end--

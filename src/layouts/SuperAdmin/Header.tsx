@@ -77,7 +77,7 @@ export default function Header({ open, setOpen }: any) {
   return (
     <section className="fixed top-0 w-full z-50">
       <div className="w-full flex p-0  justify-between items-center bg-[#DCDFFF] h-14">
-        <span className="flex gap-16 ml-8 ">
+        <span className="flex md:gap-16 gap-0 md:ml-8 ">
           <span
             className=" inline-flex ml-2"
             onClick={() => {
@@ -91,7 +91,7 @@ export default function Header({ open, setOpen }: any) {
             />
             <span className={`w-full center duration-300`}>
               <span className="h-10 w-1 rounded-full bg-[#01339F] mr-3"></span>
-              <p className="w-full text-xl font-bold text-[#01339F]">AMTeK</p>
+              <p className="w-full md:text-xl font-bold text-[#01339F]">AMTeK</p>
             </span>
             {/* <div className="pl-4 md:pl-11">
               <MdMenuOpen
@@ -103,7 +103,7 @@ export default function Header({ open, setOpen }: any) {
           </span>
         </span>
 
-        <div className="flex gap-5 justify-end m-4 center">
+        <div className="flex md:gap-5 gap-1 p-0 justify-end md:m-4 center">
           <a
             href={`https://smartambulance.in/allReport?adminId=${usernamedata}`}
             target="_blank"
@@ -111,13 +111,13 @@ export default function Header({ open, setOpen }: any) {
             className="flex center cursor-pointer bg-[#B2C1E0] rounded-md gap-1 p-2"
           >
             <img src={reportamtek.src} className="h-5 w-5" alt="" />
-            <h3 className="text-black text-md font-bold"> All Report</h3>
+            <h3 className="text-black md:text-base text-xs font-bold"> All Report</h3>
           </a>
           <span
             className="flex center cursor-pointer bg-[#B2C1E0] rounded-md gap-1 p-2"
             onClick={handleLogout}
           >
-            <h3 className="text-black text-md font-bold">Logout</h3>
+            <h3 className="text-black md:text-base text-xs font-bold">Logout</h3>
             <IoIosLogOut className="text-black text-lg font-bold" />
           </span>
           <span

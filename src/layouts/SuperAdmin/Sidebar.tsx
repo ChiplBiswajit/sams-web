@@ -15,6 +15,7 @@ import Header from "./Header";
 import Link from "next/link";
 import ProtectedRoute from "@/src/pages/ProtectedRoute";
 import { BsMenuButtonWideFill } from "react-icons/bs";
+import { userprofile } from "@/src/assets/SuperAdmin/Sidebar/Index";
 
 type prop = {
   title?: string;
@@ -25,94 +26,55 @@ export default function Sidebar({ children, title = "Amtek" }: prop) {
   const router = useRouter();
   const [open, setOpen] = useState(true);
 
-  const [isFullscreen, setIsFullscreen] = useState(false);
-
-  const handleFullscreen = () => {
-    if (document.fullscreenEnabled) {
-      if (document.fullscreenElement) {
-        document.exitFullscreen();
-        setIsFullscreen(false);
-      } else {
-        document.documentElement.requestFullscreen();
-        setIsFullscreen(true);
-      }
-    }
-  };
-
-  const handleLogout = async () => {
-    try {
-      const confirmLogout = await Swal.fire({
-        icon: "question",
-        title: "Are you sure you want to logout?",
-        showCancelButton: true,
-        confirmButtonColor: "#01246F",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, logout",
-      });
-
-      if (confirmLogout.isConfirmed) {
-        router.push("../../components/Login");
-      }
-    } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Logout Failed",
-        text: "An error occurred during logout. Please try again.",
-        confirmButtonColor: "#01246F",
-      });
-    }
-  };
-
   const usernamedata = sessionStorage.getItem("userid");
 
   return (
-    <>
+    <div className=" lg:block">
       <Header setOpen={setOpen} />
-      <div className="flex h-full min-h-screen ">
+      <div className="flex h-full min-h-screen   ">
         {/* /////sidebar div//////////// */}
         <div
-          className={`bg-[#DCDFFF] w-[15%] h-full ease-in-out transition-all duration-300 top-0 left-0 `}
+          className={`bg-[#DCDFFF] md:w-[15%] h-full ease-in-out transition-all duration-300 top-0 left-0 `}
         >
-          <span className="fixed w-[15%] bg-[#DCDFFF] inline-flex mt-12 flex-col items-start gap-3 p-0 h-[calc(100%-3rem)]">
+          <span className="fixed md:w-[15%] bg-[#DCDFFF] inline-flex mt-12 flex-col items-start gap-3 p-0 h-[calc(100%-3rem)]">
             <span
               className={`text-center flex-col  w-full flex duration-300 center  pt-5 text-black font-bold `}
             >
               <span className="w-full flex gap-3 center">
                 <img
-                  src={superadminprofile.src}
+                  src={userprofile.src}
                   alt="Profile"
-                  className="h-10 w-10  border border-black rounded-full"
+                  className="h-12 w-12 p-[3px]  border-2 border-[#01339f] rounded-full"
                 />
                 <span>
                   <p>Welcome!</p>
                   <p className="w-full text-xl text-start font-bold uppercase font-serif   text-[#ff0000]">
-                 {usernamedata}
+                    {usernamedata}
                   </p>
                 </span>
               </span>
-              <span className="w-full flex gap-2 center pt-2 ">
-                <p className="text-lg font-extrabold">Options</p>
-                <BsMenuButtonWideFill />
+              <span className="w-full flex gap-2 justify-between center bg-[#B2C1E0] px-2 mt-[10%] ">
+                <p className="text-lg font-extrabold ">Options</p>
+                <BsMenuButtonWideFill className="" />
               </span>
             </span>
             {/* custom-scrollbar */}
-            <div className="flex flex-col gap-2 pb-6 pl-[5%] h-full overflow-y-auto hide-scrollbar ">
+            <div className="flex flex-col gap-2 pb-6 md:pl-[7%] h-full overflow-y-auto hide-scrollbar ">
               {navbar.map((item: any) => (
                 <div
                   key={item.id}
                   onClick={() => router.push(item.path)}
-                  className={`bg-white center border-2  rounded-full w-full px-8 py-3 flex items-center space-x-3 shadow-inner shadow-md${
+                  className={`bg-white center border-2   rounded-full w-full md:px-8 md: py-3 flex items-center space-x-3 shadow-inner shadow-md${
                     router.pathname === item.path
-                      ? " bg-[#b2c1e0] border-6 border-[#01339f]"
+                      ? " bg-[#b2c1e0] border-4 border-[#01339f] "
                       : ""
                   }`}
                 >
                   <Link
                     href={item.path}
                     className={`flex items-center gap-2 text-gray-600 center transition-all duration-300 rounded-md ${
-                      router.pathname === item.path
-                        ? " font-extrabold triangle-arrow "
-                        : ""
+                      router.pathname === item.path ? " font-extrabold  " : ""
+                      // triangle-arrow
                     }`}
                   >
                     <div className="flex flex-col center">
@@ -123,11 +85,7 @@ export default function Sidebar({ children, title = "Amtek" }: prop) {
                           className="w-6 h-6"
                         />
                       </span>
-                      <span
-                        className={`text-base text-black font-medium flex-1 ${
-                          router.pathname === item.path ? "text-[#ff0044] " : ""
-                        } ${!open && "hidden"}`}
-                      >
+                      <span className={`text-base text-black font-bold flex-1`}>
                         {item.title}
                       </span>
                     </div>
@@ -140,11 +98,11 @@ export default function Sidebar({ children, title = "Amtek" }: prop) {
         {/* /////sidebar div//////////// */}
 
         {/* /////children div//////////// */}
-        <div className="flex-1 pt-14">
+        <div className="flex-1  pt-14">
           <ProtectedRoute>{children}</ProtectedRoute>
         </div>
         {/* /////children div//////////// */}
       </div>
-    </>
+    </div>
   );
 }

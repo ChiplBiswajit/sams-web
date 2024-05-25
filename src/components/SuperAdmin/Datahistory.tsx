@@ -10,6 +10,8 @@ import {
 } from "react-icons/fa"; // Importing icons
 import { IconType } from "react-icons";
 import { Chart } from "react-google-charts"; // Import Chart from react-google-charts
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from "recharts";
+
 
 type TabKey =
   | "Oxygen"
@@ -39,12 +41,15 @@ export default function Datahistory() {
   const [activeTab, setActiveTab] = useState<TabKey | null>(null);
   const [selectedVehicle, setSelectedVehicle] = useState<string | null>(null);
   const [showChart, setShowChart] = useState<boolean>(false);
-  const [LineChart, setLineChart] = useState<any>(null);
   const [vehicleslist, setVehicleslist] = useState<string[]>([]);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
   const [chartData, setChartData] = useState<{
     xData: number[];
     yData: number[];
   }>({ xData: [], yData: [] });
+
+
 
   const fetchVehicles = async () => {
     const authToken = sessionStorage.getItem("authToken");
@@ -63,9 +68,10 @@ export default function Datahistory() {
       console.error("Failed to fetch vehicles:", error);
     }
   };
+
   useEffect(() => {
     fetchVehicles();
-    console.log("Fetched vehicle list:", vehicleslist);
+    // console.log("Fetched vehicle list:", vehicleslist);
   }, []);
 
   const tabs: TabKey[] = [
@@ -78,19 +84,10 @@ export default function Datahistory() {
     "Alcohol",
   ];
 
-  const handleTabClick = async (tab: TabKey) => {
+  const handleTabClick = (tab: TabKey) => {
     setActiveTab(tab);
-    if (!LineChart) {
-      try {
-        const { LineChart: importedLineChart } = await import("@mui/x-charts/LineChart");
-        setLineChart(importedLineChart);
-      } catch (error) {
-        console.error("Error importing LineChart:", error);
-      }
-    }
     setShowChart(false);
   };
-  
 
   const handleSubmit = () => {
     if (selectedVehicle && activeTab) {
@@ -100,6 +97,14 @@ export default function Datahistory() {
       if (fromDate && toDate) {
         const startDate = fromDate.value;
         const endDate = toDate.value;
+
+        if (!startDate || !endDate) {
+          setErrorMessage("Please enter both start and end dates.");
+          setShowChart(false);
+          return;
+        } else {
+          setErrorMessage(null); // Clear error message if dates are provided
+        }
 
         let apiUrl = "";
         switch (activeTab) {
@@ -128,7 +133,6 @@ export default function Datahistory() {
             break;
         }
 
-        // Fetch data from the constructed URL
         const authToken = sessionStorage.getItem("authToken");
         fetch(apiUrl, {
           headers: {
@@ -138,7 +142,6 @@ export default function Datahistory() {
           .then((response) => response.json())
           .then((data) => {
             console.log("Fetched data:", data);
-            // Assuming the API response contains result array
             const xData = data.result.map((item: any) => item.time);
             const yData = data.result.map((item: any) => item.value);
             setChartData({ xData, yData });
@@ -149,7 +152,6 @@ export default function Datahistory() {
           });
       }
     }
-    setShowChart(true);
   };
 
   const renderForm = (tab: TabKey) => (
@@ -181,6 +183,9 @@ export default function Datahistory() {
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         />
       </div>
+      {errorMessage && (
+        <p className="text-red-500 text-base italic mb-8">{errorMessage}</p>
+      )}
       <div className="w-full center">
         <button
           type="submit"
@@ -194,33 +199,46 @@ export default function Datahistory() {
   );
 
   const renderChart = () => {
+    if (loading) {
+      return (
+        <div className="mt-4 p-4 bg-white rounded shadow-md mx-auto text-center">
+          <p className="text-lg font-bold text-blue-500">Loading Chart...</p>
+        </div>
+      );
+    }
+
+    if (!showChart) {
+      return (
+        <div className="mt-4 p-4 bg-white rounded shadow-md mx-auto text-center">
+          <p className="text-lg font-bold text-red-500">Please Select a Ambulance & date range to view the data.</p>
+        </div>
+      );
+    }
+
     return (
-      <div className="mt-4 w-[100%] h-[80%] p-4 bg-white rounded shadow-md mx-auto">
+      <div className="mt-4 w-[100%] h-[80%] p-4 center flex flex-col bg-white rounded shadow-md mx-auto">
         <h2 className="text-lg font-bold mb-2 text-center">
           Line Chart for {activeTab}
         </h2>
-        <Chart
-          width={"100%"}
-          height={"400px"}
-          chartType="LineChart"
-          loader={<div>Loading Chart</div>}
-          data={[
-            ["Index", activeTab || ""],
-            ...chartData.xData.map((x, index) => [x, chartData.yData[index]]),
-          ]}
-          options={{
-            hAxis: {
-              title: "Index",
-            },
-            vAxis: {
-              title: "Value",
-            },
-          }}
-          rootProps={{ "data-testid": "1" }}
-        />
+        <LineChart
+          width={900}
+          height={400}
+          data={chartData.xData.map((x, index) => ({ index: x, [activeTab || ""]: chartData.yData[index] }))}
+          margin={{ top: 5, right: 20, left: 10, bottom: 5 }}
+          className=""
+        >
+          <CartesianGrid  strokeDasharray="3 3" />
+          <XAxis dataKey="index" />
+          <YAxis />
+          <Tooltip />
+          <Legend />
+          <Line type="monotone" dataKey={activeTab || ""} stroke="#ff7300" yAxisId={0} />
+        </LineChart>
       </div>
     );
   };
+
+
 
   return (
     <section className="h-screen">
@@ -245,7 +263,7 @@ export default function Datahistory() {
             <option value="" disabled>
               Select a vehicle
             </option>
-            {vehicleslist.map((vehicle : any) => (
+            {vehicleslist.map((vehicle: any) => (
               <option key={vehicle.ambulanceId} value={vehicle.ambulanceId}>
                 {vehicle.ambulanceId}
               </option>
@@ -258,24 +276,24 @@ export default function Datahistory() {
               const Icon = tabIcons[tab];
               return (
                 <div key={""}>
-                <button
-                  key={tab}
-                  type="button"
-                  className={`flex items-center gap-2 text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-sm px-4 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900 ${
-                    activeTab === tab ? "bg-red-600 " : ""
-                  }`}
-                  onClick={() => handleTabClick(tab)}
-                >
-                  <Icon className="w-6 h-6" />
-                  {tab}
-                </button>
+                  <button
+                    key={tab}
+                    type="button"
+                    className={`flex items-center gap-2 text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-sm px-4 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900 ${
+                      activeTab === tab ? "bg-red-600 " : ""
+                    }`}
+                    onClick={() => handleTabClick(tab)}
+                  >
+                    <Icon className="w-6 h-6" />
+                    {tab}
+                  </button>
                 </div>
               );
             })}
           </div>
         )}
         {activeTab && renderForm(activeTab)}
-        {showChart && renderChart()}
+        {renderChart()}
       </div>
     </section>
   );

@@ -45,8 +45,8 @@ export const navbar: SuperAdminnavbar[] = [
   {
     id: 2,
     icon: ChiplAdmin,
-    title: "Admin",
-    path: "/admin",
+    title: "Admin List",
+    path: "/admin ",
     pagePath: "admin",
   },
 
@@ -73,51 +73,6 @@ export const navbar: SuperAdminnavbar[] = [
     pagePath: "Profile",
   },
 
-  // {
-  //   id: 3,
-  //   icon: fleets,
-  //   title: "Fleets",
-  //   path: "/fleets",
-  //   pagePath: "Fleets",
-  // },
-  // {
-  //   id: 4,
-  //   icon: stocks,
-  //   title: "Stocks",
-  //   path: "/stocks",
-  //   pagePath: "Stocks",
-  // },
-
-  // {
-  //   id: 10,
-  //   icon: jerk,
-  //   title: "Jerk",
-  //   path: "/SuperAdmin/jerk",
-  //   pagePath: "jerk",
-  // },
-
-  // {
-  //   id: 13,
-  //   icon: camera,
-  //   title: "Camera",
-  //   path: "/camera",
-  //   pagePath: "camera",
-  // },
-  // {
-  //   id: 9,
-  //   icon: reportamtek,
-  //   title: "Report",
-  //   path: "{`https://0r4mtgsn-3004.inc1.devtunnels.ms/allReport?adminId=${usernamedata}`}",
-  //   pagePath: "report",
-  // },
-
-  // {
-  //   id: 7,
-  //   icon: help,
-  //   title: "Help",
-  //   path: "/help",
-  //   pagePath: "Help",
-  // },
   {
     id: 8,
     icon: Aboutus,
@@ -125,11 +80,5 @@ export const navbar: SuperAdminnavbar[] = [
     path: "/About_Us",
     pagePath: "About_Us",
   },
-  // {
-  //   id: 9,
-  //   icon: Aboutus,
-  //   title: "Hams Login",
-  //   path: "/hamslogin",
-  //   pagePath: "hamslogin",
-  // },
+
 ];

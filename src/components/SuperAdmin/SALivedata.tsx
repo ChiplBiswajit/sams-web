@@ -49,10 +49,10 @@ import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 import SAJerkdata from "./SAJerkdata";
 import LarkAiData from "./LarkAiData";
 import AMTEKdata from "./AMTEKdata";
+import LDHeader from "./LDHeader";
 
 export default function SALivedata() {
   const router = useRouter();
-  const [isvitalCanvasOpen, setIsvitalCanvasOpen] = useState(false);
   const [isOffCanvasOpen, setIsOffCanvasOpen] = useState(false);
   const [ambulanceData, setAmbulanceData] = useState([]);
   const [modalVisible, setModalVisible] = useState(true);
@@ -64,8 +64,8 @@ export default function SALivedata() {
   const [showLarkData, setShowLarkData] = useState(false); // State to track which data to show
   const [showAmtekData, setShowAmtekData] = useState(true); // State to track which data to show
   const [cameraTopic, setCameraTopic] = useState("");
-
   const [selectedAdmin, setSelectedAdmin] = useState("");
+  const [showToast, setShowToast] = useState(false);
 
   const AdminDropdown = () => {
     const [admins, setAdmins] = useState([]);
@@ -91,30 +91,29 @@ export default function SALivedata() {
       }
     };
 
-    useEffect(() => {
-      fetchAdmins();
-      // console.log("00000000000000000000000000000000");
-      // console.log("Updated admins state:", admins); // Log the updated state to verify
-    }, []);
-
     // console.log("22222222222222222222222");
+
     const handleAdminChange = (event: any) => {
       const adminId = event.target.value;
       setSelectedAdmin(adminId);
       // console.log("hooooooooooooo");
-      // onSelectAdmin(adminId); // Call the parent function to notify the selection
     };
 
     return (
       <div>
-        <select id="admins" value=""
-                    className="px-2 py-2 h-10 rounded-md text-black font-semibold bg-[#ECEEF1]"
-        onChange={handleAdminChange}>
+        <select
+          id="admins"
+          value=""
+          className="px-2 py-2 h-10 rounded-md text-black font-semibold bg-[#ECEEF1]"
+          onChange={handleAdminChange}
+        >
           <option value="">Select an admin </option>
-          {admins.map((admin:any) => (
+          {admins.map((admin: any) => (
             <option
-            className="text-black bg-white  text-center font-semibold"
-            key={admin.adminId} value={admin.adminId}>
+              className="text-black bg-white  text-center font-semibold"
+              key={admin.adminId}
+              value={admin.adminId}
+            >
               {admin.adminId}
             </option>
           ))}
@@ -122,6 +121,12 @@ export default function SALivedata() {
         {/* {selectedAdmin && <p>You selected: {selectedAdmin}</p>} */}
       </div>
     );
+  };
+
+  const handleAdminChange = (event: any) => {
+    const adminId = event.target.value;
+    setSelectedAdmin(adminId);
+    // console.log("hooooooooooooo");
   };
 
   useEffect(() => {
@@ -154,32 +159,10 @@ export default function SALivedata() {
     setShowLarkData(false);
   };
 
-  // console.log("999999");
-
   const toggleLarkData = () => {
     setShowLarkData(true);
     setShowAmtekData(false);
   };
-
-  interface AlcoholDataState {
-    oxygen?: {
-      filterValue?: string;
-    };
-
-    alcohol?: {
-      alcoholIndex: string;
-      alert: string;
-    };
-
-    aqi?: {
-      airIndex: string;
-      alert: string;
-      eco2: string;
-      humidity: string;
-      temp: string;
-      voc: string;
-    };
-  }
 
   const openOffCanvas = () => {
     setIsOffCanvasOpen(true);
@@ -201,13 +184,10 @@ export default function SALivedata() {
 
   const fetchAmbulanceData = async () => {
     try {
+      setLoading(true); // Set loading to true before fetching data
       const authToken = sessionStorage.getItem("authToken");
-      // const filter = ""; // Define your filter here
       const response = await fetch(
-        // `https://24x7healthcare.live/v1fetchAmbulanceList/${filter}`,
-        // `https://smartambulance.in/admins/getFilterAmbulance?ambulanceType=${filter}`,
         `https://0r4mtgsn-8004.inc1.devtunnels.ms/admins/getFilterAmbulance?ambulanceType=${filter}&adminId=${selectedAdmin}`,
-
         {
           method: "GET",
           headers: {
@@ -216,33 +196,24 @@ export default function SALivedata() {
         }
       );
       const data = await response.json();
-      // console.log("amblist", data);
       if (data && data.ambulanceList) {
         setAmbulanceData(data.ambulanceList);
-        // console.log("total ambulance list",data.ambulanceList)
-        setLoading(false);
+        setLoading(false); // Set loading to false after successful data fetch
       } else {
         // If data is not received after 10 seconds, set loading to false and show "No data available"
         setTimeout(() => {
           setLoading(false);
-        }, 5000);
+          window.alert("Ambulance not available");
+        }, 10000);
       }
     } catch (error) {
-      // console.log("Error fetching data:", error);
+      console.error("Error fetching data:", error);
       setLoading(false);
+      window.alert("Error fetching ambulance data");
     }
   };
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(9);
-
-  // Pagination logic to slice ambulanceData array
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = ambulanceData.slice(indexOfFirstItem, indexOfLastItem);
-
-  // Change page
-  const paginate = (pageNumber: any) => setCurrentPage(pageNumber);
+  const adminId = sessionStorage.getItem("adminId");
 
   useEffect(() => {
     const usernamedata = sessionStorage.getItem("userid");
@@ -261,9 +232,55 @@ export default function SALivedata() {
   useEffect(() => {
     fetchAmbulanceData();
   }, []);
+
   useEffect(() => {
     fetchAmbulanceData();
   }, [filter, selectedAdmin]);
+
+  const [admins, setAdmins] = useState([]);
+  const authToken = sessionStorage.getItem("authToken");
+
+  const fetchAdmins = async () => {
+    try {
+      const response = await fetch(
+        "https://0r4mtgsn-3006.inc1.devtunnels.ms/admins/getAdmin",
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        }
+      );
+      const data = await response.json();
+      setAdmins(data.admin);
+    } catch (error) {
+      console.error("Error fetching admins:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchAdmins();
+  }, []);
+
+  const handleAdminChangeadminlist = (event: any) => {
+    const adminId = event.target.value;
+    sessionStorage.setItem("adminId", adminId);
+    setSelectedAdmin(adminId);
+    // Emit the selected adminId as a string to the socket
+    socketServcies.emit("emit data", adminId.toString());
+    console.log("1234567890");
+  };
+
+  // console.log("9999999999999999999999999999999999999999999")
+
+  const inactiveAmbulanceCount =
+    res[0] && (res[0] as any).oflineDevice != null
+      ? (res[0] as any).oflineDevice
+      : ambulanceData && ambulanceData.length
+      ? ambulanceData.length
+      : 0;
+
+  const activeAmbulanceCount = (res[0] as any)?.oflineDevice || 0;
 
   return (
     <>
@@ -271,31 +288,46 @@ export default function SALivedata() {
         <div className="flex gap-3">
           <div className="bg-[#eceef1] px-2 py-2 rounded-md flex flex-col center">
             <p className="text-sm font-semibold">Total Ambulance</p>
-            <p className="text-sm font-bold">{ambulanceData.length || 0}</p>
+            <p className="text-sm font-bold">{(ambulanceData as any).length}</p>
           </div>
           <div className="bg-[#eceef1] px-2 py-2 rounded-md flex flex-col center">
             <p className="text-sm font-semibold">Total Active Ambulance</p>
             <p className="text-sm text-green-600 font-bold">
-              {(res[0] as any)?.onlineDevice || 0}
+              {activeAmbulanceCount}
             </p>
           </div>
           <div className="bg-[#eceef1] px-2 py-2 rounded-md flex flex-col center">
             <p className="text-sm font-semibold">Total Inactive Ambulance</p>
             <p className="text-sm text-red-600 font-bold">
-              {(res[0] as any)?.oflineDevice || 0}
+              {inactiveAmbulanceCount}
             </p>
           </div>
         </div>
         <div className="flex gap-6">
-          <AdminDropdown />
-
+          <select
+            id="admins"
+            value={selectedAdmin}
+            className="px-2 py-2 h-10 rounded-md text-black font-semibold bg-[#ECEEF1]"
+            onChange={handleAdminChangeadminlist}
+          >
+            <option value="">Select an admin</option>
+            {admins.map((admin) => (
+              <option
+                className="text-black bg-white text-center font-semibold"
+                key={(admin as any).adminId}
+                value={(admin as any).adminId}
+              >
+                {(admin as any).adminId}
+              </option>
+            ))}
+          </select>{" "}
           <select
             className="px-2 py-2 h-10 rounded-md text-black font-semibold bg-[#ECEEF1]"
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
           >
             <option
-              className="text-black bg-white  text-center font-semibold"
+              className="text-black bg-white text-center font-semibold"
               value="ALL"
             >
               ALL
@@ -306,6 +338,7 @@ export default function SALivedata() {
             >
               ALS
             </option>
+
             <option
               className="text-yellow-600 bg-white text-center font-semibold"
               value="BLS"
@@ -315,9 +348,7 @@ export default function SALivedata() {
           </select>
         </div>
       </div>
-
-      {/* {loading && <Loader />} */}
-
+      {loading && <Loader />}
       <section className="md:w-[92%] flex flex-col  h-screen md:h-screen pl-[5%] pt-0 md:pt-2   ">
         <div className="w-full  grid grid-cols-2 md:grid-cols-3  gap-4   justify-start items-start">
           {ambulanceData &&

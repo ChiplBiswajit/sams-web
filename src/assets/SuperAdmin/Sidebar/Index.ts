@@ -11,3 +11,5 @@ export {default as jerk} from "./line-chart.png";
 export {default as location} from "./google-maps.png";
 export { default as maintenance } from "./maintenance.webp";
 export { default as history } from "./history.webp";
+
+export { default as userprofile } from "./programmer.png";
