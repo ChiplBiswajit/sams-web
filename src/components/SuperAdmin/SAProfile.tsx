@@ -68,7 +68,7 @@ export default function SAProfile() {
       const userId = formData.userId; // Assuming userId is available in formData
 
       // const API_URL = `https://0r4mtgsn-3006.inc1.devtunnels.ms/users/updateProfile/${userId}`;
-      const API_URL = `https://samsapi.smartambulance.in/users/updateProfile/${userId}`;
+      const API_URL = `https://sams.24x7healthcare.live/users/updateProfile/${userId}`;
 
       const response = await fetch(API_URL, {
         method: "PUT",

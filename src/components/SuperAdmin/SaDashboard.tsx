@@ -26,6 +26,7 @@ import {
 import socketServcies from "@/src/utils/Socket/socketService";
 import { storeObjByKey } from "@/src/utils/Socket/storage";
 import Responsivesidebar from "@/src/layouts/SuperAdmin/Responsivesidebar";
+import { Router, useRouter } from "next/router";
 
 Chart.register(
   Tooltip,
@@ -42,6 +43,7 @@ Chart.register(
 );
 
 export default function SADashboard() {
+  const router = useRouter();
   const [isFormVisible, setIsFormVisible] = useState(false);
   const toggleFormVisibility = () => {
     setIsFormVisible(!isFormVisible);
@@ -58,7 +60,7 @@ export default function SADashboard() {
     const authToken = sessionStorage.getItem("authToken");
     try {
       const response = await fetch(
-        "https://0r4mtgsn-8004.inc1.devtunnels.ms/admins/getDashBoardApi",
+        "https://24x7healthcare.live/admins/getDashBoardApi",
         {
           method: "GET",
           headers: {
@@ -72,22 +74,22 @@ export default function SADashboard() {
         setDashboardData(data.result);
         // console.log("dashboardData..................:", data.result);
       } else {
-        console.error("Network response was not ok.");
+        // console.error("Network response was not ok.");
       }
     } catch (error) {
-      console.error("Fetch error:", error);
+      // console.error("Fetch error:", error);
     }
   };
 
   const viewalldistrict = (dashboardData as any)?.viewDistrict;
-  console.log("viewalldistrict/////////////", viewalldistrict);
+  // console.log("viewalldistrict/////////////", viewalldistrict);
 
   useEffect(() => {
     fetchDashboardData();
     const intervalId = setInterval(fetchDashboardData, 10000); // Fetch every 10 seconds
 
     return () => clearInterval(intervalId); // Cleanup interval on component unmount
-  }, []);
+  }, [dashboardData]);
 
   const donutData = {
     labels: ["Active", "Inactive", "All Devices"],
@@ -109,18 +111,20 @@ export default function SADashboard() {
     ],
   };
 
+  
+
   const barData = {
     labels: viewalldistrict?.map((district: any) => district.district_name),
     datasets: [
-      {
-        label: "Total Devices",
-        data: viewalldistrict?.map(
-          (district: any) => dashboardData.totalDevice
-        ),
-        backgroundColor: "rgba(153, 102, 255, 0.2)",
-        borderColor: "rgba(153, 102, 255, 1)",
-        borderWidth: 1,
-      },
+      // {
+      //   label: "Total Ambulances",
+      //   data: viewalldistrict?.map(
+      //     (district: any) => dashboardData.totalDevice
+      //   ),
+      //   backgroundColor: "rgba(153, 102, 255, 0.2)",
+      //   borderColor: "rgba(153, 102, 255, 1)",
+      //   borderWidth: 1,
+      // },
       {
         label: "Number of Devices",
         data: viewalldistrict?.map((district: any) => district.no_of_devices),
@@ -131,13 +135,22 @@ export default function SADashboard() {
     ],
   };
 
+  // const maxVehicles = Math.max(
+  //   ...viewalldistrict.map((district: any) => district.total_vehicles)
+  // ) ; // Assuming 'total_vehicles' is the key for the number of vehicles in your data
+
   const barOptions = {
     scales: {
       y: {
         beginAtZero: true,
+        display: true,
+        precision: 0,
+        suggestedMin: 0, // Set the minimum value to 0
+        suggestedMax:  50, // Set the maximum value (adjust as needed)
       },
     },
   };
+  
   return (
     <section className="w-full h-full md:relative">
       <div className="w-full flex flex-col">
@@ -158,7 +171,12 @@ export default function SADashboard() {
               </span>
             </span>
             <span className="w-full flex">
-              <p className="text-white gap-1 md:text-sm text-xs center font-base pl-2">
+              <p
+                className="text-white gap-1 md:text-sm text-xs center font-base pl-2"
+                onClick={() => {
+                  router.push("./admin ");
+                }}
+              >
                 View Insights
                 <MdInsights className="text-white" />
               </p>
@@ -276,11 +294,8 @@ export default function SADashboard() {
                       </tr>
                     </thead>
                     {viewalldistrict?.map((district: any, index: number) => (
-                      <tbody>
-                        <tr
-                          key={index}
-                          className="bg-white text-center dark:bg-gray-800"
-                        >
+                      <tbody key={index}>
+                        <tr className="bg-white text-center dark:bg-gray-800">
                           <th
                             scope="row"
                             className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
@@ -317,7 +332,6 @@ export default function SADashboard() {
           </div>
         </div>
       </div>
-   
     </section>
   );
 }

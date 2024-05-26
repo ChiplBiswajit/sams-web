@@ -86,7 +86,7 @@ export default function LarkAiData() {
 
   useEffect(() => {
     if (res === null) {
-      console.log("Data not fetched from socket.");
+      // console.log("Data not fetched from socket.");
     }
   }, [res]);
 

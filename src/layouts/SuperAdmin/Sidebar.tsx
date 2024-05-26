@@ -40,7 +40,11 @@ export default function Sidebar({ children, title = "Amtek" }: prop) {
             <span
               className={`text-center flex-col  w-full flex duration-300 center  pt-5 text-black font-bold `}
             >
-              <span className="w-full flex gap-3 center">
+              <span className="w-full flex gap-3 center"
+                onClick={() => {
+                  router.push("./profile");
+                }}
+              >
                 <img
                   src={userprofile.src}
                   alt="Profile"
@@ -48,7 +52,7 @@ export default function Sidebar({ children, title = "Amtek" }: prop) {
                 />
                 <span>
                   <p>Welcome!</p>
-                  <p className="w-full text-xl text-start font-bold uppercase font-serif   text-[#ff0000]">
+                  <p className="w-full text-start font-bold uppercase font-serif   text-[#01339f]">
                     {usernamedata}
                   </p>
                 </span>

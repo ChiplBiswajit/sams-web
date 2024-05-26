@@ -55,7 +55,7 @@ export default function Datahistory() {
     const authToken = sessionStorage.getItem("authToken");
     try {
       const response = await fetch(
-        "https://0r4mtgsn-8004.inc1.devtunnels.ms/admins/getFilterAmbulance?ambulanceType=ALL",
+        "https://24x7healthcare.live/admins/getFilterAmbulance?ambulanceType=ALL",
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
@@ -65,7 +65,7 @@ export default function Datahistory() {
       const data = await response.json();
       setVehicleslist(data.ambulanceList);
     } catch (error) {
-      console.error("Failed to fetch vehicles:", error);
+      // console.error("Failed to fetch vehicles:", error);
     }
   };
 
@@ -93,11 +93,11 @@ export default function Datahistory() {
     if (selectedVehicle && activeTab) {
       const fromDate = document.getElementById("fromDate") as HTMLInputElement;
       const toDate = document.getElementById("toDate") as HTMLInputElement;
-
+  
       if (fromDate && toDate) {
         const startDate = fromDate.value;
         const endDate = toDate.value;
-
+  
         if (!startDate || !endDate) {
           setErrorMessage("Please enter both start and end dates.");
           setShowChart(false);
@@ -105,34 +105,34 @@ export default function Datahistory() {
         } else {
           setErrorMessage(null); // Clear error message if dates are provided
         }
-
+  
         let apiUrl = "";
         switch (activeTab) {
           case "Oxygen":
-            apiUrl = `https://0r4mtgsn-8004.inc1.devtunnels.ms/dataHistory/getOxygen?ambulanceId=${selectedVehicle}&startDate=${startDate}&endDate=${endDate}`;
+            apiUrl = `https://24x7healthcare.live/dataHistory/getOxygen?ambulanceId=${selectedVehicle}&startDate=${startDate}&endDate=${endDate}`;
             break;
           case "Co2":
-            apiUrl = `https://0r4mtgsn-8004.inc1.devtunnels.ms/dataHistory/getCo2?ambulanceId=${selectedVehicle}&startDate=${startDate}&endDate=${endDate}`;
+            apiUrl = `https://24x7healthcare.live/dataHistory/getCo2?ambulanceId=${selectedVehicle}&startDate=${startDate}&endDate=${endDate}`;
             break;
           case "Temperature":
-            apiUrl = `https://0r4mtgsn-8004.inc1.devtunnels.ms/dataHistory/getTemp?ambulanceId=${selectedVehicle}&startDate=${startDate}&endDate=${endDate}`;
+            apiUrl = `https://24x7healthcare.live/dataHistory/getTemp?ambulanceId=${selectedVehicle}&startDate=${startDate}&endDate=${endDate}`;
             break;
           case "Humidity":
-            apiUrl = `https://0r4mtgsn-8004.inc1.devtunnels.ms/dataHistory/getHumidity?ambulanceId=${selectedVehicle}&startDate=${startDate}&endDate=${endDate}`;
+            apiUrl = `https://24x7healthcare.live/dataHistory/getHumidity?ambulanceId=${selectedVehicle}&startDate=${startDate}&endDate=${endDate}`;
             break;
           case "Voc":
-            apiUrl = `https://0r4mtgsn-8004.inc1.devtunnels.ms/dataHistory/getVoc?ambulanceId=${selectedVehicle}&startDate=${startDate}&endDate=${endDate}`;
+            apiUrl = `https://24x7healthcare.live/dataHistory/getVoc?ambulanceId=${selectedVehicle}&startDate=${startDate}&endDate=${endDate}`;
             break;
           case "Jerk":
-            apiUrl = `https://0r4mtgsn-8004.inc1.devtunnels.ms/dataHistory/getJerk?ambulanceId=${selectedVehicle}&startDate=${startDate}&endDate=${endDate}`;
+            apiUrl = `https://24x7healthcare.live/dataHistory/getJerk?ambulanceId=${selectedVehicle}&startDate=${startDate}&endDate=${endDate}`;
             break;
           case "Alcohol":
-            apiUrl = `https://0r4mtgsn-8004.inc1.devtunnels.ms/dataHistory/getAlcohol?ambulanceId=${selectedVehicle}&startDate=${startDate}&endDate=${endDate}`;
+            apiUrl = `https://24x7healthcare.live/dataHistory/getAlcohol?ambulanceId=${selectedVehicle}&startDate=${startDate}&endDate=${endDate}`;
             break;
           default:
             break;
         }
-
+  
         const authToken = sessionStorage.getItem("authToken");
         fetch(apiUrl, {
           headers: {
@@ -141,18 +141,19 @@ export default function Datahistory() {
         })
           .then((response) => response.json())
           .then((data) => {
-            console.log("Fetched data:", data);
-            const xData = data.result.map((item: any) => item.time);
+            // console.log("Fetched data:", data);
+            const xData = data.result.map((item: any) => `${item.date} ${item.time}`);
             const yData = data.result.map((item: any) => item.value);
             setChartData({ xData, yData });
             setShowChart(true);
           })
           .catch((error) => {
-            console.error("Error fetching data:", error);
+            // console.error("Error fetching data:", error);
           });
       }
     }
   };
+  
 
   const renderForm = (tab: TabKey) => (
     <div className="mt-4 p-4 bg-white rounded shadow-md w-1/2 mx-auto">
@@ -206,15 +207,20 @@ export default function Datahistory() {
         </div>
       );
     }
-
+  
     if (!showChart) {
       return (
         <div className="mt-4 p-4 bg-white rounded shadow-md mx-auto text-center">
-          <p className="text-lg font-bold text-red-500">Please Select a Ambulance & date range to view the data.</p>
+          <p className="text-lg font-bold text-red-500">Please Select a Vehicle & date range to view the data.</p>
         </div>
       );
     }
-
+  
+    const data = chartData.xData.map((x, index) => ({
+      date: x,
+      value: chartData.yData[index],
+    }));
+  
     return (
       <div className="mt-4 w-[100%] h-[80%] p-4 center flex flex-col bg-white rounded shadow-md mx-auto">
         <h2 className="text-lg font-bold mb-2 text-center">
@@ -223,20 +229,38 @@ export default function Datahistory() {
         <LineChart
           width={900}
           height={400}
-          data={chartData.xData.map((x, index) => ({ index: x, [activeTab || ""]: chartData.yData[index] }))}
+          data={data}
           margin={{ top: 5, right: 20, left: 10, bottom: 5 }}
           className=""
         >
-          <CartesianGrid  strokeDasharray="3 3" />
-          <XAxis dataKey="index" />
-          <YAxis />
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis 
+    dataKey="date" 
+    label={{ 
+      value: "Date & Time", 
+      position: "insideBottomRight", 
+      offset: 0, 
+      dy: 15, 
+      style: { fill: 'black' }  // Set text color for X-axis label
+    }} 
+  />
+  <YAxis 
+    label={{ 
+      value: activeTab, 
+      angle: -90, 
+      position: "insideLeft", 
+      style: { fill: 'black' },
+      dx: -10,  // Set text color for Y-axis label
+    }} 
+  />
           <Tooltip />
           <Legend />
-          <Line type="monotone" dataKey={activeTab || ""} stroke="#ff7300" yAxisId={0} />
+          <Line type="monotone" dataKey="value" stroke="#01339f" yAxisId={0} />
         </LineChart>
       </div>
     );
   };
+  
 
 
 

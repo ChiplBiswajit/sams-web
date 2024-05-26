@@ -50,7 +50,7 @@ export default function SAChiplAdmin() {
   };
 
   const handleSubmit = () => {
-    console.log("Form data submitted:", formData);
+    // console.log("Form data submitted:", formData);
     updateAdminData(); // Call the function to update profile data
     // Close the dialog after submission
     // setIsDialogOpen(false);
@@ -62,7 +62,7 @@ export default function SAChiplAdmin() {
       const authToken = sessionStorage.getItem("authToken");
 
       // const API_URL = `https://0r4mtgsn-3006.inc1.devtunnels.ms/users/updateProfile/${userId}`;
-      const API_URL = `https://0r4mtgsn-3006.inc1.devtunnels.ms/users/updateProfile/${selectedAdminId}`;
+      const API_URL = `https://sams.24x7healthcare.live/users/updateProfile/${selectedAdminId}`;
 
       const response = await fetch(API_URL, {
         method: "PUT",
@@ -74,7 +74,7 @@ export default function SAChiplAdmin() {
       });
 
       if (response.ok) {
-        console.log("Profile updated successfully");
+        // console.log("Profile updated successfully");
         fetchData();
         closeUpdateProfileForm();
 
@@ -87,7 +87,7 @@ export default function SAChiplAdmin() {
         });
         // Optionally, you can perform any actions after successful update
       } else {
-        console.error("Failed to update profile");
+        // console.error("Failed to update profile");
         // Handle error case here
 
         Swal.fire({
@@ -97,7 +97,7 @@ export default function SAChiplAdmin() {
         });
       }
     } catch (error) {
-      console.error("Error while updating profile:", error);
+      // console.error("Error while updating profile:", error);
 
       Swal.fire({
         icon: "error",
@@ -123,7 +123,7 @@ export default function SAChiplAdmin() {
 
       if (result.isConfirmed) {
         const authToken = sessionStorage.getItem("authToken");
-        const API_URL = `https://0r4mtgsn-3006.inc1.devtunnels.ms/users/delete/${adminId}`;
+        const API_URL = `https://sams.24x7healthcare.live/users/delete/${adminId}`;
         const response = await fetch(API_URL, {
           method: "DELETE",
           headers: {
@@ -142,7 +142,7 @@ export default function SAChiplAdmin() {
             timer: 1000,
           });
         } else {
-          console.error("Failed to delete admin");
+          // console.error("Failed to delete admin");
 
           Swal.fire({
             icon: "error",
@@ -152,7 +152,7 @@ export default function SAChiplAdmin() {
         }
       }
     } catch (error) {
-      console.error("Error while deleting admin:", error);
+      // console.error("Error while deleting admin:", error);
 
       Swal.fire({
         icon: "error",
@@ -174,17 +174,18 @@ export default function SAChiplAdmin() {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [apiData]);
 
-  const handleAdminAdded = () => {
-    // Fetch updated admin data after a new admin is added
-    fetchData();
-  };
+  
+  
 
 
   const fetchData = async () => {
     // const API_URL = "https://samsapi.smartambulance.in/admins/getAdmin";
-    const API_URL = "https://0r4mtgsn-3006.inc1.devtunnels.ms/admins/getAdmin";
+    // const API_URL = "https://0r4mtgsn-3006.inc1.devtunnels.ms/admins/getAdmin";
+    
+    const API_URL = "https://sams.24x7healthcare.live/admins/getAdmin";
+
     try {
       const authToken = sessionStorage.getItem("authToken");
       const response = await fetch(API_URL, {
@@ -224,10 +225,10 @@ export default function SAChiplAdmin() {
           // console.log(`Admin ID for element ${index}:`, adminId);
         }
       } else {
-        console.error("Error fetching data:", response.statusText);
+        // console.error("Error fetching data:", response.statusText);
       }
     } catch (error) {
-      console.error("Error fetching data:", error);
+      // console.error("Error fetching data:", error);
     } finally {
       setLoading(false);
     }

@@ -49,7 +49,7 @@ export default function SAAddAdmin({ toggleForm }: SAAddAdminProps,) {
         const response = await axios.post(
           // "https://samsapi.smartambulance.in/users/add",
           // "https://0r4mtgsn-3006.inc1.devtunnels.ms/users/add",
-          " https://0r4mtgsn-3006.inc1.devtunnels.ms/users/add",
+          "https://sams.24x7healthcare.live/users/add",
           {
             userId: values.userId,
             name: values.name,

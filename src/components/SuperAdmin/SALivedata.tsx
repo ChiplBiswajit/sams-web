@@ -11,13 +11,14 @@ import {
   testing,
 } from "@/src/assets/SuperAdmin/fleets/offcanvas";
 import React, { useEffect, useState } from "react";
-import { FaAmbulance } from "react-icons/fa";
+import { FaAmbulance, FaEye } from "react-icons/fa";
 import { ImCross } from "react-icons/im";
 import socketServcies from "@/src/utils/Socket/socketService";
 import { getObjByKey, storeObjByKey } from "@/src/utils/Socket/storage";
 import Loader from "../Loader";
 import { MdOutlineKeyboardDoubleArrowRight } from "react-icons/md";
 import { useRouter } from "next/router";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   Chart,
   Tooltip,
@@ -50,6 +51,8 @@ import SAJerkdata from "./SAJerkdata";
 import LarkAiData from "./LarkAiData";
 import AMTEKdata from "./AMTEKdata";
 import LDHeader from "./LDHeader";
+import { IoCloseCircleSharp } from "react-icons/io5";
+import { IoMdInformationCircle } from "react-icons/io";
 
 export default function SALivedata() {
   const router = useRouter();
@@ -75,7 +78,8 @@ export default function SALivedata() {
       // console.log("777");
       try {
         const response = await fetch(
-          "https://0r4mtgsn-3006.inc1.devtunnels.ms/admins/getAdmin",
+          // "https://0r4mtgsn-3006.inc1.devtunnels.ms/admins/getAdmin",
+          "https://sams.24x7healthcare.live/admins/getAdmin",
           {
             method: "GET",
             headers: {
@@ -87,7 +91,7 @@ export default function SALivedata() {
         // console.log("Fetched data:", data); // Log the data to verify its structure
         setAdmins(data.admin); // Assuming data.admin contains the array of admins
       } catch (error) {
-        console.error("Error fetching admins:", error);
+        // console.error("Error fetching admins:", error);
       }
     };
 
@@ -147,7 +151,7 @@ export default function SALivedata() {
         setCameraTopic(data?.result);
         // console.log("jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj", data.result);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        // console.error("Error fetching data:", error);
       }
     };
 
@@ -187,7 +191,7 @@ export default function SALivedata() {
       setLoading(true); // Set loading to true before fetching data
       const authToken = sessionStorage.getItem("authToken");
       const response = await fetch(
-        `https://0r4mtgsn-8004.inc1.devtunnels.ms/admins/getFilterAmbulance?ambulanceType=${filter}&adminId=${selectedAdmin}`,
+        `https://24x7healthcare.live/admins/getFilterAmbulance?ambulanceType=${filter}&adminId=${selectedAdmin}`,
         {
           method: "GET",
           headers: {
@@ -207,13 +211,11 @@ export default function SALivedata() {
         }, 10000);
       }
     } catch (error) {
-      console.error("Error fetching data:", error);
+      // console.error("Error fetching data:", error);
       setLoading(false);
-      window.alert("Error fetching ambulance data");
+      // window.alert("Error fetching ambulance data");
     }
   };
-
-  const adminId = sessionStorage.getItem("adminId");
 
   useEffect(() => {
     const usernamedata = sessionStorage.getItem("userid");
@@ -243,7 +245,8 @@ export default function SALivedata() {
   const fetchAdmins = async () => {
     try {
       const response = await fetch(
-        "https://0r4mtgsn-3006.inc1.devtunnels.ms/admins/getAdmin",
+        // "https://0r4mtgsn-3006.inc1.devtunnels.ms/admins/getAdmin",
+        "https://sams.24x7healthcare.live/admins/getAdmin",
         {
           method: "GET",
           headers: {
@@ -254,7 +257,7 @@ export default function SALivedata() {
       const data = await response.json();
       setAdmins(data.admin);
     } catch (error) {
-      console.error("Error fetching admins:", error);
+      // console.error("Error fetching admins:", error);
     }
   };
 
@@ -262,48 +265,62 @@ export default function SALivedata() {
     fetchAdmins();
   }, []);
 
+  const [parametersOpen, setParametersOpen] = useState(false);
+
+  // Function to toggle dropdown menu
+  const toggleParameters = () => {
+    setParametersOpen(!parametersOpen);
+  };
+
   const handleAdminChangeadminlist = (event: any) => {
     const adminId = event.target.value;
+    const selectedAmbulanceData = admins; // Assuming adminlist contains ambulance data
+    // console.log("Selected Ambulance Data:", admins);
     sessionStorage.setItem("adminId", adminId);
     setSelectedAdmin(adminId);
     // Emit the selected adminId as a string to the socket
     socketServcies.emit("emit data", adminId.toString());
-    console.log("1234567890");
+    // console.log("1234567890");
   };
 
   // console.log("9999999999999999999999999999999999999999999")
 
-  const inactiveAmbulanceCount =
-    res[0] && (res[0] as any).oflineDevice != null
-      ? (res[0] as any).oflineDevice
-      : ambulanceData && ambulanceData.length
-      ? ambulanceData.length
-      : 0;
-
-  const activeAmbulanceCount = (res[0] as any)?.oflineDevice || 0;
-
   return (
     <>
       <div className="flex w-full justify-between px-6 py-3 gap-5">
-        <div className="flex gap-3">
-          <div className="bg-[#eceef1] px-2 py-2 rounded-md flex flex-col center">
-            <p className="text-sm font-semibold">Total Ambulance</p>
-            <p className="text-sm font-bold">{(ambulanceData as any).length}</p>
-          </div>
-          <div className="bg-[#eceef1] px-2 py-2 rounded-md flex flex-col center">
-            <p className="text-sm font-semibold">Total Active Ambulance</p>
-            <p className="text-sm text-green-600 font-bold">
-              {activeAmbulanceCount}
-            </p>
-          </div>
-          <div className="bg-[#eceef1] px-2 py-2 rounded-md flex flex-col center">
-            <p className="text-sm font-semibold">Total Inactive Ambulance</p>
-            <p className="text-sm text-red-600 font-bold">
-              {inactiveAmbulanceCount}
-            </p>
+        <div>
+          <div className="flex gap-3">
+            <div className="bg-[#eceef1] px-2 py-2 rounded-md flex flex-col center">
+              <p className="text-sm font-semibold">Total Ambulance</p>
+              <p className="text-sm font-bold">
+                {(ambulanceData as any).length}
+              </p>
+            </div>
+            {!selectedAdmin && (
+              <div className="flex gap-3">
+                <div className="bg-[#eceef1] px-2 py-2 rounded-md flex flex-col center">
+                  <p className="text-sm font-semibold">
+                    Total Active Ambulance
+                  </p>
+                  <p className="text-sm text-green-600 font-bold">
+                    {(res[0] as any)?.onlineDevice || 0}
+                  </p>
+                </div>
+                <div className="bg-[#eceef1] px-2 py-2 rounded-md flex flex-col center">
+                  <p className="text-sm font-semibold">
+                    Total Inactive Ambulance
+                  </p>
+                  <p className="text-sm text-red-600 font-bold">
+                    {(ambulanceData as any).length -
+                      (res[0] as any)?.onlineDevice || 0}
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
         </div>
-        <div className="flex gap-6">
+
+        <div className="flex center gap-6">
           <select
             id="admins"
             value={selectedAdmin}
@@ -311,6 +328,12 @@ export default function SALivedata() {
             onChange={handleAdminChangeadminlist}
           >
             <option value="">Select an admin</option>
+            <option
+              className="text-black bg-white text-center font-semibold"
+              value=""
+            >
+              All
+            </option>
             {admins.map((admin) => (
               <option
                 className="text-black bg-white text-center font-semibold"
@@ -346,9 +369,75 @@ export default function SALivedata() {
               BLS
             </option>
           </select>
+          <div
+            className="px-2 py-2 flex gap-2 h-10 rounded-md text-black font-semibold bg-[#ECEEF1]"
+            onClick={toggleParameters}
+          >
+            <IoMdInformationCircle className="text-black text-2xl" />
+
+            <p>Range</p>
+          </div>
+          {parametersOpen && (
+            <div className="absolute top-[20%] left-[58%] w-[40%] p-1 z-[50] rounded-md shadow-lg bg-[#e1e5ec] ring-1 ring-black ring-opacity-5">
+              <div
+                className=" justify-end flex bg-white capitalize"
+                onClick={toggleParameters}
+              >
+                <IoCloseCircleSharp className="text-red-800 text-end font-bold  text-3xl" />
+              </div>
+              <div className="py-1 px-4 bg-white  gap-2 text-white">
+                <>
+                  <p className="text-red-600 font-semibold">For Air Quality:</p>
+                  <div className="text-black ml-4">
+                    <li>AQI: {`1-3 = Good, 3-4 = Average, 4-5 = Bad`}</li>
+                    <li>
+                      VOC: {`0-50 = Good, 50-750 = Average/Mild, 750 < = Bad`}
+                    </li>
+                    <li>
+                      CO2:{" "}
+                      {`0-400 = Good, 400-1000 = Average/Mild, 1000 < = Bad`}
+                    </li>
+                  </div>
+                </>
+              </div>
+              <div className="py-1 px-4 bg-white gap-2 ">
+                <p className="text-red-600 font-semibold">For Alcohol:</p>
+                <div className="text-black ml-4">
+                  <li>{`5 mins calibration during start`}</li>
+                  <li>{`0-1500: Good`}</li>
+                  <li>{`1500-1800: Average`}</li>
+                  <li>{`1800 < = Bad`}</li>
+                </div>
+              </div>
+              <div className="py-1 px-4  gap-2 bg-white">
+                <p className="text-red-600 font-semibold">For Oxygen:</p>
+                <div className="text-black ml-4 flex gap-5">
+                  <li>{`25 < = Bad`}</li>
+                  <li>{`45 < = Average`}</li>
+                  <li>{`45 < = Good`}</li>
+                </div>
+              </div>
+              <div className="py-1 px-4  gap-2 bg-white">
+                <p className="text-red-600 font-semibold">For Jerk:</p>
+                <div className="text-black ml-4">
+                  <li> {`5 < = Bad`}</li>
+                </div>
+              </div>
+              <div className="py-1 px-4  gap-2 bg-white">
+                <p className="text-red-600 font-semibold">For Temperature:</p>
+                <div className="text-black ml-4">
+                  <li>{`23-28: Good`}</li>
+                  <li>{`28-33: Average`}</li>
+                  <li>{`33 < = Bad`}</li>
+                </div>
+              </div>
+
+              {/* Add more parameter items as needed */}
+            </div>
+          )}
         </div>
       </div>
-      {loading && <Loader />}
+      {/* {loading && <Loader />} */}
       <section className="md:w-[92%] flex flex-col  h-screen md:h-screen pl-[5%] pt-0 md:pt-2   ">
         <div className="w-full  grid grid-cols-2 md:grid-cols-3  gap-4   justify-start items-start">
           {ambulanceData &&

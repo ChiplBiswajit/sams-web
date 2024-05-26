@@ -92,7 +92,8 @@ export default function Login() {
     try {
       await validationSchema.validate(values, { abortEarly: false });
 
-      const apiUrl = "https://samsapi.smartambulance.in/users/login";
+      // const apiUrl = "https://samsapi.smartambulance.in/users/login";
+         const apiUrl = "https://sams.24x7healthcare.live/users/login";
 
       try {
         const response = await fetch(apiUrl, {

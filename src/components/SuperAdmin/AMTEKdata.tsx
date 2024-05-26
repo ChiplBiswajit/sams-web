@@ -140,7 +140,7 @@ export default function AMTEKdata() {
 
         setJerkRes(JSON.parse(msg?.alcohol[0]?.jerkValue));
       } catch (error) {
-        console.error("Error parsing message:", error);
+        // console.error("Error parsing message:", error);
       }
     });
   }, []);

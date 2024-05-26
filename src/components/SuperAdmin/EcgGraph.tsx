@@ -19,7 +19,7 @@ export default function EcgGraph() {
       if (patientId === "1234" && patientData && patientData?.ecg?.wave1) {
         const { wave1 } = patientData?.ecg;
         // console.log("wave1", wave1);
-        console.log("wave1", patientData?.ecg);
+        // console.log("wave1", patientData?.ecg);
 
         setecgdata((prevData) => [...prevData, wave1]);
       }

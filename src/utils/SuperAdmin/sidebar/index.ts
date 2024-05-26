@@ -65,13 +65,13 @@ export const navbar: SuperAdminnavbar[] = [
     pagePath: "datahistory",
   },
 
-  {
-    id: 6,
-    icon: profilePage,
-    title: "Profile",
-    path: "/profile",
-    pagePath: "Profile",
-  },
+  // {
+  //   id: 6,
+  //   icon: profilePage,
+  //   title: "Profile",
+  //   path: "/profile",
+  //   pagePath: "Profile",
+  // },
 
   {
     id: 8,
