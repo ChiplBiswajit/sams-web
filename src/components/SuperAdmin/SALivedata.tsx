@@ -311,8 +311,11 @@ export default function SALivedata() {
                     Total Inactive Ambulance
                   </p>
                   <p className="text-sm text-red-600 font-bold">
-                    {(ambulanceData as any).length -
-                      (res[0] as any)?.onlineDevice || 0}
+                    {Math.max(
+                      (ambulanceData as any).length -
+                        ((res[0] as any)?.onlineDevice || 0),
+                      0
+                    )}
                   </p>
                 </div>
               </div>
@@ -378,24 +381,30 @@ export default function SALivedata() {
             <p>Range</p>
           </div>
           {parametersOpen && (
-            <div className="absolute top-[20%] left-[58%] w-[40%] p-1 z-[50] rounded-md shadow-lg bg-[#e1e5ec] ring-1 ring-black ring-opacity-5">
-              <div
-                className=" justify-end flex bg-white capitalize"
-                onClick={toggleParameters}
-              >
-                <IoCloseCircleSharp className="text-red-800 text-end font-bold  text-3xl" />
+            <div className="absolute h-[30%] top-[20%] left-[58%] w-[40%] p-1 z-[50] rounded-md shadow-lg bg-[#e1e5ec] ring-1 ring-black ring-opacity-5 overflow-y-auto  custom-scrollbar-ranges">
+              <div className="flex justify-between bg-white">
+                <div className=" center w-full">
+                  <p className="text-bold text-xl ">Parameter Ranges</p>
+                </div>
+                <div
+                  className=" justify-end flex  capitalize"
+                  onClick={toggleParameters}
+                >
+                  <IoCloseCircleSharp className="text-red-800 text-end font-bold  text-3xl" />
+                </div>
               </div>
+
               <div className="py-1 px-4 bg-white  gap-2 text-white">
                 <>
                   <p className="text-red-600 font-semibold">For Air Quality:</p>
                   <div className="text-black ml-4">
                     <li>AQI: {`1-3 = Good, 3-4 = Average, 4-5 = Bad`}</li>
                     <li>
-                      VOC: {`0-50 = Good, 50-750 = Average/Mild, 750 < = Bad`}
+                      VOC: {`0-50 = Good, 50-750 = Average/Mild, 750 > = Bad`}
                     </li>
                     <li>
                       CO2:{" "}
-                      {`0-400 = Good, 400-1000 = Average/Mild, 1000 < = Bad`}
+                      {`0-400 = Good, 400-1000 = Average/Mild, 1000 > = Bad`}
                     </li>
                   </div>
                 </>
@@ -406,21 +415,28 @@ export default function SALivedata() {
                   <li>{`5 mins calibration during start`}</li>
                   <li>{`0-1500: Good`}</li>
                   <li>{`1500-1800: Average`}</li>
-                  <li>{`1800 < = Bad`}</li>
+                  <li>{`1800 > = Bad`}</li>
                 </div>
+              </div>
+              <div className="flex w-full py-1 px-4  gap-2 bg-white">
+                <p className="text-red-600">*</p>
+                <p className="text-red-600 font-semibold">
+                  Note
+                  <text className="capitalize text-black font-semibold px-1">{`( values may vary because of extreme temprature)`}</text>
+                </p>
               </div>
               <div className="py-1 px-4  gap-2 bg-white">
                 <p className="text-red-600 font-semibold">For Oxygen:</p>
                 <div className="text-black ml-4 flex gap-5">
                   <li>{`25 < = Bad`}</li>
                   <li>{`45 < = Average`}</li>
-                  <li>{`45 < = Good`}</li>
+                  <li>{`50 > = Good`}</li>
                 </div>
               </div>
               <div className="py-1 px-4  gap-2 bg-white">
                 <p className="text-red-600 font-semibold">For Jerk:</p>
                 <div className="text-black ml-4">
-                  <li> {`5 < = Bad`}</li>
+                  <li> {`4 > = Bad`}</li>
                 </div>
               </div>
               <div className="py-1 px-4  gap-2 bg-white">
@@ -428,7 +444,7 @@ export default function SALivedata() {
                 <div className="text-black ml-4">
                   <li>{`23-28: Good`}</li>
                   <li>{`28-33: Average`}</li>
-                  <li>{`33 < = Bad`}</li>
+                  <li>{`33 > = Bad`}</li>
                 </div>
               </div>
 

@@ -121,20 +121,21 @@ export default function SAProfile() {
               <span className="font-bold text-lg ">User Type:</span>
               <span className="text-base font-mono">Super Admin</span>
             </div> */}
-            <div className="w-[50%] flex-col flex md:items-center">
+            {/* <div className="w-[50%] flex-col flex md:items-center">
               <span className="font-bold text-lg ">Gender:</span>
               <span className="text-base font-mono">{formData.gender}</span>
-            </div>
+            </div> */}
             <div className="w-[50%] flex-col flex md:items-center">
               <span className="font-bold text-lg ">Email ID:</span>
               <span className="text-base font-mono">{formData.emailId}</span>
             </div>
-          </div>
-          <div className="w-full flex  md:flex-row flex-col md:gap-0 gap-4 px-8">
             <div className="w-[50%] flex-col flex md:items-center">
               <span className="font-bold text-lg ">Password:</span>
               <span className="text-base font-mono">{formData.password}</span>
             </div>
+          </div>
+          <div className="w-full flex  md:flex-row flex-col md:gap-0 gap-4 px-8">
+            
           </div>
         </div>
         <div className=" w-full center py-10">
@@ -151,7 +152,7 @@ export default function SAProfile() {
       {/* Update Profile Dialog */}
       {isDialogOpen && (
         <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-700 bg-opacity-50">
-          <div className="bg-white  p-8 w-[70%] h-[70vh]  rounded-lg">
+          <div className="bg-white  p-8 w-[70%] h-auto  rounded-lg">
             <h2 className="text-2xl font-semibold mb-6 text-center">
               Edit Profile
             </h2>

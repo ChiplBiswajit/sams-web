@@ -7,7 +7,9 @@ import {
   FaWineBottle,
   FaFlask,
   FaThermometerHalf,
-} from "react-icons/fa"; // Importing icons
+} from "react-icons/fa";
+ // Importing icons
+ import { SiAirchina } from "react-icons/si";
 import { IconType } from "react-icons";
 import { Chart } from "react-google-charts"; // Import Chart from react-google-charts
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from "recharts";
@@ -20,7 +22,8 @@ type TabKey =
   | "Humidity"
   | "Voc"
   | "Jerk"
-  | "Alcohol";
+  | "Alcohol"
+  | "AQI";
 
 interface DataSet {
   xData: number[];
@@ -35,6 +38,7 @@ const tabIcons: Record<TabKey, IconType> = {
   Voc: FaBroadcastTower,
   Jerk: FaCarCrash,
   Alcohol: FaWineBottle,
+  AQI: SiAirchina ,
 };
 
 export default function Datahistory() {
@@ -82,7 +86,9 @@ export default function Datahistory() {
     "Voc",
     "Jerk",
     "Alcohol",
+    "AQI"
   ];
+
 
   const handleTabClick = (tab: TabKey) => {
     setActiveTab(tab);
@@ -129,6 +135,9 @@ export default function Datahistory() {
           case "Alcohol":
             apiUrl = `https://24x7healthcare.live/dataHistory/getAlcohol?ambulanceId=${selectedVehicle}&startDate=${startDate}&endDate=${endDate}`;
             break;
+            case "AQI":
+              apiUrl = `https://24x7healthcare.live/dataHistory/getAqiIndex?ambulanceId=${selectedVehicle}&startDate=${startDate}&endDate=${endDate}`;
+              break;
           default:
             break;
         }
@@ -303,14 +312,14 @@ export default function Datahistory() {
                   <button
                     key={tab}
                     type="button"
-                    className={`flex items-center gap-2 text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-sm px-4 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900 ${
+                    className={`flex items-center gap-2 text-white bg-[#01339F] hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-md text-sm px-4 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900 ${
                       activeTab === tab ? "bg-red-600 " : ""
                     }`}
                     onClick={() => handleTabClick(tab)}
                   >
                     <Icon className="w-6 h-6" />
                     {tab}
-                  </button>
+                  </button >
                 </div>
               );
             })}

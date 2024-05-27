@@ -2,7 +2,8 @@ import { io } from "socket.io-client";
 import { getObjByKey } from "./storage";
 // const SOCKET_URL = 'https://0r4mtgsn-8004.inc1.devtunnels.ms'
 // const SOCKET_URL = "https://0r4mtgsn-3004.inc1.devtunnels.ms/";
-const SOCKET_URL = 'https://24x7healthcare.live/'
+const SOCKET_URL = "https://24x7healthcare.live/";
+// const SOCKET_URL = "http://46.28.44.138:3004/";
 let stringToSend = "";
 
 class WSService {
@@ -30,7 +31,6 @@ class WSService {
     }
   };
 
-  
   retrieveData = async () => {
     try {
       const storedData = await getObjByKey("obj");
@@ -46,7 +46,7 @@ class WSService {
   emitStringOnceConnected = async () => {
     // Made this function async
     await this.retrieveData(); // Wait for data retrieval
-    this.socket.emit("emit data", stringToSend  );
+    this.socket.emit("emit data", stringToSend);
   };
   socket: any;
   //--end--

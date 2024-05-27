@@ -100,6 +100,27 @@ body {
 
 
 
+.custom-scrollbar-ranges::-webkit-scrollbar {
+  width: 12px;
+}
+
+.custom-scrollbar-ranges::-webkit-scrollbar-track {
+  background: #e1e5ec;
+}
+
+.custom-scrollbar-ranges::-webkit-scrollbar-thumb {
+  background-color: #727AB9;
+  border-radius: 10px;
+  border: 3px solid #e1e5ec;
+}
+
+.custom-scrollbar-ranges {
+  scrollbar-color: #727AB9 #e1e5ec;
+  scrollbar-width: thin;
+}
+
+
+
 /* Triangle arrow for active link */
 /* Triangle arrow for active link */
 .triangle-arrow::after {
