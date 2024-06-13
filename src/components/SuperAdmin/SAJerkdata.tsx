@@ -6,7 +6,7 @@ export default function SAJerkdata() {
   const [res, setRes] = useState([]);
 
   useEffect(() => {
-    socketServcies.initializeSocket();
+    // socketServcies.initializeSocket();
     socketServcies.on("received_message", (msg: any) => {
       // console.log("Jerk Value response:::::::::::::::", msg?.alcohol[0]?.jerkValue);
       setRes(JSON.parse(msg?.alcohol[0]?.jerkValue));

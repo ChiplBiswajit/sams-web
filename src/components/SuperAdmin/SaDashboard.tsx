@@ -82,7 +82,6 @@ export default function SADashboard() {
   };
 
   const viewalldistrict = (dashboardData as any)?.viewDistrict;
-  // console.log("viewalldistrict/////////////", viewalldistrict);
 
   useEffect(() => {
     fetchDashboardData();
@@ -111,8 +110,6 @@ export default function SADashboard() {
     ],
   };
 
-  
-
   const barData = {
     labels: viewalldistrict?.map((district: any) => district.district_name),
     datasets: [
@@ -135,10 +132,6 @@ export default function SADashboard() {
     ],
   };
 
-  // const maxVehicles = Math.max(
-  //   ...viewalldistrict.map((district: any) => district.total_vehicles)
-  // ) ; // Assuming 'total_vehicles' is the key for the number of vehicles in your data
-
   const barOptions = {
     scales: {
       y: {
@@ -146,13 +139,13 @@ export default function SADashboard() {
         display: true,
         precision: 0,
         suggestedMin: 0, // Set the minimum value to 0
-        suggestedMax:  50, // Set the maximum value (adjust as needed)
+        suggestedMax: 50, // Set the maximum value (adjust as needed)
       },
     },
   };
-  
+
   return (
-    <section className="w-full h-full md:relative">
+    <section className="w-full h-full md:relative bg-zinc-100">
       <div className="w-full flex flex-col">
         <span className="w-full flex md:flex-row flex-col p-2 gap-4">
           <div className="w-full p-1 flex flex-col gap-2 center rounded-md bg-gradient-to-r from-[#272770] to-[#BA3664]">
@@ -184,7 +177,7 @@ export default function SADashboard() {
           </div>
 
           <div
-            className="w-full p-1 flex flex-col gap-2 rounded-md bg-gradient-to-r from-[#7691FE] to-[#8056F8]"
+            className="w-full p-1 flex flex-col gap-2 rounded-md bg-gradient-to-r from-[#00A4FB] via-[#1F3597] to-[#00264D]"
             onClick={toggleFormVisibility}
           >
             <span className="w-full flex flex-col pl-2">
@@ -210,7 +203,7 @@ export default function SADashboard() {
           </div>
         </span>
         <span className="w-full flex md:flex-row flex-col gap-4 p-2">
-          <div className="w-full p-1 flex flex-col center gap-2 rounded-md bg-gradient-to-r from-[#8056F8] to-[#7691FE]">
+          <div className="w-full p-1 flex flex-col center gap-2 rounded-md bg-gradient-to-r from-[#00264D] via-[#1F3597] to-[#00A4FB]">
             <span className="w-full flex flex-col pl-2">
               <p className="text-white md:text-lg font-semibold">
                 Total Number of Active
@@ -314,20 +307,23 @@ export default function SADashboard() {
             </div>
           </div>
         )}
-        <div className="w-full center md:gap-0 gap-10  h-full flex md:flex-row flex-col ">
+        <div className="w-full center md:gap-3 gap-10 p-1  h-full flex md:flex-row flex-col ">
           <div className="w-full h-ful relative">
             <div className="w-full flex flex-col">
               <div className="w-full center">
-                <div className="w-[70%] h-[70%]">
-                  <Doughnut data={donutData} />
+                <div className="w-[100%] h-[54vh] bg-slate-100 rounded-xl ">
+                  <div className="w-[100%] h-[100%] flex center ">
+                    <Doughnut data={donutData} />
+                  </div>
                 </div>
               </div>
             </div>
           </div>
           <div className="w-full center">
-            <div className="w-[90%] h-[90%]">
-              {/* Bar chart */}
-              <Bar data={barData} options={barOptions} />
+            <div className="w-[100%] h-[54vh] bg-slate-100 rounded-xl ">
+              <div className="w-[100%] h-[100%] flex center ">
+                <Bar data={barData} options={barOptions} />
+              </div>
             </div>
           </div>
         </div>

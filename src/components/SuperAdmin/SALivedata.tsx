@@ -53,6 +53,25 @@ import AMTEKdata from "./AMTEKdata";
 import LDHeader from "./LDHeader";
 import { IoCloseCircleSharp } from "react-icons/io5";
 import { IoMdInformationCircle } from "react-icons/io";
+import {
+  ALSN,
+  BLSN,
+  airqulityblue,
+  airqulitygray,
+  airqulityred,
+  alcoholblue,
+  alcoholgray,
+  alcoholred,
+  humidityblue,
+  humiditygray,
+  humidityred,
+  oxygenblue,
+  oxygengray,
+  oxygenred,
+  tempblue,
+  tempgray,
+  tempred,
+} from "@/src/assets/SuperAdmin/Livedata";
 
 export default function SALivedata() {
   const router = useRouter();
@@ -217,19 +236,41 @@ export default function SALivedata() {
     }
   };
 
+  // useEffect(() => {
+  //   const usernamedata = sessionStorage.getItem("userid");
+  //   console.log(usernamedata)
+  //   storeObjByKey("obj", usernamedata);
+  //   socketServcies.initializeSocket();
+  //   socketServcies.on("received_admin_data", (msg: any) => {
+  //     // console.log("jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj", msg);
+  //     setRes(msg);
+  //     setTimeout(() => {
+  //       setLoading(false);
+  //       setModalVisible(false);
+  //     }, 10000);
+  //   });
+  // }, []);
+
   useEffect(() => {
-    const usernamedata = sessionStorage.getItem("userid");
+    const usernamedata = sessionStorage.getItem("userid") || "";
     storeObjByKey("obj", usernamedata);
-    socketServcies.initializeSocket();
-    socketServcies.on("received_admin_data", (msg: any) => {
-      // console.log("jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj", msg);
-      setRes(msg);
-      setTimeout(() => {
-        setLoading(false);
-        setModalVisible(false);
-      }, 10000);
-    });
+
+    socketServcies.on("received_admin_data", handleReceivedAdminData);
+    socketServcies.emit("emit data", usernamedata);
+
+    return () => {
+      socketServcies.removeListener("received_admin_data");
+    };
   }, []);
+
+  const handleReceivedAdminData = (msg: any) => {
+    setRes(msg);
+    setTimeout(() => {
+      setLoading(false);
+      setModalVisible(false);
+    }, 10000);
+  };
+
 
   useEffect(() => {
     fetchAmbulanceData();
@@ -283,14 +324,12 @@ export default function SALivedata() {
     // console.log("1234567890");
   };
 
-  // console.log("9999999999999999999999999999999999999999999")
-
   return (
-    <>
+    <div className="bg-zinc-100 h-auto">
       <div className="flex w-full justify-between px-6 py-3 gap-5">
         <div>
-          <div className="flex gap-3">
-            <div className="bg-[#eceef1] px-2 py-2 rounded-md flex flex-col center">
+          <div className="flex gap-3 pl-2">
+            <div className="bg-[#A9CCE2] bg-opacity-60 px-2 py-2 rounded-md flex flex-col center">
               <p className="text-sm font-semibold">Total Ambulance</p>
               <p className="text-sm font-bold">
                 {(ambulanceData as any).length}
@@ -298,7 +337,7 @@ export default function SALivedata() {
             </div>
             {!selectedAdmin && (
               <div className="flex gap-3">
-                <div className="bg-[#eceef1] px-2 py-2 rounded-md flex flex-col center">
+                <div className="bg-[#A9CCE2] bg-opacity-60  px-2 py-2 rounded-md flex flex-col center">
                   <p className="text-sm font-semibold">
                     Total Active Ambulance
                   </p>
@@ -306,7 +345,7 @@ export default function SALivedata() {
                     {(res[0] as any)?.onlineDevice || 0}
                   </p>
                 </div>
-                <div className="bg-[#eceef1] px-2 py-2 rounded-md flex flex-col center">
+                <div className="bg-[#A9CCE2] bg-opacity-60  px-2 py-2 rounded-md flex flex-col center">
                   <p className="text-sm font-semibold">
                     Total Inactive Ambulance
                   </p>
@@ -327,7 +366,7 @@ export default function SALivedata() {
           <select
             id="admins"
             value={selectedAdmin}
-            className="px-2 py-2 h-10 rounded-md text-black font-semibold bg-[#ECEEF1]"
+            className="px-2 py-2 h-10 rounded-md text-black font-semibold bg-[#A9CCE2] bg-opacity-60 "
             onChange={handleAdminChangeadminlist}
           >
             <option value="">Select an admin</option>
@@ -348,7 +387,7 @@ export default function SALivedata() {
             ))}
           </select>{" "}
           <select
-            className="px-2 py-2 h-10 rounded-md text-black font-semibold bg-[#ECEEF1]"
+            className="px-2 py-2 h-10 rounded-md text-black font-semibold  bg-[#A9CCE2] bg-opacity-60"
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
           >
@@ -373,7 +412,7 @@ export default function SALivedata() {
             </option>
           </select>
           <div
-            className="px-2 py-2 flex gap-2 h-10 rounded-md text-black font-semibold bg-[#ECEEF1]"
+            className="px-2 py-2 flex gap-2 h-10 rounded-md text-black font-semibold bg-[#A9CCE2] bg-opacity-60"
             onClick={toggleParameters}
           >
             <IoMdInformationCircle className="text-black text-2xl" />
@@ -453,9 +492,9 @@ export default function SALivedata() {
           )}
         </div>
       </div>
-      {/* {loading && <Loader />} */}
-      <section className="md:w-[92%] flex flex-col  h-screen md:h-screen pl-[5%] pt-0 md:pt-2   ">
-        <div className="w-full  grid grid-cols-2 md:grid-cols-3  gap-4   justify-start items-start">
+      {loading && <Loader />}
+      <section className=" md:w-[100%] flex flex-col    md:h-auto  pr-6 md:pt-2   ">
+        <div className="w-full  grid grid-cols-2 md:grid-cols-3  gap-0  center justify-center items-center">
           {ambulanceData &&
             ambulanceData?.map((item: any) => {
               const alcoholData = res.find(
@@ -470,7 +509,7 @@ export default function SALivedata() {
 
               return (
                 <div
-                  className="w-auto h-auto mb-0 md:mb-7  md:pl-7"
+                  className="w-auto h-auto mb-0 md:mb-6  md:pl-7 "
                   key={item?.id}
                   onClick={async () => {
                     // console.log("first");
@@ -480,106 +519,183 @@ export default function SALivedata() {
                     setAlcoholDataState(
                       alcoholData?.[item?.ambulanceId] || null
                     );
-
-                    // console.log("222222222222222222222222222", alcoholData);
+                    console.log("222222222222222222222222222", alcoholData);
                     setAmbulanceID(item?.ambulanceId);
+                    socketServcies.emit("emit data", item?.ambulanceId);
+
                   }}
                 >
-                  <span className="absolute">
-                    <img
-                      src={totalcard.src}
-                      alt=""
-                      className="md:w-[290px] w-[225px] "
-                    />
-                  </span>
-                  <div className=" flex gap-5 relative  md:w-[290px] w-[225px]">
-                    <span className="flex w-full center gap-[2px] ml-3">
-                      <span
-                        className={`md:h-2 md:w-2 h-1 w-1 rounded-full ${
-                          amtekStatus == 1 ? "bg-green-600" : "bg-red-600"
-                        }`}
-                      ></span>
-                      <p
-                        className={`md:text-xs text-[10px] ${
-                          amtekStatus == 1 ? "text-green-600" : "text-red-600"
-                        }`}
-                      >
-                        {amtekStatus == 1 ? "Active" : "Inactive"}
-                      </p>
-                    </span>
+                  <div className="bg-[#d7eaf8]  shadow-lg rounded-xl w-[100%] mx-auto">
+                    <div className="bg-[#7aaec6] text-center p-0 rounded-t-xl ">
+                      <span className="flex w-full center px-1">
+                        {/* <span className="flex center">
+                          <span
+                            className={`md:h-2 md:w-2 h-1 w-1 rounded-full ${
+                              amtekStatus == 1 ? "bg-[#3FFF1B]" : "bg-[#EE4B2B]"
+                            }`}
+                          ></span>
+                          <p
+                            className={`md:text-sm text-[10px] fon ${
+                              amtekStatus == 1
+                                ? "text-[#3FFF1B]"
+                                : "text-[#EE4B2B]"
+                            }`}
+                          >
+                            {amtekStatus == 1 ? "Active" : "Inactive"}
+                          </p>
+                        </span> */}
 
-                    <span className="w-full flex gap-1 p-1 md:ml-[150px] ml-[110px]">
-                      {item.ambulanceType === 1 ? (
-                        <span className="center gap-1">
-                          <FaAmbulance className="text-red-600 text-xs  md:text-sm" />
-                          <p className="md:text-xs text-[8px] font-bold text-white">
-                            ALS
-                          </p>
+                        <span className="font-bold">
+                          {item.ambulanceType === 1 ? (
+                            <span className="center gap-1">
+                              <img
+                                src={ALSN.src}
+                                alt="ALS"
+                                className="h-5 w-auto"
+                              />{" "}
+                              <p className="md:text-sm text-[8px] font-bold">
+                                ALS
+                              </p>
+                            </span>
+                          ) : item.ambulanceType === 2 ? (
+                            <span className="center gap-1">
+                              <img
+                                src={BLSN.src}
+                                alt="ALS"
+                                className="h-5 w-auto"
+                              />{" "}
+                              <p className="md:text-sm text-[8px] font-bold">
+                                BLS
+                              </p>
+                            </span>
+                          ) : null}
                         </span>
-                      ) : item.ambulanceType === 2 ? (
-                        <span className="center gap-1">
-                          <FaAmbulance className="text-yellow-600 text-xs md:text-sm" />
-                          <p className="md:text-xs text-[8px] font-bold text-white">
-                            BLS
-                          </p>
+                      </span>
+
+                      <div className="flex w-full items-center gap-1 justify-center">
+                        <span
+                          className={`md:h-3 md:w-3 h-1 w-1 rounded-full ${
+                            amtekStatus == 1 ? "bg-[#3FFF1B]" : "bg-[#EE4B2B]"
+                          }`}
+                        ></span>
+                        <span className=" text-sm font-medium">
+                          Ambulance ID :{" "}
+                          <span className=" font-medium uppercase">
+                            {item.ambulanceId}
+                          </span>
                         </span>
-                      ) : null}
-                    </span>
+                      </div>
+                    </div>
+                    <div className="flex flex-col gap-2 p-2">
+                      <div className="w-full flex justify-center gap-2">
+                        <div className=" w-full bg-[#a9cce2] py-2 flex  shadow-md  justify-center items-center gap-2 rounded-md">
+                          <div className=" rounded-full bg-[#8a97a8] border border-white grid items-center justify-center">
+                            <img
+                              src={
+                                alcoholData &&
+                                (alcoholData[item.ambulanceId] as any)?.oxygen
+                                  ?.filterValue
+                                  ? (alcoholData[item.ambulanceId] as any)
+                                      ?.oxygen?.filterValue < 25
+                                    ? oxygenred.src
+                                    : oxygenblue.src
+                                  : oxygengray.src
+                              }
+                              alt="Co2 Image"
+                              className="h-12 w-12"
+                            />
+                          </div>
+                          {alcoholData && (
+                            <p className="md:text-base text-xs  text-BLACK font-bold">
+                              {" " +
+                                ((
+                                  alcoholData[item?.ambulanceId] as {
+                                    oxygen: any;
+                                  }
+                                )?.oxygen?.filterValue >= 100
+                                  ? 100
+                                  : (
+                                      alcoholData[item?.ambulanceId] as {
+                                        oxygen: any;
+                                      }
+                                    )?.oxygen?.filterValue >= 0
+                                  ? (
+                                      alcoholData[item?.ambulanceId] as {
+                                        oxygen: any;
+                                      }
+                                    )?.oxygen?.filterValue
+                                  : 0) +
+                                " "}
+                              %
+                            </p>
+                          )}
+                        </div>
+                        <div className="w-full bg-[#a9cce2] py-2 flex   shadow-md justify-center items-center gap-2 rounded-md">
+                          <div className="rounded-full bg-[#8a97a8] border border-white grid items-center justify-center">
+                            <img
+                              src={
+                                alcoholData &&
+                                (alcoholData[item.ambulanceId] as any)?.alcohol
+                                  ?.alcoholIndex
+                                  ? alcoholData &&
+                                    ((alcoholData[item.ambulanceId] as any)
+                                      ?.alcohol?.alcoholIndex >= 1800
+                                      ? alcoholred.src
+                                      : alcoholblue.src)
+                                  : alcoholgray.src
+                              }
+                              alt="Co2 Image"
+                              className="h-12 w-12"
+                            />
+                          </div>
+                          <p>
+                            {alcoholData && (
+                              <p className="md:text-base text-xs  text-BLACK font-bold">
+                                {" " +
+                                  ((alcoholData[item.ambulanceId] as any)
+                                    ?.alcohol?.alert == 0
+                                    ? "N/A"
+                                    : (alcoholData[item.ambulanceId] as any)
+                                        ?.alcohol?.alert)}
+                              </p>
+                            )}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="w-full flex justify-center gap-2">
+                        <div className="w-full bg-[#a9cce2] py-2 px-2 flex  shadow-md justify-center items-center rounded-md">
+                          <div className=" rounded-full bg-[#8a97a8] border border-white grid items-center justify-center">
+                            <img
+                              src={alcoholData && ((alcoholData[item.ambulanceId] as any)?.aqi?.temp) ?
+                                alcoholData && ((alcoholData[item.ambulanceId] as any)?.aqi?.temp > 37 ? tempred.src : tempblue.src) : tempgray.src}
+                              alt="Co2 Image"
+                              className="h-12 w-12"
+                            />
+                          </div>
+                        </div>
+                        <div className="w-full bg-[#a9cce2] py-2 px-2 flex  shadow-md justify-center items-center rounded-md">
+                          <div className=" rounded-full bg-[#8a97a8] border border-white grid items-center justify-center">
+                            <img
+                              src={alcoholData && ((alcoholData[item.ambulanceId] as any)?.aqi?.humidity) ?
+                                alcoholData && ((alcoholData[item.ambulanceId] as any)?.aqi?.humidity > 70 ? humidityred.src : humidityblue.src) : humiditygray.src}
+                              alt="Co2 Image"
+                              className="h-12 w-12"
+                            />
+                          </div>
+                        </div>
+                        <div className="w-full bg-[#a9cce2] py-2 px-2 flex  shadow-md justify-center items-center rounded-md">
+                          <div className="rounded-full bg-[#8a97a8] border border-white grid items-center justify-center">
+                            <img
+                              src={alcoholData && ((alcoholData[item.ambulanceId] as any)?.aqi?.airIndex) ?
+                                alcoholData && ((alcoholData[item.ambulanceId] as any)?.aqi?.airIndex > 2 ? airqulityred.src : airqulityblue.src) : airqulitygray.src}
+                              alt="Co2 Image"
+                              className="h-12 w-12"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <span className=" w-auto relative md:top-2 left-1 md:left-2">
-                    <p className="md:text-xs text-[10px] text-black font-bold">
-                      Ambulance ID
-                    </p>
-                    <p className="md:text-xs text-[10px] text-[#5B6ADB] font-bold">
-                      {item.ambulanceId}
-                    </p>
-                  </span>
-                  <span className=" w-auto relative md:top-5 md:left-3 left-1">
-                    <p className="md:text-xs text-[10px] text-black font-bold">
-                      OXYGEN
-                    </p>
-                  </span>
-                  <span className=" w-auto relative md:top-[20px] md:left-12 left-8">
-                    <img
-                      src={oxygenc.src}
-                      alt=""
-                      className="md:w-10 md:h-10 w-6 h-6 rounded-md"
-                    />
-                  </span>
-                  <span className="w-auto relative md:top-3 md:left-[85px] left-[55px]">
-                    {alcoholData && (
-                      <p className="md:text-base text-xs  text-[#FF4500] font-bold">
-                        {" " +
-                          ((alcoholData[item?.ambulanceId] as { oxygen: any })
-                            ?.oxygen?.filterValue >= 100
-                            ? 100
-                            : (
-                                alcoholData[item?.ambulanceId] as {
-                                  oxygen: any;
-                                }
-                              )?.oxygen?.filterValue >= 0
-                            ? (
-                                alcoholData[item?.ambulanceId] as {
-                                  oxygen: any;
-                                }
-                              )?.oxygen?.filterValue
-                            : 0) +
-                          " "}
-                        %
-                      </p>
-                    )}
-                    {!alcoholData && (
-                      <p className="md:text-base text-xs text-black font-bold">
-                        NA
-                      </p>
-                    )}
-                  </span>
-                  <span
-                    className="bg-[#ECEEF1] border  border-black relative md:top-2 top-1 md:text-sm  text-xs font-semibold text-black md:left-[15rem] p-[3px] rounded-xl left-[15em]"
-                    onClick={toggleLarkData}
-                  >
-                    Vitals
-                  </span>
                 </div>
               );
             })}
@@ -590,7 +706,7 @@ export default function SALivedata() {
             <div className="w-[85%] md:w-[85%] bg-WHITE h-full  flex top-14 flex-col absolute  p-4 overflow-y-auto">
               <span className="w-full  mb-2 flex  justify-between center">
                 <span
-                  className="w-8 h-7 rounded-full center bg-[#7F88CE]"
+                  className="w-8 h-7 rounded-full center bg-[#7AAEC6] cursor-pointer"
                   onClick={closeOffCanvas}
                 >
                   <ImCross className="text-white text-sm" />
@@ -610,21 +726,21 @@ export default function SALivedata() {
                 </span>
               </span>
 
-              <div className="w-full flex gap-5 center py-6">
+              {/* <div className="w-full flex gap-5 center py-6">
                 <button className={`button`} onClick={toggleData}>
                   <p>Amtek</p>
                 </button>
-                <button className={`button`} onClick={toggleLarkData}>
+                {/* <button className={`button`} onClick={toggleLarkData}>
                   <p>Vitals</p>
-                </button>
-              </div>
+                </button> */}
+              {/* </div> */}
               {showAmtekData && <AMTEKdata />}
 
-              {showLarkData && (
+              {/* {showLarkData && (
                 <div>
                   <LarkAiData />
                 </div>
-              )}
+              )} */}
             </div>
           </div>
         )}
@@ -653,6 +769,6 @@ export default function SALivedata() {
           </div>
         )}
       </section>
-    </>
+    </div>
   );
 }

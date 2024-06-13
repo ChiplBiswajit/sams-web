@@ -595,7 +595,7 @@ body:hover {
   100% {
     transform: rotate(-360deg);
   }
-} 
+}  
 
 .button-Profile-page {
   background: #5E5DF0;
@@ -725,3 +725,5 @@ body:hover {
   background-color: rgb(139,149,227); /* Set background color to blue */
   color: white; /* Set text color to white */
 }
+
+

@@ -32,7 +32,6 @@ export default function SAChiplAdmin() {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
 
-  
   // Calculate the range of items to display
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -55,7 +54,6 @@ export default function SAChiplAdmin() {
     // Close the dialog after submission
     // setIsDialogOpen(false);
   };
-
 
   const updateAdminData = async () => {
     try {
@@ -107,7 +105,6 @@ export default function SAChiplAdmin() {
       // Handle error case here
     }
   };
-
 
   const deleteAdmin = async (adminId: string) => {
     try {
@@ -162,8 +159,6 @@ export default function SAChiplAdmin() {
     }
   };
 
-
-
   // useEffect to call the formik function
   useEffect(() => {
     if (formikFunction) {
@@ -176,14 +171,9 @@ export default function SAChiplAdmin() {
     fetchData();
   }, [apiData]);
 
-  
-  
-
-
   const fetchData = async () => {
     // const API_URL = "https://samsapi.smartambulance.in/admins/getAdmin";
     // const API_URL = "https://0r4mtgsn-3006.inc1.devtunnels.ms/admins/getAdmin";
-    
     const API_URL = "https://sams.24x7healthcare.live/admins/getAdmin";
 
     try {
@@ -205,7 +195,6 @@ export default function SAChiplAdmin() {
         // console.log("Admin List +++++++++", data);
         sessionStorage.setItem("adminList", JSON.stringify(data.admin));
         // console.log("tttttttt", data.admin)
-
 
         // store adminId for each element
         if (data.admin && data.admin.length > 0) {
@@ -238,7 +227,6 @@ export default function SAChiplAdmin() {
     setShowAddAdminForm(!showAddAdminForm);
   };
 
-
   const openUpdateProfileForm = (user: any) => {
     setShowUpdateProfileForm(true);
     setSelectedAdminId(user.adminId);
@@ -246,7 +234,7 @@ export default function SAChiplAdmin() {
       name: user.name,
       emailId: user.emailId,
       contactNo: user.contactNo,
-    })
+    });
     // console.log("qqqqqq", adminId);
   };
   const closeUpdateProfileForm = () => {
@@ -254,7 +242,7 @@ export default function SAChiplAdmin() {
   };
 
   return (
-    <section className="h-screen">
+    <section className="h-screen bg-zinc-100">
       <div className="w-full p-2 flex justify-end ">
         <button
           className="bg-blue-500 flex center gap-1 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded-md transition duration-300 transform hover:scale-110"
@@ -317,127 +305,134 @@ export default function SAChiplAdmin() {
       </div>
 
       <table className="min-w-[99%] divide-y divide-gray-200 m-1  hidden md:table ">
-
-        {apiData && apiData?.status === 200 ? (
-          <><thead className="bg-[#b2c1e0] border-b border-gray-300">
-            <tr className="border border-gray-300">
-              <th
-                scope="col"
-                className="px-2 py-3 text-center text-sm font-bold text-black  tracking-wider border border-gray-300"
-              >
-                Sl no
-              </th>
-              <th
-                scope="col"
-                className="px-2 py-3 text-center text-sm font-bold text-black  tracking-wider border border-gray-300"
-              >
-                Admin Id
-              </th>
-              <th
-                scope="col"
-                className="px-2 py-3 text-center text-sm font-bold text-black  tracking-wider border border-gray-300"
-              >
-                Name
-              </th>
-              <th
-                scope="col"
-                className="px-2 py-3 text-center text-sm font-bold text-black  tracking-wider border border-gray-300"
-              >
-                Email id
-              </th>
-              <th
-                scope="col"
-                className="px-2 py-3 text-center text-sm font-bold text-black  tracking-wider border border-gray-300"
-              >
-                Organization Name
-              </th>
-              <th
-                scope="col"
-                className="px-2 py-3 text-center text-sm font-bold text-black  tracking-wider border border-gray-300"
-              >
-                Contact No
-              </th>
-              <th
-                scope="col"
-                className="px-2 py-3  text-sm text-center font-bold text-black  tracking-wider border border-gray-300"
-              >
-                Parent Admin
-              </th>
-              <th
-                scope="col"
-                className="px-2 py-3  text-sm text-center font-bold text-black  tracking-wider border border-gray-300"
-              >
-                Total User Created
-              </th>
-              <th
-                scope="col"
-                className="px-2 py-3 text-center text-sm font-bold text-black  tracking-wider border border-gray-300"
-              >
-                Edit
-              </th>
-              <th
-                scope="col"
-                className="px-2 py-3  text-sm text-center font-bold text-black  tracking-wider border border-gray-300"
-              >
-                Delete
-              </th>
-            </tr>
-          </thead><>
-              {apiData?.admin?.map((user: any, index: any) => {
-                // console.log("hiiiiiiiiiiiiiiiiiiiiiiiii", apiData); // Log apiData here
-                return (
-                  <tbody
-                    key={index}
-                    className="bg-white divide-y divide-gray-200"
-                  >       
-                    <tr>
-                      <td className="px-2 py-2 text-center whitespace-nowrap">
-                        {index + 1}
-                      </td>
-                      <td className="px-2 py-2 text-center whitespace-nowrap">
-                        {user?.adminId}
-                      </td>
-                      <td className="px-2 py-2 text-center whitespace-nowrap">
-                        {user?.name}
-                      </td>
-                      <td className="px-2 py-2 text-center whitespace-nowrap">
-                        {user?.emailId}
-                      </td>
-                      <td className="px-2 py-2 text-center whitespace-nowrap">
-                        {user?.organizationName}
-                      </td>
-                      <td className="px-2 py-2 text-center whitespace-nowrap">
-                        {user?.contactNo}
-                      </td>
-                      <td className="px-2 py-2 text-center whitespace-nowrap">
-                        {user?.parentAdmin}
-                      </td>
-                      <td className="px-2 py-2 text-center whitespace-nowrap">
-                        {user?.totalUserCreated}
-                      </td>
-                      <td className="px-2 py-2 text-center whitespace-nowrap">
-                        <button
-                          className="text-green-500"
-                          onClick={() => openUpdateProfileForm(user)}
-                        >
-                          <FaEdit className="text-xl" />
-                        </button>
-                      </td>
-                      <td className="px-2 py-2 text-center whitespace-nowrap">
-                        <button
-                          className="text-red-500"
-                          onClick={() => deleteAdmin(user.adminId)}
-                        >
-                          <MdDeleteForever className="text-xl" />
-                        </button>
-                      </td>
-                    </tr>
-                  </tbody>
-                );
-              })}
-            </></>
+        {apiData && apiData.status === 200 ? (
+          apiData.admin && apiData.admin.length > 0 ? (
+            <>
+              <thead className="bg-[#b2c1e0] border-b border-gray-300">
+                <tr className="border border-gray-300">
+                  <th
+                    scope="col"
+                    className="px-2 py-3 text-center text-sm font-bold text-black  tracking-wider border border-gray-300"
+                  >
+                    Sl no
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-2 py-3 text-center text-sm font-bold text-black  tracking-wider border border-gray-300"
+                  >
+                    Admin Id
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-2 py-3 text-center text-sm font-bold text-black  tracking-wider border border-gray-300"
+                  >
+                    Name
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-2 py-3 text-center text-sm font-bold text-black  tracking-wider border border-gray-300"
+                  >
+                    Email id
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-2 py-3 text-center text-sm font-bold text-black  tracking-wider border border-gray-300"
+                  >
+                    Organization Name
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-2 py-3 text-center text-sm font-bold text-black  tracking-wider border border-gray-300"
+                  >
+                    Contact No
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-2 py-3  text-sm text-center font-bold text-black  tracking-wider border border-gray-300"
+                  >
+                    Parent Admin
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-2 py-3  text-sm text-center font-bold text-black  tracking-wider border border-gray-300"
+                  >
+                    Total User Created
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-2 py-3 text-center text-sm font-bold text-black  tracking-wider border border-gray-300"
+                  >
+                    Edit
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-2 py-3  text-sm text-center font-bold text-black  tracking-wider border border-gray-300"
+                  >
+                    Delete
+                  </th>
+                </tr>
+              </thead>
+              <>
+                {apiData.admin.map((user:any, index:any) => {
+                  return (
+                    <tbody
+                      key={index}
+                      className="bg-white divide-y divide-gray-200"
+                    >
+                      <tr>
+                        <td className="px-2 py-2 text-center whitespace-nowrap">
+                          {index + 1}
+                        </td>
+                        <td className="px-2 py-2 text-center whitespace-nowrap">
+                          {user.adminId}
+                        </td>
+                        <td className="px-2 py-2 text-center whitespace-nowrap">
+                          {user.name}
+                        </td>
+                        <td className="px-2 py-2 text-center whitespace-nowrap">
+                          {user.emailId}
+                        </td>
+                        <td className="px-2 py-2 text-center whitespace-nowrap">
+                          {user.organizationName}
+                        </td>
+                        <td className="px-2 py-2 text-center whitespace-nowrap">
+                          {user.contactNo}
+                        </td>
+                        <td className="px-2 py-2 text-center whitespace-nowrap">
+                          {user.parentAdmin}
+                        </td>
+                        <td className="px-2 py-2 text-center whitespace-nowrap">
+                          {user.totalUserCreated}
+                        </td>
+                        <td className="px-2 py-2 text-center whitespace-nowrap">
+                          <button
+                            className="text-green-500"
+                            onClick={() => openUpdateProfileForm(user)}
+                          >
+                            <FaEdit className="text-xl" />
+                          </button>
+                        </td>
+                        <td className="px-2 py-2 text-center whitespace-nowrap">
+                          <button
+                            className="text-red-500"
+                            onClick={() => deleteAdmin(user.adminId)}
+                          >
+                            <MdDeleteForever className="text-xl" />
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  );
+                })}
+              </>
+            </>
+          ) : (
+            <div className="w-full h-[80vh] center font-normal text-2xl">
+              No admin available
+            </div>
+          )
         ) : (
-          <div className="w-full h-[80vh] center font-normal text-2xl  ">
+          <div className="w-full h-[80vh] center font-normal text-2xl">
             {loading ? "" : "No data available"}
           </div>
         )}
@@ -447,7 +442,7 @@ export default function SAChiplAdmin() {
         <SAAddAdmin
           toggleForm={toggleAddAdminForm}
           setFormikFunction={setFormikFunction}
-        // onAdminAdded={handleAdminAdded}
+          // onAdminAdded={handleAdminAdded}
         />
       )}
 
@@ -507,7 +502,9 @@ export default function SAChiplAdmin() {
                   id="contactNo"
                   name="contactNo"
                   value={formData.contactNo}
-                  onChange={(e) => handleInputChange("contactNo", e.target.value)}
+                  onChange={(e) =>
+                    handleInputChange("contactNo", e.target.value)
+                  }
                   className="mt-1 p-2 w-full rounded-md border border-black "
                 />
               </div>

@@ -1,10 +1,10 @@
-import React, { Children, ReactElement, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MdMenuOpen } from "react-icons/md";
 import { IoIosLogOut } from "react-icons/io";
 import { BsArrowsFullscreen } from "react-icons/bs";
 import { BiSolidBellRing } from "react-icons/bi";
 import Swal from "sweetalert2";
-import { Amteklogo } from "@/src/assets/SuperAdmin/header";
+import { Action, Amteklogo } from "@/src/assets/SuperAdmin/header";
 import { navbar } from "@/src/utils/SuperAdmin/sidebar";
 import FullscreenIcon from "@mui/icons-material/Fullscreen";
 import FullscreenExitIcon from "@mui/icons-material/FullscreenExit";
@@ -12,20 +12,21 @@ import { useRouter } from "next/router";
 import { superadminprofile } from "@/src/assets/SuperAdmin/dashboard";
 import SADashboard from "@/src/components/SuperAdmin/SaDashboard";
 import { reportamtek } from "@/src/assets/SuperAdmin/Sidebar/Index";
-type prop = {
-  title?: string;
-  children: ReactElement | ReactElement[];
-};
+import { GoAlertFill } from "react-icons/go";
 
 export default function Header({ open, setOpen }: any) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedFilter, setSelectedFilter] = useState("all");
+
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen);
+  };
+
   const router = useRouter();
-  // const [open, setOpen] = useState(true);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
   const handleFullscreen = () => {
-    // Check if fullscreen mode is available
     if (document.fullscreenEnabled) {
-      // Toggle fullscreen
       if (document.fullscreenElement) {
         document.exitFullscreen();
         setIsFullscreen(false);
@@ -33,14 +34,11 @@ export default function Header({ open, setOpen }: any) {
         document.documentElement.requestFullscreen();
         setIsFullscreen(true);
       }
-    } else {
-      // console.error("Fullscreen not supported by your browser");
     }
   };
 
   const handleLogout = async () => {
     try {
-      // Display confirmation prompt
       const confirmLogout = await Swal.fire({
         icon: "question",
         title: "Are you sure you want to logout?",
@@ -50,19 +48,32 @@ export default function Header({ open, setOpen }: any) {
         confirmButtonText: "Yes, logout",
       });
 
-      // Check if the user confirmed the logout
       if (confirmLogout.isConfirmed) {
-        // console.log("Logout clicked");
+        // Remove items from session storage
+        sessionStorage.removeItem("authToken");
+        sessionStorage.removeItem("ProfileData");
+        sessionStorage.removeItem("userid");
 
-        // Simulate a delay (replace with your actual logout logic)
-        // await new Promise((resolve) => setTimeout(resolve, 1000));
+        console.log("Attempting to remove all session items");
 
+        // Check if items were successfully removed
+        const authToken = sessionStorage.getItem("authToken");
+        const profileData = sessionStorage.getItem("ProfileData");
+        const userId = sessionStorage.getItem("userid");
+
+        if (!authToken && !profileData && !userId) {
+          console.log("All session items successfully removed");
+        } else {
+          console.log("Failed to remove some session items");
+          if (authToken) console.log("authToken was not removed");
+          if (profileData) console.log("ProfileData was not removed");
+          if (userId) console.log("userid was not removed");
+        }
+
+        // Navigate to login page
         router.push("./login");
       }
     } catch (error) {
-      // console.error("Logout failed:", error);
-
-      // Display error message
       Swal.fire({
         icon: "error",
         title: "Logout Failed",
@@ -74,32 +85,72 @@ export default function Header({ open, setOpen }: any) {
 
   const usernamedata = sessionStorage.getItem("userid");
 
+  const [notifications, setNotifications] = useState([]);
+  const [notificationLength, setNotificationLength] = useState(0);
+  const fetchNotificationData = async () => {
+    try {
+      const authToken = sessionStorage.getItem("authToken");
+      const API_URL =
+        "https://0r4mtgsn-8004.inc1.devtunnels.ms/notification/get?notificationType=All";
+      const response = await fetch(API_URL, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setNotifications(data.result);
+        setNotificationLength(data.result.length);
+      } else {
+        console.error(
+          "Error fetching notifications data:",
+          response.statusText
+        );
+      }
+    } catch (error) {
+      console.error("Error fetching notifications data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchNotificationData();
+    console.log(
+      "notificationsssssssssssssssssssssssss List :::::::::::::::::",
+      notifications
+    );
+  }, []);
+
+  const filteredNotifications = notifications.filter((notification) => {
+    if (selectedFilter === "all") {
+      return true;
+    }
+    return (notification as any).notification_type === selectedFilter;
+  });
+
   return (
     <section className="fixed top-0 w-full z-50">
-      <div className="w-full flex p-0  justify-between items-center bg-[#DCDFFF] h-14">
-        <span className="flex md:gap-16 gap-0 md:ml-8 ">
+      <div className="w-full flex p-0 justify-between items-center bg-[#00264D] h-14">
+        <span className="flex md:gap-14 gap-0 md:ml-8 ">
           <span
-            className=" inline-flex ml-2"
+            className="inline-flex ml-[5px] "
             onClick={() => {
               router.push("./dashboard");
             }}
           >
-            <img
-              src={Amteklogo.src}
-              alt=""
-              className="w-auto h-10 cursor-pointer block float-left"
-            />
-            <span className={`w-full center duration-300`}>
-              <span className="h-10 w-1 rounded-full bg-[#01339F] mr-3"></span>
-              <p className="w-full md:text-xl font-bold text-[#01339F]">AMTeK</p>
-            </span>
-            {/* <div className="pl-4 md:pl-11">
-              <MdMenuOpen
-                className={`text-black text-4xl cursor-pointer 
-              ${!open && "rotate-180"}`}
-                onClick={() => setOpen((open: any) => !open)}
+            <span className="bg-white rounded-full p-[3px]  mr-2">
+              <img
+                src={Amteklogo.src}
+                alt=""
+                className="w-14 h-10 cursor-pointer block float-left"
               />
-            </div> */}
+            </span>
+
+            <span className={`w-full center duration-300 cursor-pointer`}>
+              <span className="h-10 w-1 rounded-full bg-WHITE mr-2"></span>
+              <p className="w-full md:text-2xl font-bold text-WHITE">AMTeK</p>
+            </span>
           </span>
         </span>
 
@@ -108,20 +159,25 @@ export default function Header({ open, setOpen }: any) {
             href={`https://smartambulance.in/allReport?adminId=${usernamedata}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex center cursor-pointer bg-[#B2C1E0] rounded-md gap-1 p-2"
+            className="flex center cursor-pointer bg-[#A9CCE2] rounded-md gap-1 p-2"
           >
             <img src={reportamtek.src} className="h-5 w-5" alt="" />
-            <h3 className="text-black md:text-base text-xs font-bold"> All Report</h3>
+            <h3 className="text-black md:text-base text-xs font-bold">
+              {" "}
+              All Report
+            </h3>
           </a>
           <span
-            className="flex center cursor-pointer bg-[#B2C1E0] rounded-md gap-1 p-2"
+            className="flex center cursor-pointer bg-[#A9CCE2] rounded-md gap-1 p-2"
             onClick={handleLogout}
           >
-            <h3 className="text-black md:text-base text-xs font-bold">Logout</h3>
+            <h3 className="text-black md:text-base text-xs font-bold">
+              Logout
+            </h3>
             <IoIosLogOut className="text-black text-lg font-bold" />
           </span>
           <span
-            className="h-10 w-10 flex center bg-[#B2C1E0] rounded-full"
+            className="h-10 w-10 flex center bg-[#A9CCE2] rounded-full"
             onClick={handleFullscreen}
           >
             {isFullscreen ? (
@@ -130,11 +186,102 @@ export default function Header({ open, setOpen }: any) {
               <FullscreenIcon className="text-black font-bold  text-[35px]" />
             )}
           </span>{" "}
-          <span className="h-10 w-10 flex center bg-[#B2C1E0] rounded-full">
-            <BiSolidBellRing className="text-black text-lg cursor-pointer " />
+          <span
+            className="relative h-10 w-10 flex items-center justify-center bg-[#A9CCE2] rounded-full cursor-pointer"
+            onClick={toggleDropdown}
+          >
+            <BiSolidBellRing className="text-black text-2xl" />
+            {notificationLength > 0 && (
+              <span className="absolute top-0   right-0 h-4 w-auto px-1 bg-red-500 text-white rounded-full flex items-center justify-center text-xs">
+                {notificationLength}
+              </span>
+            )}
           </span>
+          {/* //Notification Start */}
+          {isOpen && (
+            <div className="absolute top-12 right-0 mt-3 w-80 h-[90vh] bg-gray-100 shadow-lg rounded-lg overflow-y-auto">
+              <div className="flex flex-col h-full">
+                <div className="flex justify-between center items-center bg-gray-100 py-2 px-4 border-b">
+                  <div>
+                    <p className="font-medium">
+                      Notifications{" "}
+                      <span className="text-red-600 ">
+                        ({filteredNotifications.length})
+                      </span>
+                    </p>
+                  </div>
+                  <div className="flex items-center">
+                    <select
+                      className="mr-4 p-0 border rounded"
+                      value={selectedFilter}
+                      onChange={(e) => setSelectedFilter(e.target.value)}
+                    >
+                      <option value="all">All</option>
+                      <option value="Alcohol">Alcohol</option>
+                      <option value="Oxygen">Oxygen</option>
+                      <option value="Sos">Sos</option>
+                      <option value="Jerk">Jerk</option>
+                    </select>
+                    <button
+                      onClick={toggleDropdown}
+                      className="text-blue-500 font-extrabold text-2xl"
+                    >
+                      &times;
+                    </button>
+                  </div>
+                </div>
+                <div className="flex-grow overflow-y-auto p-2 custom-scrollbar-ranges">
+                  {filteredNotifications && filteredNotifications.length > 0 ? (
+                    filteredNotifications.map((notification, index) => (
+                      <div
+                        key={index}
+                        className="mt-1 flex px-2 py-0 w-full pl-2 text-left bg-gray-100 rounded-lg"
+                      >
+                        <div className="w-[20%] flex-col flex center h-auto">
+                          <span className="text-xs font-medium text-red-600">
+                            {(notification as any).notification_type}
+                          </span>
+                          <GoAlertFill className="text-red-600" />
+                        </div>
+                        <div className="w-[80%] p-1 h-auto ml-2">
+                          <div className="flex flex-col w-full">
+                            <span className="text-xs font-medium">
+                              Ambulance ID :{" "}
+                              {(notification as any).ambulance_id}
+                            </span>
+                          </div>
+                          <div className="text-xs font-medium text-gray-700">
+                            Date : {(notification as any).date}{" "}
+                            <span className="text-xs font-medium ">
+                              {(notification as any).time}
+                            </span>
+                          </div>
+                          <div className="text-xs font-medium text-gray-700">
+                            Owner : {(notification as any).owner_id}
+                          </div>
+                          {/* <div className="text-xs font-medium text-gray-700">
+                            value : {(notification as any).value}
+                          </div> */}
+                        </div>
+                        <div className="flex center w-[15%]">
+                          <span className="bg-WHITE p-1 rounded-full">
+                            <img src={Action.src} className="h-5 w-5" alt="" />
+                          </span>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-center text-gray-500">
+                      No notifications available.
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+          {/* //Notification end */}
           <div
-            className="w-10 h-10  center bg-white rounded-full"
+            className="w-10 h-10 center bg-[#A9CCE2] rounded-full"
             onClick={() => {
               router.push("./profile");
             }}
@@ -142,7 +289,7 @@ export default function Header({ open, setOpen }: any) {
             <img
               src={superadminprofile.src}
               alt="loading..."
-              className="w-9 h-9 "
+              className="w-9 h-9"
             />
           </div>
         </div>

@@ -15,7 +15,6 @@ import {
   stocks,
 } from "@/src/assets/SuperAdmin/Sidebar/Index";
 import { camera } from "@/src/assets/SuperAdmin/fleets/offcanvas";
-// const usernamedata = sessionStorage.getItem("userid");
 
 export const navbar: SuperAdminnavbar[] = [
   {
@@ -33,7 +32,6 @@ export const navbar: SuperAdminnavbar[] = [
     path: "/liveData",
     pagePath: "LiveData",
   },
-
   {
     id: 11,
     icon: location,

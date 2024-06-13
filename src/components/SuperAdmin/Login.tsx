@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import Swal from "sweetalert2";
 import * as Yup from "yup";
 import { Formik, Form, useField } from "formik";
-import { loginpageimg } from "../../assets/Login";
+import { BG1, BG2, BG3, loginpageimg } from "../../assets/Login";
 import { MdVisibilityOff, MdVisibility } from "react-icons/md";
 import Loader from "../Loader";
 import { useSetRecoilState } from "recoil"; // Import Recoil components
@@ -116,8 +116,6 @@ export default function Login() {
         sessionStorage.setItem("authToken", data.token);
         sessionStorage.setItem("ProfileData", JSON.stringify(data.profile));
         sessionStorage.setItem("userid", data.profile.userId);
-        localStorage.setItem("authToken", data.token);
-        localStorage.setItem("ProfileData", JSON.stringify(data.profile));
 
         Swal.fire({
           icon: "success",
@@ -147,10 +145,14 @@ export default function Login() {
     }
   };
 
+  // <section className='w-full main-container my-12 flex flex-col items-center justify-center gap-6 bg-center bg-no-repeat ' style={{ backgroundImage: `url(${bgmenuImg.src})` }}>
+
   return (
-    <section className="w-full h-screen md:h-[100vh] center bg-[#DCDFFF]">
-      <div className="flex md:flex-row flex-col bg-white bg-opacity-40 rounded-2xl md:p-0 p-6">
-        <div className="w-full h-auto p-5 flex flex-col">
+    <section className= 'w-full h-screen md:h-[100vh] center bg-[#A9CCE2] bg-center bg-no-repeat' 
+    style={{ backgroundImage: `url(${BG1.src})` }}
+    >
+      <div className="  flex md:flex-row flex-col bg-white bg-opacity-70 backdrop-blur-lg backdrop-filter rounded-2xl md:p-0 p-6 shadow-2xl overflow-hidden">
+        <div className="w-full h-auto p-5 flex flex-col ">
           <div className="w-full h-full flex justify-center items-center">
             <img
               src={loginpageimg.src}
@@ -160,7 +162,7 @@ export default function Login() {
           </div>
         </div>
 
-        <div className="w-full h-auto ml-[3%] justify-center items-center md:items-start flex flex-col">
+        <div className="w-full h-auto ml-[3%] justify-center items-center md:items-start flex flex-col ">
           <span className="md:text-5xl text-3xl font-bold text-[#100B1D]">
             Welcome to AMTeK
           </span>

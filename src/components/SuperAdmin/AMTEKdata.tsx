@@ -74,7 +74,6 @@ const LocationData = ({ lat, lng }: any) => {
   );
 };
 
-
 interface Atom {
   latitude?: number;
   longitude?: number;
@@ -125,24 +124,45 @@ export default function AMTEKdata() {
       : []),
   ];
 
-  useEffect(() => {
-    socketServcies.initializeSocket();
-    socketServcies.on("received_message", (msg: any) => {
-          // socketServcies.on("received_admin_data", (msg: any) => {
+  // useEffect(() => {
+  //   // socketServcies.initializeSocket();
+  //   socketServcies.on("received_message", (msg: any) => {
+  //     // socketServcies.on("received_admin_data", (msg: any) => {
 
-      // console.log("Received AMTEK VALUE Message :", msg    ); // Log msg here
-      try {
-        let parsedMsg = msg;
-        if (typeof msg === "string") {
-          parsedMsg = JSON.parse(msg);
-        }
-        setAmtekRes(parsedMsg);
+  //     // console.log("Received AMTEK VALUE Message :", msg    ); // Log msg here
+  //     try {
+  //       let parsedMsg = msg;
+  //       if (typeof msg === "string") {
+  //         parsedMsg = JSON.parse(msg);
+  //       }
+  //       setAmtekRes(parsedMsg);
 
-        setJerkRes(JSON.parse(msg?.alcohol[0]?.jerkValue));
-      } catch (error) {
-        // console.error("Error parsing message:", error);
+  //       setJerkRes(JSON.parse(msg?.alcohol[0]?.jerkValue));
+  //     } catch (error) {
+  //       // console.error("Error parsing message:", error);
+  //     }
+  //   });
+  // }, []);
+
+  const handleReceivedMessage = (msg: any) => {
+    try {
+      let parsedMsg = msg;
+      if (typeof msg === "string") {
+        parsedMsg = JSON.parse(msg);
       }
-    });
+      setAmtekRes(msg);
+      setJerkRes(JSON.parse(msg?.alcohol[0]?.jerkValue));
+    } catch (error) {
+      console.error("Error parsing message:", error);
+    }
+  };
+
+  useEffect(() => {
+    socketServcies.on("received_message", handleReceivedMessage);
+
+    return () => {
+      socketServcies.removeListener("received_message");
+    };
   }, []);
 
   // console.log("Received AMTEK VALUE Message :", amtekres); // Log msg here
@@ -155,10 +175,10 @@ export default function AMTEKdata() {
 
   return (
     <div>
-      <div className="w-full  gap-3 flex md:flex-row flex-col">
-        <div className="w-full  flex-col flex gap-2 ">
-          <div className="w-full h-96 bg-LAVENDER rounded-md  p-1 mt-2">
-            <p className="text-center bg-LAVENDER text-white rounded-sm text-sm font-bold capitalize">
+      <div className="w-full center  gap-3 flex md:flex-row flex-col">
+        <div className="w-full  shadow-xl  flex-col flex gap-2 ">
+          <div className="w-full h-96 bg-[#7AAEC6] rounded-md  p-1 mt-2">
+            <p className="text-center bg-[#7AAEC6] text-white rounded-sm text-sm font-bold capitalize">
               GPS
             </p>
             <span className="h-full w-full">
@@ -184,19 +204,18 @@ export default function AMTEKdata() {
             </span>
           </div>
         </div>
-        <div className="w-full grid grid-cols-3  gap-6 md:gap-8">
-          <span className=" w-full ">
-            <img src={triangle.src} alt="" className="w-32 absolute" />
-            <div className="w-20 h-24 p-1 rounded-md center bg-WHITE relative top-4 left-[10px]">
-              <div className=" w-[72px] h-[88px]  rounded-md bg-[#EBEDFF]">
+        
+        <div className="w-full grid grid-cols-3 center  gap-6 md:gap-4">
+          <span className=" w-full  shadow-xl">
+              <div className="h-28 center flex flex-col rounded-md border-2 bg-[#EBEDFF] border-[#7AAEC6]">
                 <span className=" border-LAVENDER rounded-full center pt-2">
-                  <img src={oxygen.src} alt="" className="w-8 " />
+                  <img src={oxygen.src} alt="" className="w-10 " />
                 </span>
 
-                <p className=" text-center text-xs font-bold capitalize">
+                <p className=" text-center text-md font-bold capitalize">
                   oxygen
                 </p>
-                <p className=" text-center text-xs">
+                <p className=" text-center text-md">
                   {amtekres &&
                   (amtekres as any).oxygen &&
                   (amtekres as any).oxygen[0] &&
@@ -205,19 +224,16 @@ export default function AMTEKdata() {
                     : 0}
                 </p>
               </div>
-            </div>
           </span>
-          <span className="w-full">
-            <img src={triangle.src} alt="" className="w-32 absolute" />
-            <div className="w-20 h-24 p-1 rounded-md center bg-WHITE relative top-4 left-[10px]">
-              <div className="w-[72px] h-[88px]  rounded-md bg-[#EBEDFF]">
+          <span className="w-full  shadow-xl">
+              <div className="h-28 center flex flex-col rounded-md border-2 bg-[#EBEDFF] border-[#7AAEC6]">
                 <span className=" border-LAVENDER rounded-full center pt-2">
-                  <img src={airqualitysensor.src} alt="" className="w-8 " />
+                  <img src={airqualitysensor.src} alt="" className="w-10 " />
                 </span>
-                <p className=" text-center text-xs font-bold capitalize">
+                <p className=" text-center text-md font-bold capitalize">
                   air quality
                 </p>{" "}
-                <p className=" text-center text-xs">
+                <p className=" text-center text-md">
                   {amtekres &&
                   (amtekres as any).aqi &&
                   (amtekres as any)?.aqi[0] &&
@@ -226,17 +242,14 @@ export default function AMTEKdata() {
                     : 0}
                 </p>
               </div>
-            </div>
           </span>
-          <span className="w-full">
-            <img src={triangle.src} alt="" className="w-32 absolute" />
-            <div className="w-20 h-24 p-1 rounded-md center bg-WHITE relative top-4 left-[10px]">
-              <div className="w-[72px] h-[88px]  rounded-md bg-[#EBEDFF]">
+          <span className="w-full  shadow-xl">
+              <div className="h-28  center flex flex-col rounded-md border-2 bg-[#EBEDFF] border-[#7AAEC6]">
                 <span className=" border-LAVENDER rounded-full center pt-2">
-                  <img src={co2.src} alt="" className="w-8" />
+                  <img src={co2.src} alt="" className="w-10" />
                 </span>
-                <p className=" text-center text-xs font-bold capitalize">co2</p>{" "}
-                <p className=" text-center text-xs">
+                <p className=" text-center text-md font-bold capitalize">co2</p>{" "}
+                <p className=" text-center text-md">
                   {amtekres &&
                   (amtekres as any)?.aqi &&
                   (amtekres as any)?.aqi[0] &&
@@ -245,19 +258,16 @@ export default function AMTEKdata() {
                     : 0}
                 </p>
               </div>
-            </div>
           </span>
-          <span className="w-full">
-            <img src={triangle.src} alt="" className="w-32 absolute" />
-            <div className="w-20 h-24 p-1 rounded-md center bg-WHITE relative top-4 left-[10px]">
-              <div className="w-[72px] h-[88px]  rounded-md bg-[#EBEDFF]">
+          <span className="w-full  shadow-xl">
+              <div className="h-28 center flex flex-col rounded-md border-2 bg-[#EBEDFF] border-[#7AAEC6]">
                 <span className=" border-LAVENDER rounded-full center pt-2">
-                  <img src={summer.src} alt="" className="w-8 " />
+                  <img src={summer.src} alt="" className="w-10 " />
                 </span>
-                <p className=" text-center text-xs font-bold capitalize">
+                <p className=" text-center text-md font-bold capitalize">
                   temprature
                 </p>{" "}
-                <p className=" text-center text-xs">
+                <p className=" text-center text-md">
                   {amtekres &&
                   (amtekres as any)?.aqi &&
                   (amtekres as any)?.aqi[0] &&
@@ -266,19 +276,16 @@ export default function AMTEKdata() {
                     : 0}
                 </p>
               </div>
-            </div>
           </span>
-          <span className="w-full">
-            <img src={triangle.src} alt="" className="w-32 absolute" />
-            <div className="w-20 h-24 p-1 rounded-md center bg-WHITE relative top-4 left-[10px]">
-              <div className="w-[72px] h-[88px]  rounded-md bg-[#EBEDFF]">
-                <span className=" border-LAVENDER rounded-full center pt-2">
-                  <img src={drop.src} alt="" className="w-8 " />
+          <span className="w-full  shadow-xl">
+              <div className="h-28 center flex flex-col rounded-md border-2 bg-[#EBEDFF] border-[#7AAEC6]">
+                <span className=" border-[LAVENDER] rounded-full center pt-2">
+                  <img src={drop.src} alt="" className="w-10 " />
                 </span>
-                <p className=" text-center text-xs font-bold capitalize">
+                <p className=" text-center text-md font-bold capitalize">
                   humidity
                 </p>{" "}
-                <p className=" text-center text-xs">
+                <p className=" text-center text-md">
                   {amtekres &&
                   (amtekres as any)?.aqi &&
                   (amtekres as any)?.aqi[0] &&
@@ -287,17 +294,14 @@ export default function AMTEKdata() {
                     : 0}
                 </p>
               </div>
-            </div>
           </span>
-          <span className="w-full">
-            <img src={triangle.src} alt="" className="w-32 absolute" />
-            <div className="w-20 h-24 p-1 rounded-md center bg-WHITE relative top-4 left-[10px]">
-              <div className="w-[72px] h-[88px]  rounded-md bg-[#EBEDFF]">
+          <span className="w-full  shadow-xl">
+              <div className="h-28 center flex flex-col rounded-md border-2 bg-[#EBEDFF] border-[#7AAEC6]">
                 <span className=" border-LAVENDER rounded-full center pt-2">
-                  <img src={compound.src} alt="" className="w-8 " />
+                  <img src={compound.src} alt="" className="w-10 " />
                 </span>
-                <p className=" text-center text-xs font-bold capitalize">VOC</p>{" "}
-                <p className=" text-center text-xs">
+                <p className=" text-center text-md font-bold capitalize">VOC</p>{" "}
+                <p className=" text-center text-md">
                   {amtekres &&
                   (amtekres as any)?.aqi &&
                   (amtekres as any)?.aqi[0] &&
@@ -306,64 +310,57 @@ export default function AMTEKdata() {
                     : 0}
                 </p>
               </div>
+          </span>
+          <span className="w-full  shadow-xl">
+            <div className="h-28 center flex flex-col rounded-md border-2 bg-[#EBEDFF] border-[#7AAEC6]">
+              <span className=" border-LAVENDER rounded-full center ">
+                <img src={testing.src} alt="" className="w-8 " />
+              </span>
+              <p className=" text-center text-md font-bold capitalize">
+                alcohol
+              </p>{" "}
+              <p className=" text-center text-md">
+                {amtekres &&
+                (amtekres as any)?.alcohol &&
+                (amtekres as any)?.alcohol[0] &&
+                (amtekres as any)?.alcohol[0]?.alcoholIndex
+                  ? (amtekres as any)?.alcohol[0]?.alcoholIndex
+                  : 0}
+              </p>
+              <p className=" text-center  text-md">
+                <span className="font-bold"> Alert: </span>
+                {amtekres &&
+                (amtekres as any)?.alcohol &&
+                (amtekres as any)?.alcohol[0] &&
+                (amtekres as any)?.alcohol[0]?.alert
+                  ? (amtekres as any)?.alcohol[0]?.alert
+                  : "N/A"}{" "}
+              </p>
             </div>
           </span>
-          <span className="w-full">
-            <img src={triangle.src} alt="" className="w-32 absolute" />
-            <div className="w-20 h-24 p-1 rounded-md center bg-WHITE relative top-4 left-[10px]">
-              <div className="w-[72px] h-[88px]  rounded-md bg-[#EBEDFF]">
-                <span className=" border-LAVENDER rounded-full center pt-0">
-                  <img src={testing.src} alt="" className="w-8 " />
-                </span>
-                <p className=" text-center text-xs font-bold capitalize">
-                  alcohol
-                </p>{" "}
-                <p className=" text-center text-xs">
-                  {amtekres &&
-                  (amtekres as any)?.alcohol &&
-                  (amtekres as any)?.alcohol[0] &&
-                  (amtekres as any)?.alcohol[0]?.alcoholIndex
-                    ? (amtekres as any)?.alcohol[0]?.alcoholIndex
-                    : 0}
-                </p>
-                <p className=" text-center  text-[10px]">
-                  <span className="font-bold"> Alert: </span>
-                  {amtekres &&
-                  (amtekres as any)?.alcohol &&
-                  (amtekres as any)?.alcohol[0] &&
-                  (amtekres as any)?.alcohol[0]?.alert
-                    ? (amtekres as any)?.alcohol[0]?.alert
-                    : "N/A"}{" "}
-                </p>
-              </div>
-            </div>
-          </span>
-          <span className="w-full">
+          <span className="w-full  shadow-xl">
             <a
               href={`${storedCameraTopic}`}
               target="_blank"
               rel="noopener noreferrer"
             >
-              <img src={triangle.src} alt="" className="w-32 absolute" />
-              <div className="w-20 h-24 p-1 rounded-md center bg-WHITE relative top-4 left-[10px]">
-                <div className="w-[72px] h-[88px] center flex flex-col rounded-md bg-[#EBEDFF]">
-                  <span className="border-LAVENDER rounded-full center pt-0">
-                    <img src={camera.src} alt="" className="w-8" />
-                  </span>
-                  <p className="text-center font-semibold text-xs">
-                    Tab to see
-                    <p className="text-center text-xs">Livefeed</p>
-                  </p>
-                  <MdOutlineKeyboardDoubleArrowRight className="" />
-                </div>
+              <div className="h-28  center flex flex-col rounded-md border-2 bg-[#EBEDFF] border-[#7AAEC6]">
+                <span className="border-LAVENDER rounded-full center pt-0">
+                  <img src={camera.src} alt="" className="w-10" />
+                </span>
+                <p className="text-center font-semibold text-md">
+                  Tab to see
+                  <p className="text-center text-md">Livefeed</p>
+                </p>
+                <MdOutlineKeyboardDoubleArrowRight className="" />
               </div>
             </a>
           </span>
         </div>
       </div>
-      <div className="w-full mt-12 ">
+      <div className="w-full mt-4  shadow-xl">
         {/* <SAJerkdata /> */}
-        <div className=" w-full bg-LAVENDER p-1 rounded-md">
+        <div className=" w-full bg-[#7AAEC6] p-1 rounded-md">
           <h1 className="text-xl text-center py-1 text-white font-bold w-full underline-offset-2 ">
             Jerk Graph
           </h1>

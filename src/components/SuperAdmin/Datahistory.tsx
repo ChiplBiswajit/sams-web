@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   FaCloud,
   FaTint,
@@ -8,12 +8,19 @@ import {
   FaFlask,
   FaThermometerHalf,
 } from "react-icons/fa";
- // Importing icons
- import { SiAirchina } from "react-icons/si";
+import { SiAirchina } from "react-icons/si";
 import { IconType } from "react-icons";
-import { Chart } from "react-google-charts"; // Import Chart from react-google-charts
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from "recharts";
-
+import { IoMdArrowDropdown } from "react-icons/io";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+} from "recharts";
+import Loader from "../Loader";
 
 type TabKey =
   | "Oxygen"
@@ -38,7 +45,21 @@ const tabIcons: Record<TabKey, IconType> = {
   Voc: FaBroadcastTower,
   Jerk: FaCarCrash,
   Alcohol: FaWineBottle,
-  AQI: SiAirchina ,
+  AQI: SiAirchina,
+};
+
+const tabRanges: Record<
+  TabKey,
+  { low: number; high: number; lowColor: string; highColor: string }
+> = {
+  Oxygen: { low: 25, high: 90, lowColor: "red", highColor: "green" }, //25 < = Bad, 45 < = Average, 50 > = Good
+  Co2: { low: 350, high: 1000, lowColor: "green", highColor: "red" }, //CO2: 0-400 = Good, 400-1000 = Average/Mild, 1000 > = Bad
+  Temperature: { low: 15, high: 40, lowColor: "green", highColor: "red" }, //23-28: Good,28-33: Average,33 > = Bad
+  Humidity: { low: 30, high: 60, lowColor: "green", highColor: "red" },
+  Voc: { low: 30, high: 750, lowColor: "green", highColor: "red" }, //VOC: 0-50 = Good, 50-750 = Average/Mild, 750 > = Bad
+  Jerk: { low: 0.01, high: 2, lowColor: "green", highColor: "red" }, //4 > = Bad
+  Alcohol: { low: 1, high: 1500, lowColor: "green", highColor: "red" }, //0-1500: Good, 1500-1800: Average, 1800 > = Bad
+  AQI: { low: 1, high: 4, lowColor: "green", highColor: "red" }, //AQI: 1-3 = Good, 3-4 = Average, 4-5 = Bad
 };
 
 export default function Datahistory() {
@@ -53,7 +74,7 @@ export default function Datahistory() {
     yData: number[];
   }>({ xData: [], yData: [] });
 
-
+  const graphRef = useRef<HTMLDivElement>(null); // Create a ref for the graph container
 
   const fetchVehicles = async () => {
     const authToken = sessionStorage.getItem("authToken");
@@ -86,9 +107,8 @@ export default function Datahistory() {
     "Voc",
     "Jerk",
     "Alcohol",
-    "AQI"
+    "AQI",
   ];
-
 
   const handleTabClick = (tab: TabKey) => {
     setActiveTab(tab);
@@ -99,11 +119,11 @@ export default function Datahistory() {
     if (selectedVehicle && activeTab) {
       const fromDate = document.getElementById("fromDate") as HTMLInputElement;
       const toDate = document.getElementById("toDate") as HTMLInputElement;
-  
+
       if (fromDate && toDate) {
         const startDate = fromDate.value;
         const endDate = toDate.value;
-  
+
         if (!startDate || !endDate) {
           setErrorMessage("Please enter both start and end dates.");
           setShowChart(false);
@@ -111,7 +131,7 @@ export default function Datahistory() {
         } else {
           setErrorMessage(null); // Clear error message if dates are provided
         }
-  
+
         let apiUrl = "";
         switch (activeTab) {
           case "Oxygen":
@@ -135,14 +155,15 @@ export default function Datahistory() {
           case "Alcohol":
             apiUrl = `https://24x7healthcare.live/dataHistory/getAlcohol?ambulanceId=${selectedVehicle}&startDate=${startDate}&endDate=${endDate}`;
             break;
-            case "AQI":
-              apiUrl = `https://24x7healthcare.live/dataHistory/getAqiIndex?ambulanceId=${selectedVehicle}&startDate=${startDate}&endDate=${endDate}`;
-              break;
+          case "AQI":
+            apiUrl = `https://24x7healthcare.live/dataHistory/getAqiIndex?ambulanceId=${selectedVehicle}&startDate=${startDate}&endDate=${endDate}`;
+            break;
           default:
             break;
         }
-  
+
         const authToken = sessionStorage.getItem("authToken");
+        setLoading(true); // Start loading
         fetch(apiUrl, {
           headers: {
             Authorization: `Bearer ${authToken}`,
@@ -151,87 +172,115 @@ export default function Datahistory() {
           .then((response) => response.json())
           .then((data) => {
             // console.log("Fetched data:", data);
-            const xData = data.result.map((item: any) => `${item.date} ${item.time}`);
+            const xData = data.result.map(
+              (item: any) => `${item.date} ${item.time}`
+            );
             const yData = data.result.map((item: any) => item.value);
             setChartData({ xData, yData });
             setShowChart(true);
+            setLoading(false); // End loading
+            setTimeout(() => {
+              graphRef.current?.scrollIntoView({ behavior: "smooth" }); // Scroll to the graph
+            }, 100);
           })
           .catch((error) => {
             // console.error("Error fetching data:", error);
+            setLoading(false); // End loading on error
           });
       }
     }
   };
-  
 
   const renderForm = (tab: TabKey) => (
     <div className="mt-4 p-4 bg-white rounded shadow-md w-1/2 mx-auto">
-      <h2 className="text-lg font-bold mb-2">{tab} Data</h2>
-      <div className="mb-4">
-        <label
-          className="block text-gray-700 text-sm font-bold mb-2"
-          htmlFor="fromDate"
-        >
-          From:
-        </label>
-        <input
-          type="date"
-          id="fromDate"
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        />
+      <h2 className="text-lg font-bold mb-2">{tab} Data :</h2>
+      <div className="w-full flex gap-2">
+        <div className="mb-4 w-full">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="fromDate"
+          >
+            From:
+          </label>
+          <input
+            type="date"
+            id="fromDate"
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          />
+        </div>
+        <div className="mb-4 w-full">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="toDate"
+          >
+            To:
+          </label>
+          <input
+            type="date"
+            id="toDate"
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          />
+        </div>
       </div>
-      <div className="mb-4">
-        <label
-          className="block text-gray-700 text-sm font-bold mb-2"
-          htmlFor="toDate"
-        >
-          To:
-        </label>
-        <input
-          type="date"
-          id="toDate"
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        />
-      </div>
+
       {errorMessage && (
         <p className="text-red-500 text-base italic mb-8">{errorMessage}</p>
       )}
       <div className="w-full center">
         <button
           type="submit"
-          className="text-white bg-blue-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mb-2 "
+          className="text-white bg-blue-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
           onClick={handleSubmit}
         >
-          Submit
+          View Data
         </button>
       </div>
     </div>
   );
 
+  const determineDotStyle = (value: number, tab: TabKey) => {
+    const { low, high, lowColor, highColor } = tabRanges[tab];
+    if (value < low) {
+      return lowColor;
+    }
+    if (value > high) {
+      return highColor;
+    }
+    return "#01339f";
+  };
+
+  const CustomDot = (props: any) => {
+    const { cx, cy, value } = props;
+    const fill = determineDotStyle(value, activeTab!);
+    return <circle cx={cx} cy={cy} r={5} fill={fill} stroke="none" />;
+  };
+
   const renderChart = () => {
     if (loading) {
       return (
         <div className="mt-4 p-4 bg-white rounded shadow-md mx-auto text-center">
-          <p className="text-lg font-bold text-blue-500">Loading Chart...</p>
+          <Loader />
         </div>
       );
     }
-  
+
     if (!showChart) {
       return (
-        <div className="mt-4 p-4 bg-white rounded shadow-md mx-auto text-center">
-          <p className="text-lg font-bold text-red-500">Please Select a Vehicle & date range to view the data.</p>
+        <div className="w-[70%] mt-4 p-2 bg-white rounded shadow-md mx-auto text-center">
+          <p className="w-full text-lg font-bold text-black">
+            Please Select a Vehicle & date range to view the data.
+          </p>
         </div>
       );
     }
-  
+
     const data = chartData.xData.map((x, index) => ({
       date: x,
       value: chartData.yData[index],
     }));
-  
+
     return (
-      <div className="mt-4 w-[100%] h-[80%] p-4 center flex flex-col bg-white rounded shadow-md mx-auto">
+      <div ref={graphRef} className="mt-4 w-[100%] h-[80%] p-4 center flex flex-col bg-white rounded shadow-md mx-auto">
         <h2 className="text-lg font-bold mb-2 text-center">
           Line Chart for {activeTab}
         </h2>
@@ -243,83 +292,95 @@ export default function Datahistory() {
           className=""
         >
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis 
-    dataKey="date" 
-    label={{ 
-      value: "Date & Time", 
-      position: "insideBottomRight", 
-      offset: 0, 
-      dy: 15, 
-      style: { fill: 'black' }  // Set text color for X-axis label
-    }} 
-  />
-  <YAxis 
-    label={{ 
-      value: activeTab, 
-      angle: -90, 
-      position: "insideLeft", 
-      style: { fill: 'black' },
-      dx: -10,  // Set text color for Y-axis label
-    }} 
-  />
+          <XAxis
+            dataKey="date"
+            label={{
+              value: "Date & Time",
+              position: "insideBottomRight",
+              offset: 0,
+              dy: 15,
+              style: { fill: "black" },
+            }}
+          />
+          <YAxis
+            label={{
+              value: activeTab,
+              angle: -90,
+              position: "insideLeft",
+              style: { fill: "black" },
+              dx: -10,
+            }}
+          />
           <Tooltip />
           <Legend />
-          <Line type="monotone" dataKey="value" stroke="#01339f" yAxisId={0} />
+          <Line
+            type="monotone"
+            dataKey="value"
+            stroke="#01339f"
+            yAxisId={0}
+            dot={<CustomDot />}
+          />
         </LineChart>
       </div>
     );
   };
-  
-
-
 
   return (
-    <section className="h-screen">
-      <div className="flex flex-col items-center mt-[2%] p-2">
-        <div className="mb-4 w-1/2">
+    <section className="h-screen bg-zinc-100">
+      <div className="flex flex-col items-center pt-[2%] p-2">
+        <div className="mb-4 w-[80%]">
           <label
-            className="block text-gray-700 text-sm font-bold mb-2"
+            className="block text-gray-700  text-sm font-bold mb-2"
             htmlFor="vehicleSelect"
           >
             Select Vehicle:
+
           </label>
-          <select
-            id="vehicleSelect"
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            onChange={(e) => {
-              setSelectedVehicle(e.target.value);
-              setActiveTab(null);
-              setShowChart(false);
-            }}
-            value={selectedVehicle || ""}
-          >
-            <option value="" disabled>
-              Select a vehicle
-            </option>
-            {vehicleslist.map((vehicle: any) => (
-              <option key={vehicle.ambulanceId} value={vehicle.ambulanceId}>
-                {vehicle.ambulanceId}
-              </option>
-            ))}
-          </select>
+          <div className="relative">
+  <select
+    id="vehicleSelect"
+    className="block appearance-none w-full bg-white border hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+    onChange={(e) => {
+      setSelectedVehicle(e.target.value);
+      setActiveTab(null);
+      setShowChart(false);
+    }}
+    value={selectedVehicle || ""}
+  >
+    <option value="" disabled>
+      Select a vehicle
+    </option>
+    {vehicleslist.map((vehicle: any) => (
+      <option key={vehicle.ambulanceId} value={vehicle.ambulanceId}>
+        {vehicle.ambulanceId}
+      </option>
+    ))}
+  </select>
+  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+    <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+      <path d="M7 10l5 5 5-5H7z"/>
+    </svg>
+  </div>
+</div>
+
         </div>
         {selectedVehicle && (
-          <div className="flex flex-row gap-4 justify-center items-center mt-4">
+          <div className="grid grid-cols-4 gap-2 justify-center items-center mt-2">
             {tabs.map((tab) => {
               const Icon = tabIcons[tab];
               return (
-                <div key={""}>
+                <div key={tab}>
                   <button
                     key={tab}
                     type="button"
-                    className={`flex items-center gap-2 text-white bg-[#01339F] hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-md text-sm px-4 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900 ${
+                    className={`w-full gap-1 center flex items-center text-white bg-[#01339F] hover:bg-green-500 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-md text-base px-2 py-2.5 text-center mb-2   ${
                       activeTab === tab ? "bg-red-600 " : ""
                     }`}
                     onClick={() => handleTabClick(tab)}
                   >
                     <Icon className="w-6 h-6" />
                     {tab}
-                  </button >
+                  </button>
                 </div>
               );
             })}

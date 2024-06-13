@@ -30,10 +30,10 @@ export default function SAmaintenance() {
   // console.log("maintenanceData",maintenanceData)
 
   return (
-    <section className="h-screen">
+    <section className="h-full bg-zinc-100">
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
         <table className="min-w-[99%] divide-y divide-gray-200 m-1 hidden md:table">
-          <thead className="bg-[#b2c1e0]">
+          <thead className="bg-[#bfcde7]">
             <tr>
               <th
                 scope="col"
@@ -64,16 +64,17 @@ export default function SAmaintenance() {
           <tbody>
             {maintenanceData && (maintenanceData as any).length > 0 ? (
               (maintenanceData as any).map((item: any, index: any) => (
-                <tr
-                  key={index}
-                  className="border-b border-gray-200 dark:border-gray-700"
-                >
-                  <td className="px-6 py-4 text-center">{item.slNo}</td>
-                  <td className="px-6 py-4 font-medium text-center text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800">
+                <tr key={index} className="border-b border-gray-200 ">
+                  <td className="px-6 py-4  text-center text-gray-900 whitespace-nowrap bg-WHITE dark:text-white dark:bg-gray-800">
+                  {index + 1}
+                  </td>
+                  <td className="px-6 py-4  text-center text-gray-900 whitespace-nowrap bg-WHITE dark:text-white dark:bg-gray-800">
                     {item.ambulance_no}
                   </td>
-                  <td className="px-6 py-4 text-center">{item.remarks}</td>
-                  <td className="px-6 py-4 text-center bg-gray-50 dark:bg-gray-800">
+                  <td className="px-6 py-4  text-center text-gray-900 whitespace-nowrap bg-WHITE dark:text-white dark:bg-gray-800">
+                    {item.remarks}
+                  </td>
+                  <td className="px-6 py-4  text-center text-gray-900 whitespace-nowrap bg-WHITE dark:text-white dark:bg-gray-800">
                     {item.region}
                   </td>
                 </tr>

@@ -9,8 +9,8 @@ import Spo2Graph from "./Spo2Graph";
 
 export default function SAAboutus() {
   return (
-    <div className="h-screen w-full ">
-      <div className="w-full flex gap-3 center justify-end py-2 px-2">
+    <div className="h-full w-full bg-zinc-100 py-1 ">
+      <div className="w-full flex gap-3 center justify-end py-0 px-2">
         
         <button className="flex items-center gap-2 text-white bg-[#01339F] hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-md text-sm px-4 py-2.5 text-center mb-2 dark:bg-purple-600  ">
           FAQ
@@ -33,7 +33,7 @@ export default function SAAboutus() {
             alt=""
             className="w-auto h-28 cursor-pointer block mx-auto"
           />
-          <p className="text-base md:text-lg text-center font-medium  text-gray-600">
+          <p className="text-base md:text-lg text-center font-medium  text-gray-900">
             Elevate the standard of ambulance care with our cutting-edge AMTeK,
             a comprehensive Ambulance Technology Kit meticulously designed to
             monitor and enhance the quality of emergency medical services.
