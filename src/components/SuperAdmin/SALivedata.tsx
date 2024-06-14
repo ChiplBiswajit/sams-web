@@ -236,39 +236,37 @@ export default function SALivedata() {
     }
   };
 
-  // useEffect(() => {
-  //   const usernamedata = sessionStorage.getItem("userid");
-  //   console.log(usernamedata)
-  //   storeObjByKey("obj", usernamedata);
-  //   socketServcies.initializeSocket();
-  //   socketServcies.on("received_admin_data", (msg: any) => {
-  //     // console.log("jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj", msg);
-  //     setRes(msg);
-  //     setTimeout(() => {
-  //       setLoading(false);
-  //       setModalVisible(false);
-  //     }, 10000);
-  //   });
-  // }, []);
-
   useEffect(() => {
     const usernamedata = sessionStorage.getItem("userid") || "";
-    storeObjByKey("obj", usernamedata);
-
-    socketServcies.on("received_admin_data", handleReceivedAdminData);
+    // console.log("aaaaaaaaaaaaaaa",usernamedata)
+    storeObjByKey("obj",);
+    socketServcies.initializeSocket();
     socketServcies.emit("emit data", usernamedata);
-
-    return () => {
-      socketServcies.removeListener("received_admin_data");
-    };
+    socketServcies.on("received_admin_data", (msg: any) => {
+      console.log("jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj", msg);
+      setRes(msg);
+      setTimeout(() => {
+        setLoading(false);
+        setModalVisible(false);
+      }, 10000);
+    });
   }, []);
 
-  const handleReceivedAdminData = (msg: any) => {
-    setRes(msg);
-    setTimeout(() => {
-      setLoading(false);
-      setModalVisible(false);
-    }, 10000);
+//   useEffect(() => {
+//     const usernamedata = sessionStorage.getItem("userid") || "";
+//     storeObjByKey("obj", usernamedata);
+// console.log(usernamedata)
+//     socketServcies.on("received_admin_data", handleReceivedAdminData);
+//     socketServcies.emit("emit data", usernamedata);
+
+//     return () => {
+//       socketServcies.removeListener("received_admin_data");
+//     };
+//   }, []);
+
+  const disconnectSocket = () => {
+    // socketServcies.disconnect(); // Disconnect the socket
+    console.log("socket close")
   };
 
 
@@ -522,7 +520,6 @@ export default function SALivedata() {
                     console.log("222222222222222222222222222", alcoholData);
                     setAmbulanceID(item?.ambulanceId);
                     socketServcies.emit("emit data", item?.ambulanceId);
-
                   }}
                 >
                   <div className="bg-[#d7eaf8]  shadow-lg rounded-xl w-[100%] mx-auto">
@@ -666,8 +663,17 @@ export default function SALivedata() {
                         <div className="w-full bg-[#a9cce2] py-2 px-2 flex  shadow-md justify-center items-center rounded-md">
                           <div className=" rounded-full bg-[#8a97a8] border border-white grid items-center justify-center">
                             <img
-                              src={alcoholData && ((alcoholData[item.ambulanceId] as any)?.aqi?.temp) ?
-                                alcoholData && ((alcoholData[item.ambulanceId] as any)?.aqi?.temp > 37 ? tempred.src : tempblue.src) : tempgray.src}
+                              src={
+                                alcoholData &&
+                                (alcoholData[item.ambulanceId] as any)?.aqi
+                                  ?.temp
+                                  ? alcoholData &&
+                                    ((alcoholData[item.ambulanceId] as any)?.aqi
+                                      ?.temp > 37
+                                      ? tempred.src
+                                      : tempblue.src)
+                                  : tempgray.src
+                              }
                               alt="Co2 Image"
                               className="h-12 w-12"
                             />
@@ -676,8 +682,17 @@ export default function SALivedata() {
                         <div className="w-full bg-[#a9cce2] py-2 px-2 flex  shadow-md justify-center items-center rounded-md">
                           <div className=" rounded-full bg-[#8a97a8] border border-white grid items-center justify-center">
                             <img
-                              src={alcoholData && ((alcoholData[item.ambulanceId] as any)?.aqi?.humidity) ?
-                                alcoholData && ((alcoholData[item.ambulanceId] as any)?.aqi?.humidity > 70 ? humidityred.src : humidityblue.src) : humiditygray.src}
+                              src={
+                                alcoholData &&
+                                (alcoholData[item.ambulanceId] as any)?.aqi
+                                  ?.humidity
+                                  ? alcoholData &&
+                                    ((alcoholData[item.ambulanceId] as any)?.aqi
+                                      ?.humidity > 70
+                                      ? humidityred.src
+                                      : humidityblue.src)
+                                  : humiditygray.src
+                              }
                               alt="Co2 Image"
                               className="h-12 w-12"
                             />
@@ -686,8 +701,17 @@ export default function SALivedata() {
                         <div className="w-full bg-[#a9cce2] py-2 px-2 flex  shadow-md justify-center items-center rounded-md">
                           <div className="rounded-full bg-[#8a97a8] border border-white grid items-center justify-center">
                             <img
-                              src={alcoholData && ((alcoholData[item.ambulanceId] as any)?.aqi?.airIndex) ?
-                                alcoholData && ((alcoholData[item.ambulanceId] as any)?.aqi?.airIndex > 2 ? airqulityred.src : airqulityblue.src) : airqulitygray.src}
+                              src={
+                                alcoholData &&
+                                (alcoholData[item.ambulanceId] as any)?.aqi
+                                  ?.airIndex
+                                  ? alcoholData &&
+                                    ((alcoholData[item.ambulanceId] as any)?.aqi
+                                      ?.airIndex > 2
+                                      ? airqulityred.src
+                                      : airqulityblue.src)
+                                  : airqulitygray.src
+                              }
                               alt="Co2 Image"
                               className="h-12 w-12"
                             />
@@ -707,7 +731,10 @@ export default function SALivedata() {
               <span className="w-full  mb-2 flex  justify-between center">
                 <span
                   className="w-8 h-7 rounded-full center bg-[#7AAEC6] cursor-pointer"
-                  onClick={closeOffCanvas}
+                  onClick={() => {
+                    closeOffCanvas(); // Close the off-canvas
+                    disconnectSocket(); // Disconnect the socket
+                  }}
                 >
                   <ImCross className="text-white text-sm" />
                 </span>

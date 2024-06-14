@@ -13,6 +13,7 @@ import { superadminprofile } from "@/src/assets/SuperAdmin/dashboard";
 import SADashboard from "@/src/components/SuperAdmin/SaDashboard";
 import { reportamtek } from "@/src/assets/SuperAdmin/Sidebar/Index";
 import { GoAlertFill } from "react-icons/go";
+import socketServcies from '@/src/utils/Socket/socketService'; // Adjust the import path as per your setup
 
 export default function Header({ open, setOpen }: any) {
   const [isOpen, setIsOpen] = useState(false);
@@ -49,6 +50,9 @@ export default function Header({ open, setOpen }: any) {
       });
 
       if (confirmLogout.isConfirmed) {
+
+        socketServcies.disconnect();
+
         // Remove items from session storage
         sessionStorage.removeItem("authToken");
         sessionStorage.removeItem("ProfileData");
@@ -72,6 +76,7 @@ export default function Header({ open, setOpen }: any) {
 
         // Navigate to login page
         router.push("./login");
+
       }
     } catch (error) {
       Swal.fire({
@@ -116,10 +121,10 @@ export default function Header({ open, setOpen }: any) {
 
   useEffect(() => {
     fetchNotificationData();
-    console.log(
-      "notificationsssssssssssssssssssssssss List :::::::::::::::::",
-      notifications
-    );
+    // console.log(
+    //   // "notificationsssssssssssssssssssssssss List :::::::::::::::::",
+    //   notifications
+    // );
   }, []);
 
   const filteredNotifications = notifications.filter((notification) => {

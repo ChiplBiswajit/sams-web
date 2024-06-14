@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import {
   GoogleMap,
   Marker,
   InfoWindow,
   useJsApiLoader,
-} from '@react-google-maps/api';
-import Loader from '../Loader';
-import { useSocket } from '@/src/utils/Socket/SocketContext';
+} from "@react-google-maps/api";
+import Loader from "../Loader";
+import socketServcies from "@/src/utils/Socket/socketService";
+
 
 interface Message {
   atoms?: Array<{
@@ -19,8 +20,8 @@ interface Message {
 }
 
 const containerStyle = {
-  height: '100%',
-  width: '100%',
+  height: "100%",
+  width: "100%",
 };
 
 const defaultCenter = {
@@ -32,14 +33,14 @@ const mapOptions = {
   disableDefaultUI: true,
   styles: [
     {
-      featureType: 'poi',
-      elementType: 'labels',
-      stylers: [{ visibility: 'off' }],
+      featureType: "poi",
+      elementType: "labels",
+      stylers: [{ visibility: "off" }],
     },
     {
-      featureType: 'road',
-      elementType: 'labels',
-      stylers: [{ visibility: 'off' }],
+      featureType: "road",
+      elementType: "labels",
+      stylers: [{ visibility: "off" }],
     },
   ],
 };
@@ -49,33 +50,35 @@ export default function SALocation() {
   const [selectedMarker, setSelectedMarker] = useState<Message | null>(null);
   const [map, setMap] = useState<google.maps.Map | null>(null);
   const [loading, setLoading] = useState(true);
-  const socket = useSocket();
 
   const handleAllLocation = (msg: any) => {
     setRes(msg);
     setLoading(false);
   };
-
+  
   useEffect(() => {
-    if (!socket) return;
-
-    const usernamedata = sessionStorage.getItem('userid') || '';
-    socket.emit('emit data', usernamedata);
-    socket.on('All_Location', handleAllLocation);
-
-    return () => {
-      socket.removeListener('All_Location');
-    };
-  }, [socket]);
+    const usernamedata = sessionStorage.getItem("userid") || ""; // Provide a default value
+    socketServcies.initializeSocket();
+    socketServcies.emit("emit data", usernamedata);
+    socketServcies.on("All_Location", (msg: any) => {
+      console.log("usernamedataaaaaaaaaaaaaa", usernamedata);
+      setRes(msg);
+      setLoading(false); // Data has been received, set loading to false
+      });
+  }, []);
 
   const { isLoaded } = useJsApiLoader({
-    id: 'google-map-script',
-    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || '',
+    id: "google-map-script",
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "",
   });
 
   const handleMarkerClick = (marker: Message) => {
     setSelectedMarker(marker);
-    if (map && marker.latitude !== undefined && marker.longitude !== undefined) {
+    if (
+      map &&
+      marker.latitude !== undefined &&
+      marker.longitude !== undefined
+    ) {
       const newPosition = {
         lat: marker.latitude,
         lng: marker.longitude,
@@ -86,7 +89,7 @@ export default function SALocation() {
   };
 
   return isLoaded ? (
-    <div className='h-screen w-full'>
+    <div className="h-screen w-full">
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={defaultCenter}
@@ -98,7 +101,7 @@ export default function SALocation() {
           <Marker
             key={marker.ambulanceId || `${marker.latitude}-${marker.longitude}`}
             icon={{
-              url: '/gps.png',
+              url: "/gps.png",
               scaledSize: { width: 60, height: 60 } as google.maps.Size,
             }}
             position={{
@@ -117,7 +120,7 @@ export default function SALocation() {
             }}
             onCloseClick={() => setSelectedMarker(null)}
           >
-            <div className='font-semibold text-sm'>
+            <div className="font-semibold text-sm">
               {selectedMarker.ambulanceId}
             </div>
           </InfoWindow>

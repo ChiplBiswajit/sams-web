@@ -47,16 +47,18 @@ class WSService {
       const storedData = await getObjByKey("obj");
       console.log("Retrieved data:", storedData);
       stringToSend = storedData?.ambulanceId ?? storedData;
-      console.log("String to send:", stringToSend);
+      // console.log("String to send:", stringToSend);
     } catch (error) {
       console.error("Error retrieving data:", error);
     }
   };
 
+
+
   emitStringOnceConnected = async (): Promise<void> => {
-    await this.retrieveData();
+    // await this.retrieveData();
     if (this.socket) {
-      this.socket.emit("emit data");
+      this.socket.emit("emit data", stringToSend);
     } else {
       console.error("Socket is not initialized.");
     }
@@ -86,6 +88,9 @@ class WSService {
     }
   }
 }
+
+console.log("callll");
+
 
 const socketServices = new WSService();
 

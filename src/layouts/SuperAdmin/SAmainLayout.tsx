@@ -4,7 +4,6 @@ import Sidebar from "./Sidebar";
 import Loader from "@/src/components/Loader";
 import { Amteklogo } from "@/src/assets/SuperAdmin/header";
 import Responsivesidebar from "./Responsivesidebar";
-import { SocketProvider } from "@/src/utils/Socket/SocketContext";
 
 type prop = {
   title?: string;
@@ -43,7 +42,7 @@ export default function SAmainLayout({ children, title = "AMTeK" }: prop) {
         </Responsivesidebar> */}
 
           <Sidebar>
-              <>{children}</>
+            <>{children}</>
           </Sidebar>
         </>
       )}
