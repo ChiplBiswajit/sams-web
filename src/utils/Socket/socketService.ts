@@ -1,7 +1,9 @@
 import { io, Socket } from "socket.io-client";
 import { getObjByKey } from "./storage";
 
-const SOCKET_URL = "https://0r4mtgsn-8004.inc1.devtunnels.ms/";
+// const SOCKET_URL = "https://0r4mtgsn-8004.inc1.devtunnels.ms/";
+const SOCKET_URL = "https://24x7healthcare.live";
+
 let stringToSend = "";
 
 class WSService {
@@ -89,7 +91,7 @@ class WSService {
   }
 }
 
-console.log("callll");
+// console.log("callll");
 
 
 const socketServices = new WSService();

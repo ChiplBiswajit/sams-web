@@ -65,16 +65,16 @@ export default function SAmaintenance() {
             {maintenanceData && (maintenanceData as any).length > 0 ? (
               (maintenanceData as any).map((item: any, index: any) => (
                 <tr key={index} className="border-b border-gray-200 ">
-                  <td className="px-6 py-4  text-center text-gray-900 whitespace-nowrap bg-WHITE dark:text-white dark:bg-gray-800">
+                  <td className="px-6 py-4  text-center text-gray-900 whitespace-nowrap bg-WHITE ">
                   {index + 1}
                   </td>
-                  <td className="px-6 py-4  text-center text-gray-900 whitespace-nowrap bg-WHITE dark:text-white dark:bg-gray-800">
+                  <td className="px-6 py-4  text-center text-gray-900 whitespace-nowrap bg-WHITE ">
                     {item.ambulance_no}
                   </td>
-                  <td className="px-6 py-4  text-center text-gray-900 whitespace-nowrap bg-WHITE dark:text-white dark:bg-gray-800">
+                  <td className="px-6 py-4  text-center text-gray-900 whitespace-nowrap bg-WHITE">
                     {item.remarks}
                   </td>
-                  <td className="px-6 py-4  text-center text-gray-900 whitespace-nowrap bg-WHITE dark:text-white dark:bg-gray-800">
+                  <td className="px-6 py-4  text-center text-gray-900 whitespace-nowrap bg-WHITE ">
                     {item.region}
                   </td>
                 </tr>

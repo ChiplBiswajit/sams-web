@@ -13,7 +13,10 @@ import { superadminprofile } from "@/src/assets/SuperAdmin/dashboard";
 import SADashboard from "@/src/components/SuperAdmin/SaDashboard";
 import { reportamtek } from "@/src/assets/SuperAdmin/Sidebar/Index";
 import { GoAlertFill } from "react-icons/go";
-import socketServcies from '@/src/utils/Socket/socketService'; // Adjust the import path as per your setup
+import socketServcies from "@/src/utils/Socket/socketService"; // Adjust the import path as per your setup
+import { AiOutlineMenuFold } from "react-icons/ai";
+import { AiOutlineMenuUnfold } from "react-icons/ai";
+import Responsivesidebar from "./Responsivesidebar";
 
 export default function Header({ open, setOpen }: any) {
   const [isOpen, setIsOpen] = useState(false);
@@ -50,33 +53,42 @@ export default function Header({ open, setOpen }: any) {
       });
 
       if (confirmLogout.isConfirmed) {
-
         socketServcies.disconnect();
 
         // Remove items from session storage
-        sessionStorage.removeItem("authToken");
-        sessionStorage.removeItem("ProfileData");
-        sessionStorage.removeItem("userid");
-
-        console.log("Attempting to remove all session items");
+        sessionStorage.clear();
+        localStorage.clear();
+        // console.log("Attempting to remove all session items");
 
         // Check if items were successfully removed
         const authToken = sessionStorage.getItem("authToken");
         const profileData = sessionStorage.getItem("ProfileData");
         const userId = sessionStorage.getItem("userid");
+        const adminList = sessionStorage.getItem("adminList");
+        const cameraTopic = sessionStorage.getItem("cameraTopic");
+        const LSauthToken = localStorage.getItem("LSauthToken");
 
-        if (!authToken && !profileData && !userId) {
-          console.log("All session items successfully removed");
+        if (
+          !authToken &&
+          !profileData &&
+          !userId &&
+          !LSauthToken &&
+          !cameraTopic &&
+          !adminList
+        ) {
+          // console.log("All session items successfully removed");
         } else {
-          console.log("Failed to remove some session items");
-          if (authToken) console.log("authToken was not removed");
-          if (profileData) console.log("ProfileData was not removed");
-          if (userId) console.log("userid was not removed");
+          // console.log("Failed to remove some session items");
+          // if (authToken) console.log("authToken was not removed");
+          // if (profileData) console.log("ProfileData was not removed");
+          // if (userId) console.log("userid was not removed");
+          // if (LSauthToken) console.log("LSauthToken was not removed");
+          // if (cameraTopic) console.log("cameraTopic was not removed");
+          // if (adminList) console.log("adminList was not removed");
         }
 
         // Navigate to login page
-        router.push("./login");
-
+        router.push("./Login");
       }
     } catch (error) {
       Swal.fire({
@@ -89,14 +101,13 @@ export default function Header({ open, setOpen }: any) {
   };
 
   const usernamedata = sessionStorage.getItem("userid");
-
   const [notifications, setNotifications] = useState([]);
   const [notificationLength, setNotificationLength] = useState(0);
   const fetchNotificationData = async () => {
     try {
       const authToken = sessionStorage.getItem("authToken");
       const API_URL =
-        "https://0r4mtgsn-8004.inc1.devtunnels.ms/notification/get?notificationType=All";
+        "https://24x7healthcare.live/notification/get?notificationType=All";
       const response = await fetch(API_URL, {
         method: "GET",
         headers: {
@@ -121,10 +132,6 @@ export default function Header({ open, setOpen }: any) {
 
   useEffect(() => {
     fetchNotificationData();
-    // console.log(
-    //   // "notificationsssssssssssssssssssssssss List :::::::::::::::::",
-    //   notifications
-    // );
   }, []);
 
   const filteredNotifications = notifications.filter((notification) => {
@@ -133,6 +140,12 @@ export default function Header({ open, setOpen }: any) {
     }
     return (notification as any).notification_type === selectedFilter;
   });
+
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
 
   return (
     <section className="fixed top-0 w-full z-50">
@@ -164,10 +177,10 @@ export default function Header({ open, setOpen }: any) {
             href={`https://smartambulance.in/allReport?adminId=${usernamedata}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex center cursor-pointer bg-[#A9CCE2] rounded-md gap-1 p-2"
+            className="flex center cursor-pointer bg-[#A9CCE2] rounded-md gap-0 p-2"
           >
             <img src={reportamtek.src} className="h-5 w-5" alt="" />
-            <h3 className="text-black md:text-base text-xs font-bold">
+            <h3 className="text-black md:text-base text-[9px] font-bold">
               {" "}
               All Report
             </h3>
@@ -182,7 +195,7 @@ export default function Header({ open, setOpen }: any) {
             <IoIosLogOut className="text-black text-lg font-bold" />
           </span>
           <span
-            className="h-10 w-10 flex center bg-[#A9CCE2] rounded-full"
+            className="h-10 w-10  md:flex  center bg-[#A9CCE2] rounded-full"
             onClick={handleFullscreen}
           >
             {isFullscreen ? (
@@ -286,7 +299,7 @@ export default function Header({ open, setOpen }: any) {
           )}
           {/* //Notification end */}
           <div
-            className="w-10 h-10 center bg-[#A9CCE2] rounded-full"
+            className="w-10 h-10 center  hidden  md:mr-0 mr-2 md:flex bg-[#A9CCE2] rounded-full"
             onClick={() => {
               router.push("./profile");
             }}
@@ -294,9 +307,20 @@ export default function Header({ open, setOpen }: any) {
             <img
               src={superadminprofile.src}
               alt="loading..."
-              className="w-9 h-9"
+              className="w-9 h-9 "
             />
           </div>
+          <span
+            className="w-10 h-10 center flex md:hidden items-center cursor-pointer   md:mr-0 mr-2  bg-[#A9CCE2] rounded-full"
+            onClick={toggleSidebar}
+          >
+            {sidebarOpen ? (
+              <AiOutlineMenuFold className="text-black text-2xl" />
+            ) : (
+              <AiOutlineMenuUnfold className="text-black text-2xl" />
+            )}
+            <Responsivesidebar open={sidebarOpen} setOpen={setSidebarOpen} />
+          </span>
         </div>
       </div>
     </section>

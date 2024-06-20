@@ -25,12 +25,12 @@ export default function EcgGraph() {
       }
       // if (patientId === "1234" && patientData && patientData?.ecg?.wave2) {
       //   const { wave2 } = patientData?.ecg;
-      //   // console.log("wave2", wave2);
+      //    console.log("wave2", wave2);
       //   setecgdata2((prevData) => [...prevData, wave2]);
       // }
       // if (patientId === "1234" && patientData && patientData?.ecg?.wave3) {
       //   const { wave3 } = patientData?.ecg;
-      //   // console.log("wave3", wave3);
+      //   console.log("wave3", wave3);
       //   setecgdata3((prevData) => [...prevData, wave3]);
       // }
     });

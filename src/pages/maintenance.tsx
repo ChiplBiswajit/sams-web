@@ -1,15 +1,15 @@
 import React from 'react'
 import SAmainLayout from '../layouts/SuperAdmin/SAmainLayout'
-import ProtectedRoute from './ProtectedRoute'
 import SAmaintenance from '../components/SuperAdmin/SAmaintenance'
+import withAuth from '../utils/ProtectedRoute/withAuth';
 
-export default function maintenance() {
+ function maintenance() {
     return (
-        <ProtectedRoute>
             <SAmainLayout>
                 <SAmaintenance />
             </SAmainLayout>
-        </ProtectedRoute>
 
     )
 }
+export default withAuth(maintenance);
+

@@ -243,7 +243,7 @@ export default function SALivedata() {
     socketServcies.initializeSocket();
     socketServcies.emit("emit data", usernamedata);
     socketServcies.on("received_admin_data", (msg: any) => {
-      console.log("jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj", msg);
+      // console.log("jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj", msg);
       setRes(msg);
       setTimeout(() => {
         setLoading(false);
@@ -324,7 +324,7 @@ export default function SALivedata() {
 
   return (
     <div className="bg-zinc-100 h-auto">
-      <div className="flex w-full justify-between px-6 py-3 gap-5">
+      <div className="flex md:flex-row flex-col  w-full justify-between px-6 py-3 gap-5">
         <div>
           <div className="flex gap-3 pl-2">
             <div className="bg-[#A9CCE2] bg-opacity-60 px-2 py-2 rounded-md flex flex-col center">
@@ -491,8 +491,8 @@ export default function SALivedata() {
         </div>
       </div>
       {loading && <Loader />}
-      <section className=" md:w-[100%] flex flex-col    md:h-auto  pr-6 md:pt-2   ">
-        <div className="w-full  grid grid-cols-2 md:grid-cols-3  gap-0  center justify-center items-center">
+      <section className=" md:w-[100%] flex flex-col   md:h-auto  md:pr-6 md:pt-2 md:px-0 px-4 md:py-0 py-4    ">
+        <div className="w-full  grid grid-cols-1 md:grid-cols-3  md:gap-0 gap-3 center justify-center items-center">
           {ambulanceData &&
             ambulanceData?.map((item: any) => {
               const alcoholData = res.find(
@@ -522,7 +522,7 @@ export default function SALivedata() {
                     socketServcies.emit("emit data", item?.ambulanceId);
                   }}
                 >
-                  <div className="bg-[#d7eaf8]  shadow-lg rounded-xl w-[100%] mx-auto">
+                  <div className="bg-[#d7eaf8]   shadow-lg rounded-xl w-[100%] mx-auto">
                     <div className="bg-[#7aaec6] text-center p-0 rounded-t-xl ">
                       <span className="flex w-full center px-1">
                         {/* <span className="flex center">
@@ -583,9 +583,9 @@ export default function SALivedata() {
                         </span>
                       </div>
                     </div>
-                    <div className="flex flex-col gap-2 p-2">
+                    <div className="flex flex-col rounded-b-xl bg-[#a9cce2] gap-2 p-2">
                       <div className="w-full flex justify-center gap-2">
-                        <div className=" w-full bg-[#a9cce2] py-2 flex  shadow-md  justify-center items-center gap-2 rounded-md">
+                        <div className=" w-full bg-[#d7eaf8] py-2 flex  shadow-md  justify-center items-center gap-2 rounded-md">
                           <div className=" rounded-full bg-[#8a97a8] border border-white grid items-center justify-center">
                             <img
                               src={
@@ -627,7 +627,7 @@ export default function SALivedata() {
                             </p>
                           )}
                         </div>
-                        <div className="w-full bg-[#a9cce2] py-2 flex   shadow-md justify-center items-center gap-2 rounded-md">
+                        <div className="w-full bg-[#d7eaf8] py-2 flex   shadow-md justify-center items-center gap-2 rounded-md">
                           <div className="rounded-full bg-[#8a97a8] border border-white grid items-center justify-center">
                             <img
                               src={
@@ -660,7 +660,7 @@ export default function SALivedata() {
                         </div>
                       </div>
                       <div className="w-full flex justify-center gap-2">
-                        <div className="w-full bg-[#a9cce2] py-2 px-2 flex  shadow-md justify-center items-center rounded-md">
+                        <div className="w-full bg-[#d7eaf8] py-2 px-2 flex  shadow-md justify-center items-center rounded-md">
                           <div className=" rounded-full bg-[#8a97a8] border border-white grid items-center justify-center">
                             <img
                               src={
@@ -679,7 +679,7 @@ export default function SALivedata() {
                             />
                           </div>
                         </div>
-                        <div className="w-full bg-[#a9cce2] py-2 px-2 flex  shadow-md justify-center items-center rounded-md">
+                        <div className="w-full bg-[#d7eaf8] py-2 px-2 flex  shadow-md justify-center items-center rounded-md">
                           <div className=" rounded-full bg-[#8a97a8] border border-white grid items-center justify-center">
                             <img
                               src={
@@ -698,7 +698,7 @@ export default function SALivedata() {
                             />
                           </div>
                         </div>
-                        <div className="w-full bg-[#a9cce2] py-2 px-2 flex  shadow-md justify-center items-center rounded-md">
+                        <div className="w-full bg-[#d7eaf8] py-2 px-2 flex  shadow-md justify-center items-center rounded-md">
                           <div className="rounded-full bg-[#8a97a8] border border-white grid items-center justify-center">
                             <img
                               src={

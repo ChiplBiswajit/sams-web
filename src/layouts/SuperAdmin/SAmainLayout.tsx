@@ -37,10 +37,6 @@ export default function SAmainLayout({ children, title = "AMTeK" }: prop) {
         <Loader />
       ) : (
         <>
-          {/* <Responsivesidebar>
-        <>{children}</>
-        </Responsivesidebar> */}
-
           <Sidebar>
             <>{children}</>
           </Sidebar>

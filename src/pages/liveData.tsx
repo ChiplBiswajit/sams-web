@@ -1,14 +1,14 @@
 import SAmainLayout from "@/src/layouts/SuperAdmin/SAmainLayout";
 import React from "react";
 import SALivedata from "../components/SuperAdmin/SALivedata";
-import ProtectedRoute from "./ProtectedRoute";
+import withAuth from "../utils/ProtectedRoute/withAuth";
 
-export default function liveData() {
+ function liveData() {
   return (
-    <ProtectedRoute>
       <SAmainLayout>
         <SALivedata />
       </SAmainLayout>
-    </ProtectedRoute>
   );
 }
+
+export default withAuth(liveData);

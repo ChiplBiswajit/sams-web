@@ -229,7 +229,7 @@ export default function Datahistory() {
       <div className="w-full center">
         <button
           type="submit"
-          className="text-white bg-blue-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+          className="text-white bg-blue-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center "
           onClick={handleSubmit}
         >
           View Data
@@ -280,7 +280,10 @@ export default function Datahistory() {
     }));
 
     return (
-      <div ref={graphRef} className="mt-4 w-[100%] h-[80%] p-4 center flex flex-col bg-white rounded shadow-md mx-auto">
+      <div
+        ref={graphRef}
+        className="mt-4 w-[100%] h-[80%] p-4 center flex flex-col bg-white rounded shadow-md mx-auto"
+      >
         <h2 className="text-lg font-bold mb-2 text-center">
           Line Chart for {activeTab}
         </h2>
@@ -326,7 +329,7 @@ export default function Datahistory() {
   };
 
   return (
-    <section className="h-screen bg-zinc-100">
+    <section className="md:h-auto h-screen bg-zinc-100">
       <div className="flex flex-col items-center pt-[2%] p-2">
         <div className="mb-4 w-[80%]">
           <label
@@ -334,35 +337,37 @@ export default function Datahistory() {
             htmlFor="vehicleSelect"
           >
             Select Vehicle:
-
           </label>
           <div className="relative">
-  <select
-    id="vehicleSelect"
-    className="block appearance-none w-full bg-white border hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
-    onChange={(e) => {
-      setSelectedVehicle(e.target.value);
-      setActiveTab(null);
-      setShowChart(false);
-    }}
-    value={selectedVehicle || ""}
-  >
-    <option value="" disabled>
-      Select a vehicle
-    </option>
-    {vehicleslist.map((vehicle: any) => (
-      <option key={vehicle.ambulanceId} value={vehicle.ambulanceId}>
-        {vehicle.ambulanceId}
-      </option>
-    ))}
-  </select>
-  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-    <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-      <path d="M7 10l5 5 5-5H7z"/>
-    </svg>
-  </div>
-</div>
-
+            <select
+              id="vehicleSelect"
+              className="block appearance-none w-full bg-white border hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+              onChange={(e) => {
+                setSelectedVehicle(e.target.value);
+                setActiveTab(null);
+                setShowChart(false);
+              }}
+              value={selectedVehicle || ""}
+            >
+              <option value="" disabled>
+                Select a vehicle
+              </option>
+              {vehicleslist?.map((vehicle: any) => (
+                <option key={vehicle.ambulanceId} value={vehicle.ambulanceId}>
+                  {vehicle.ambulanceId}
+                </option>
+              ))}
+            </select>
+            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+              <svg
+                className="fill-current h-4 w-4"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+              >
+                <path d="M7 10l5 5 5-5H7z" />
+              </svg>
+            </div>
+          </div>
         </div>
         {selectedVehicle && (
           <div className="grid grid-cols-4 gap-2 justify-center items-center mt-2">

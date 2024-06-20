@@ -1,14 +1,14 @@
-import SAAboutus from '@/src/components/SuperAdmin/SAAboutus'
-import SAmainLayout from '@/src/layouts/SuperAdmin/SAmainLayout'
-import React from 'react'
-import ProtectedRoute from './ProtectedRoute'
+import SAAboutus from "@/src/components/SuperAdmin/SAAboutus";
+import SAmainLayout from "@/src/layouts/SuperAdmin/SAmainLayout";
+import React from "react";
+import withAuth from "../utils/ProtectedRoute/withAuth";
 
-export default function About_Us() {
+function About_Us() {
   return (
-    <ProtectedRoute>
-   <SAmainLayout>
-    <SAAboutus/>
-   </SAmainLayout>
-    </ProtectedRoute>
-  )
+    <SAmainLayout>
+      <SAAboutus />
+    </SAmainLayout>
+  );
 }
+
+export default withAuth(About_Us);

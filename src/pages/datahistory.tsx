@@ -1,15 +1,15 @@
 import React from 'react'
-import ProtectedRoute from './ProtectedRoute'
 import SAmainLayout from '../layouts/SuperAdmin/SAmainLayout'
 import Datahistory from '../components/SuperAdmin/Datahistory'
+import withAuth from '../utils/ProtectedRoute/withAuth'
 
-export default function datahistory() {
+ function datahistory() {
   return (
-    <ProtectedRoute>
         <SAmainLayout>
             <Datahistory/>
         </SAmainLayout>
-    </ProtectedRoute>
    
   )
 }
+
+export default withAuth(datahistory);

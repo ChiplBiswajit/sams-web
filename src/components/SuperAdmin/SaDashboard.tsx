@@ -252,7 +252,7 @@ export default function SADashboard() {
 
         {isFormVisible && (
           <div className="fixed z-[999] top-0 left-0 flex justify-center items-center w-full h-full bg-black bg-opacity-50">
-            <div className="bg-white p-2 rounded-lg md:w-[50%] md:h-[50%] overflow-y-auto">
+            <div className="bg-white p-2 rounded-lg  md:w-[50%] md:h-[50%] overflow-y-auto">
               <div className="flex justify-between">
                 <div className="flex w-full justify-center items-center gap-2 mb-3">
                   <h2 className="text-lg font-bold text-center">
@@ -269,8 +269,8 @@ export default function SADashboard() {
 
               <div className="p-4">
                 <div className="relative overflow-x-auto">
-                  <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                    <thead className="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
+                  <table className="w-full text-sm text-left rtl:text-right text-gray-500 ">
+                    <thead className="text-xs text-gray-700 uppercase bg-gray-100 ">
                       <tr>
                         <th
                           scope="col"
@@ -288,10 +288,10 @@ export default function SADashboard() {
                     </thead>
                     {viewalldistrict?.map((district: any, index: number) => (
                       <tbody key={index}>
-                        <tr className="bg-white text-center dark:bg-gray-800">
+                        <tr className="bg-white text-center ">
                           <th
                             scope="row"
-                            className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                            className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
                           >
                             {district?.district_name}
                           </th>
@@ -308,7 +308,7 @@ export default function SADashboard() {
           </div>
         )}
         <div className="w-full center md:gap-3 gap-10 p-1  h-full flex md:flex-row flex-col ">
-          <div className="w-full h-ful relative">
+          <div className="w-full h-full ">
             <div className="w-full flex flex-col">
               <div className="w-full center">
                 <div className="w-[100%] h-[54vh] bg-slate-100 rounded-xl ">

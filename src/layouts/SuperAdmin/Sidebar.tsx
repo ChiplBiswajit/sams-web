@@ -13,7 +13,6 @@ import { superadminprofile } from "@/src/assets/SuperAdmin/dashboard";
 import SADashboard from "@/src/components/SuperAdmin/SaDashboard";
 import Header from "./Header";
 import Link from "next/link";
-import ProtectedRoute from "@/src/pages/ProtectedRoute";
 import { BsMenuButtonWideFill } from "react-icons/bs";
 import { userprofile } from "@/src/assets/SuperAdmin/Sidebar/Index";
 
@@ -30,14 +29,14 @@ export default function Sidebar({ children, title = "Amtek" }: prop) {
   const usernamedata = sessionStorage.getItem("userid");
 
   return (
-    <div className=" lg:block">
+    <div className="  md:block">
       <Header setOpen={setOpen} />
-      <div className="flex h-full min-h-screen">
+      <div className=" md:flex h-full min-h-screen">
         {/* /////sidebar div//////////// */}
         <div
-          className={`bg-[#00264D] md:w-[15%] h-full ease-in-out transition-all duration-300 top-0 left-0`}
+          className={`hidden  md:flex bg-[#00264D] md:w-[15%] h-full ease-in-out transition-all duration-300 top-0 left-0`}
         >
-          <span className="fixed md:w-[15%] bg-[#00264D] inline-flex mt-12 flex-col items-start gap-3 p-0 h-[calc(100%-3rem)]">
+          <span className="fixed md:w-[15%]  bg-[#00264D] inline-flex mt-12 flex-col items-start gap-3 p-0 md:h-[calc(100%-3rem)]">
             <span
               className={`text-center flex-col w-full flex duration-300 center pt-5 text-black font-bold`}
             >
@@ -117,7 +116,7 @@ export default function Sidebar({ children, title = "Amtek" }: prop) {
 
         {/* /////children div//////////// */}
         <div className="flex-1 pt-14 bg-gray-100">
-          <ProtectedRoute>{children}</ProtectedRoute>
+          {children}
         </div>
         {/* /////children div//////////// */}
       </div>

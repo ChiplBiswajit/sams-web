@@ -12,10 +12,10 @@ export default function SAAboutus() {
     <div className="h-full w-full bg-zinc-100 py-1 ">
       <div className="w-full flex gap-3 center justify-end py-0 px-2">
         
-        <button className="flex items-center gap-2 text-white bg-[#01339F] hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-md text-sm px-4 py-2.5 text-center mb-2 dark:bg-purple-600  ">
+        <button className="flex items-center gap-2 text-white bg-[#01339F] hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-md text-sm px-4 py-2.5 text-center mb-2  ">
           FAQ
         </button>
-        <button className="flex items-center gap-2 text-white bg-[#01339F] hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-md text-sm px-4 py-2.5 text-center mb-2 dark:bg-purple-600">
+        <button className="flex items-center gap-2 text-white bg-[#01339F] hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-md text-sm px-4 py-2.5 text-center mb-2 ">
         Grievance
         </button>
       </div>

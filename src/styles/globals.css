@@ -726,4 +726,10 @@ body:hover {
   color: white; /* Set text color to white */
 }
 
+/* global.css or any css file */
+.no-scroll {
+  overflow: hidden;
+}
+
+
 

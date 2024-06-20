@@ -61,7 +61,7 @@ export default function SALocation() {
     socketServcies.initializeSocket();
     socketServcies.emit("emit data", usernamedata);
     socketServcies.on("All_Location", (msg: any) => {
-      console.log("usernamedataaaaaaaaaaaaaa", usernamedata);
+      // console.log("usernamedataaaaaaaaaaaaaa", usernamedata);
       setRes(msg);
       setLoading(false); // Data has been received, set loading to false
       });

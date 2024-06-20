@@ -6,8 +6,6 @@ import { Formik, Form, useField } from "formik";
 import { BG1, BG2, BG3, loginpageimg } from "../../assets/Login";
 import { MdVisibilityOff, MdVisibility } from "react-icons/md";
 import Loader from "../Loader";
-import { useSetRecoilState } from "recoil"; // Import Recoil components
-import { authState } from "../../utils/Recoil/authState"; // Import your Recoil atom for auth state
 import {
   FilledInput,
   FormControl,
@@ -83,17 +81,16 @@ const UsernameField = ({ label, ...props }: any) => {
   );
 };
 
-export default function Login() {
+export default function Loginpage() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const setAuth = useSetRecoilState(authState); // Get setter function for auth state
 
   const handleLogin = async (values: any, { setSubmitting }: any) => {
     try {
       await validationSchema.validate(values, { abortEarly: false });
 
       // const apiUrl = "https://samsapi.smartambulance.in/users/login";
-         const apiUrl = "https://sams.24x7healthcare.live/users/login";
+      const apiUrl = "https://sams.24x7healthcare.live/users/login";
 
       try {
         const response = await fetch(apiUrl, {
@@ -116,6 +113,8 @@ export default function Login() {
         sessionStorage.setItem("authToken", data.token);
         sessionStorage.setItem("ProfileData", JSON.stringify(data.profile));
         sessionStorage.setItem("userid", data.profile.userId);
+        localStorage.setItem("LSauthToken", data.token);
+
 
         Swal.fire({
           icon: "success",
@@ -148,8 +147,9 @@ export default function Login() {
   // <section className='w-full main-container my-12 flex flex-col items-center justify-center gap-6 bg-center bg-no-repeat ' style={{ backgroundImage: `url(${bgmenuImg.src})` }}>
 
   return (
-    <section className= 'w-full h-screen md:h-[100vh] center bg-[#A9CCE2] bg-center bg-no-repeat' 
-    style={{ backgroundImage: `url(${BG1.src})` }}
+    <section
+      className="w-full h-screen md:h-[100vh] center bg-[#A9CCE2] bg-center bg-no-repeat"
+      style={{ backgroundImage: `url(${BG1.src})` }}
     >
       <div className="  flex md:flex-row flex-col bg-white bg-opacity-70 backdrop-blur-lg backdrop-filter rounded-2xl md:p-0 p-6 shadow-2xl overflow-hidden">
         <div className="w-full h-auto p-5 flex flex-col ">
