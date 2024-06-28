@@ -248,6 +248,7 @@ export default function SALivedata() {
     storeObjByKey("obj",);
     socketServcies.initializeSocket();
     setPreviousAdmin(usernamedata);
+    sessionStorage.setItem("previousAdmin", usernamedata);
     socketServcies.emit("emit data", usernamedata);
     socketServcies.on("received_admin_data", (msg: any) => {
       console.log(".........Socket Admin Data.....", msg);
