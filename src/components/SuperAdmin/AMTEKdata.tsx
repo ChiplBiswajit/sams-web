@@ -146,6 +146,7 @@ export default function AMTEKdata() {
 
   const handleReceivedMessage = (msg: any) => {
     try {
+      console.log('Single Vechile socket Data',msg);
       let parsedMsg = msg;
       if (typeof msg === "string") {
         parsedMsg = JSON.parse(msg);
@@ -160,9 +161,9 @@ export default function AMTEKdata() {
   useEffect(() => {
     socketServcies.on("received_message", handleReceivedMessage);
 
-    return () => {
-      socketServcies.removeListener("received_message");
-    };
+    // return () => {
+    //   socketServcies.removeListener("received_message");
+    // };
   }, []);
 
   // console.log("Received AMTEK VALUE Message :", amtekres); // Log msg here

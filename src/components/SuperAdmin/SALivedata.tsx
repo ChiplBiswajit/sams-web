@@ -87,6 +87,7 @@ export default function SALivedata() {
   const [showAmtekData, setShowAmtekData] = useState(true); // State to track which data to show
   const [cameraTopic, setCameraTopic] = useState("");
   const [selectedAdmin, setSelectedAdmin] = useState("");
+  const [previousAdmin, setPreviousAdmin] = useState("");
   const [showToast, setShowToast] = useState(false);
 
   const AdminDropdown = () => {
@@ -190,7 +191,8 @@ export default function SALivedata() {
   const openOffCanvas = () => {
     setIsOffCanvasOpen(true);
   };
-  const closeOffCanvas = () => {
+  const closeOffCanvas = (ambulanceID: any) => {
+    socketServcies.emit("leaveRoom", ambulanceID.toString());
     setIsOffCanvasOpen(false);
   };
 
@@ -239,11 +241,16 @@ export default function SALivedata() {
   useEffect(() => {
     const usernamedata = sessionStorage.getItem("userid") || "";
     // console.log("aaaaaaaaaaaaaaa",usernamedata)
+    const previousAdmin=sessionStorage.getItem("previousAdmin");
+    if (previousAdmin) {
+      socketServcies.emit("leaveRoom", previousAdmin);
+    }
     storeObjByKey("obj",);
     socketServcies.initializeSocket();
+    setPreviousAdmin(usernamedata);
     socketServcies.emit("emit data", usernamedata);
     socketServcies.on("received_admin_data", (msg: any) => {
-      // console.log("jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj", msg);
+      console.log(".........Socket Admin Data.....", msg);
       setRes(msg);
       setTimeout(() => {
         setLoading(false);
@@ -264,10 +271,10 @@ export default function SALivedata() {
 //     };
 //   }, []);
 
-  const disconnectSocket = () => {
-    // socketServcies.disconnect(); // Disconnect the socket
-    console.log("socket close")
-  };
+  // const disconnectSocket = () => {
+  //   // socketServcies.disconnect(); // Disconnect the socket
+  //   console.log("socket close")
+  // };
 
 
   useEffect(() => {
@@ -312,10 +319,14 @@ export default function SALivedata() {
   };
 
   const handleAdminChangeadminlist = (event: any) => {
+    setRes([]);
     const adminId = event.target.value;
     const selectedAmbulanceData = admins; // Assuming adminlist contains ambulance data
     // console.log("Selected Ambulance Data:", admins);
+    socketServcies.emit("leaveRoom", previousAdmin.toString());
     sessionStorage.setItem("adminId", adminId);
+    sessionStorage.setItem("previousAdmin", adminId);
+    setPreviousAdmin(adminId);
     setSelectedAdmin(adminId);
     // Emit the selected adminId as a string to the socket
     socketServcies.emit("emit data", adminId.toString());
@@ -333,14 +344,14 @@ export default function SALivedata() {
                 {(ambulanceData as any).length}
               </p>
             </div>
-            {!selectedAdmin && (
+            {(selectedAdmin || !selectedAdmin) && (
               <div className="flex gap-3">
                 <div className="bg-[#A9CCE2] bg-opacity-60  px-2 py-2 rounded-md flex flex-col center">
                   <p className="text-sm font-semibold">
                     Total Active Ambulance
                   </p>
                   <p className="text-sm text-green-600 font-bold">
-                    {(res[0] as any)?.onlineDevice || 0}
+                    {(res as any)?.length?(res[0] as any)?.onlineDevice : 0}
                   </p>
                 </div>
                 <div className="bg-[#A9CCE2] bg-opacity-60  px-2 py-2 rounded-md flex flex-col center">
@@ -350,7 +361,7 @@ export default function SALivedata() {
                   <p className="text-sm text-red-600 font-bold">
                     {Math.max(
                       (ambulanceData as any).length -
-                        ((res[0] as any)?.onlineDevice || 0),
+                        ((res as any)?.length?(res[0] as any)?.onlineDevice : 0),
                       0
                     )}
                   </p>
@@ -368,12 +379,12 @@ export default function SALivedata() {
             onChange={handleAdminChangeadminlist}
           >
             <option value="">Select an admin</option>
-            <option
+            {/* <option
               className="text-black bg-white text-center font-semibold"
               value=""
             >
               All
-            </option>
+            </option> */}
             {admins.map((admin) => (
               <option
                 className="text-black bg-white text-center font-semibold"
@@ -732,8 +743,8 @@ export default function SALivedata() {
                 <span
                   className="w-8 h-7 rounded-full center bg-[#7AAEC6] cursor-pointer"
                   onClick={() => {
-                    closeOffCanvas(); // Close the off-canvas
-                    disconnectSocket(); // Disconnect the socket
+                    closeOffCanvas(ambulanceID); // Close the off-canvas
+                    // disconnectSocket(); // Disconnect the socket
                   }}
                 >
                   <ImCross className="text-white text-sm" />
@@ -779,7 +790,7 @@ export default function SALivedata() {
                 <span className="w-8 h-8 rounded-full center bg-[#7F88CE]">
                   <ImCross
                     className="text-white text-sm"
-                    onClick={closeOffCanvas}
+                    onClick={() => closeOffCanvas(ambulanceID)}
                   />
                 </span>
 

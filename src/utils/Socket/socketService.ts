@@ -1,16 +1,24 @@
 import { io, Socket } from "socket.io-client";
 import { getObjByKey } from "./storage";
 
-// const SOCKET_URL = "https://0r4mtgsn-8004.inc1.devtunnels.ms/";
+// const SOCKET_URL = "https://0r4mtgsn-3004.inc1.devtunnels.ms/";
 const SOCKET_URL = "https://24x7healthcare.live";
+// const SOCKET_URL = "https://smartambulance.in/";
 
 let stringToSend = "";
 
 class WSService {
-  off(arg0: string, handleAllLocation: (msg: any) => void) {
-    throw new Error('Method not implemented.');
-  }
+  private static instance: WSService;
   private socket: Socket | undefined;
+
+  private constructor() {}
+
+  public static getInstance(): WSService {
+    if (!WSService.instance) {
+      WSService.instance = new WSService();
+    }
+    return WSService.instance;
+  }
 
   disconnect() {
     if (this.socket) {
@@ -22,14 +30,19 @@ class WSService {
   }
 
   initializeSocket = async (): Promise<void> => {
+    if (this.socket) {
+      console.log("Socket is already initialized.");
+      return;
+    }
+
     try {
       this.socket = io(SOCKET_URL, {
         transports: ["websocket"],
       });
 
       this.socket.on("connect", () => {
-        console.log("=== socket connected ====");
-        this.emitStringOnceConnected();
+        console.log("=== socket connected ====", this.socket?.id);
+        // this.emitStringOnceConnected();
       });
 
       this.socket.on("disconnect", () => {
@@ -55,19 +68,9 @@ class WSService {
     }
   };
 
-
-
-  emitStringOnceConnected = async (): Promise<void> => {
-    // await this.retrieveData();
-    if (this.socket) {
-      this.socket.emit("emit data", stringToSend);
-    } else {
-      console.error("Socket is not initialized.");
-    }
-  };
-
   emit(event: string, data = {}): void {
     if (this.socket) {
+      console.log(`Emitting event "${event}" with data:`, data, "on socket ID:", this.socket.id);
       this.socket.emit(event, data);
     } else {
       console.error("Socket is not initialized.");
@@ -91,9 +94,6 @@ class WSService {
   }
 }
 
-// console.log("callll");
-
-
-const socketServices = new WSService();
+const socketServices = WSService.getInstance();
 
 export default socketServices;

@@ -58,8 +58,13 @@ export default function SALocation() {
   
   useEffect(() => {
     const usernamedata = sessionStorage.getItem("userid") || ""; // Provide a default value
+    const previousAdmin=sessionStorage.getItem("previousAdmin");
     socketServcies.initializeSocket();
-    socketServcies.emit("emit data", usernamedata);
+    if (previousAdmin) {
+      socketServcies.emit("emit data", previousAdmin);
+    }else{
+      socketServcies.emit("emit data", usernamedata);
+    }
     socketServcies.on("All_Location", (msg: any) => {
       // console.log("usernamedataaaaaaaaaaaaaa", usernamedata);
       setRes(msg);
