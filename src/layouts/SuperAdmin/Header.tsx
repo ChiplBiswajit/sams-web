@@ -88,7 +88,7 @@ export default function Header({ open, setOpen }: any) {
         }
 
         // Navigate to login page
-        router.push("./Login");
+        router.push("./");
       }
     } catch (error) {
       Swal.fire({
